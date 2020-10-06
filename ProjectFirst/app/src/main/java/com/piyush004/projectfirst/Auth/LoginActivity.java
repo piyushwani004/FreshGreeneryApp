@@ -74,12 +74,12 @@ public class LoginActivity extends AppCompatActivity {
             passwordText.setError("Please Enter Password");
             passwordText.requestFocus();
         } else if (!(email.isEmpty() && pass.isEmpty())) {
+            System.out.println(email+pass);
             mAuth.signInWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-
                                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
