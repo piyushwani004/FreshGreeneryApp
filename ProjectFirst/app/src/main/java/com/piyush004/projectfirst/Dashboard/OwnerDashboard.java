@@ -47,7 +47,7 @@ public class OwnerDashboard extends AppCompatActivity {
                         break;
 
                     case R.id.menu_mess:
-                        Toast.makeText(getApplicationContext(), "Setting Panel is Open", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "mess Panel is Open", Toast.LENGTH_LONG).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
