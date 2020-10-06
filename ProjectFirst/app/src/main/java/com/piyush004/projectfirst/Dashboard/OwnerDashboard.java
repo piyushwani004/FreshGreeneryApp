@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.piyush004.projectfirst.Auth.LoginActivity;
 import com.piyush004.projectfirst.R;
+import com.piyush004.projectfirst.owner.Owner_Profile_Activity;
 
 public class OwnerDashboard extends AppCompatActivity {
     @Override
@@ -43,8 +44,10 @@ public class OwnerDashboard extends AppCompatActivity {
                         break;
 
                     case R.id.menu_profile:
-                        Toast.makeText(getApplicationContext(), "Call Panel is Open", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Profile Panel is Open", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
+                        Intent intentprofile = new Intent(OwnerDashboard.this, Owner_Profile_Activity.class);
+                        startActivity(intentprofile);
                         break;
 
                     case R.id.menu_mess:
@@ -60,8 +63,8 @@ public class OwnerDashboard extends AppCompatActivity {
                     case R.id.menu_logout:
                         Toast.makeText(getApplicationContext(), "Logout Successful", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        Intent intent = new Intent(OwnerDashboard.this , LoginActivity.class);
-                        startActivity(intent);
+                        Intent intentlogout = new Intent(OwnerDashboard.this, LoginActivity.class);
+                        startActivity(intentlogout);
                         break;
                 }
 
