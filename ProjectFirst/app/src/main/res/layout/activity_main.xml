@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:id="@+id/backLayout"
+    android:layout_height="match_parent"
+    android:background="#F8F8F8"
+    tools:context=".MainActivity"
+    tools:ignore="InvalidId">
+
+
+    <ImageView
+        android:id="@+id/imageViewTop"
+        android:layout_width="347dp"
+        android:layout_height="219dp"
+        android:alpha="0.9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/img2" />
+
+    <ImageView
+        android:id="@+id/imageViewMiddel"
+        android:layout_width="281dp"
+        android:layout_height="204dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="66dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:srcCompat="@mipmap/food1" />
+
+    <Button
+        android:id="@+id/LoginBtn"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="50dp"
+        android:background="@color/colorAccent"
+        android:onClick="onClickLogin"
+        android:text="Login"
+        app:cornerRadius="10dp"
+        android:textAlignment="center"
+        android:textColor="#DF1010"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/signUpBtn"
+        android:layout_width="140dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="50dp"
+        android:background="@color/colorAccent"
+        android:onClick="onClickSignUp"
+        android:text="sign Up"
+        android:textAlignment="center"
+        android:textColor="#E60C0C"
+        android:textStyle="bold|italic"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Online Mess System"
+        android:textColor="@color/colorAccent"
+        android:textSize="30dp"
+        android:textStyle="bold|italic"
+        app:layout_constraintEnd_toEndOf="@+id/imageViewTop"
+        app:layout_constraintStart_toStartOf="@+id/imageViewTop"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewTop" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

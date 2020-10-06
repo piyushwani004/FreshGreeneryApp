@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/loginbackground"
+    tools:context=".Auth.SignUpActivity">
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B1B1B1"
+        app:layout_constraintEnd_toEndOf="@+id/editTextName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextName"
+        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B1B1B1"
+        app:layout_constraintEnd_toEndOf="@+id/editTextEmail"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmail"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
+
+    <EditText
+        android:id="@+id/editTextRePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Repeat Your Password"
+        android:inputType="textPassword"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B1B1B1"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#B1B1B1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="410dp"
+        android:layout_height="131dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/icon3" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
+
+        <RadioButton
+            android:id="@+id/radioButtonOwner"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:text="Mess-Owner"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#00BCD4"
+            android:textColorLink="#00BCD4"
+            android:textSize="25dp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonCustomer"
+            android:layout_width="195dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:text="Customer"
+            android:textColor="#FFFFFF"
+            android:textColorHighlight="#00BCD4"
+            android:textColorLink="#00BCD4"
+            android:textSize="25dp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:onClick="onClickRegister"
+        android:text="Register"
+        app:cornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/checkBoxAgreement"
+        app:layout_constraintHorizontal_bias="0.215"
+        app:layout_constraintStart_toStartOf="@+id/checkBoxAgreement"
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxAgreement" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Already have Account ?"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/buttonRegister"
+        app:layout_constraintStart_toStartOf="@+id/buttonRegister"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:clickable="true"
+        android:onClick="OnClickLogInLink"
+        android:text="LogIn"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.141"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegister" />
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="61dp"
+        android:layout_height="57dp"
+        android:background="#134871"
+        android:foreground="@drawable/back"
+        android:onClick="onClickBackBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkBoxAgreement"
+        android:layout_width="339dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="28dp"
+        android:text="I agree all statements in Terms of service "
+        android:textColor="#FFF4F4"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRePassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextRePassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRePassword" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="ShowHidePass"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPassword"
+        app:layout_constraintTop_toTopOf="@+id/editTextPassword"
+        app:layout_constraintVertical_bias="0.476"
+        app:srcCompat="@drawable/eye" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="ShowHideRePass"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextRePassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextRePassword"
+        app:layout_constraintTop_toTopOf="@+id/editTextRePassword"
+        app:layout_constraintVertical_bias="0.38"
+        app:srcCompat="@drawable/eye" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
