@@ -36,27 +36,30 @@ public class OwnerDashboard extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
+
                     case R.id.menu_home:
-                        Toast.makeText(getApplicationContext(), "Home Panel is Open", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Home Panel is Open", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.menu_profile:
-                        Toast.makeText(getApplicationContext(), "Call Panel is Open", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Call Panel is Open", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.menu_mess:
-                        Toast.makeText(getApplicationContext(), "mess Panel is Open", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "mess Panel is Open", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.menu_setting:
-                        Toast.makeText(getApplicationContext(), "Setting Panel is Open", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Setting Panel is Open", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.menu_logout:
+                        Toast.makeText(getApplicationContext(), "Logout Successful", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
                         Intent intent = new Intent(OwnerDashboard.this , LoginActivity.class);
                         startActivity(intent);
                         break;
