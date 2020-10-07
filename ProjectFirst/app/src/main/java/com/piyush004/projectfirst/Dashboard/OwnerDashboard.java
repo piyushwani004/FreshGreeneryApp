@@ -12,13 +12,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.piyush004.projectfirst.Auth.LoginActivity;
 import com.piyush004.projectfirst.MainActivity;
 import com.piyush004.projectfirst.R;
-import com.piyush004.projectfirst.owner.HomeOwner;
-import com.piyush004.projectfirst.owner.ProfileOwner;
+import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
+import com.piyush004.projectfirst.owner.profile.ProfileOwner;
 
 public class OwnerDashboard extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +37,7 @@ public class OwnerDashboard extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new HomeOwner()).commit();
+                    new HomeOwnerFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -48,7 +48,7 @@ public class OwnerDashboard extends AppCompatActivity {
                     case R.id.menu_home:
                         Toast.makeText(getApplicationContext(), "Home Panel is Open", Toast.LENGTH_SHORT).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new HomeOwner()).commit();
+                                new HomeOwnerFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 

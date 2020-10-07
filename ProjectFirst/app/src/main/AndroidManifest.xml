@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/food1"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <activity android:name=".owner.home.HomeOwnerActivity"></activity>
         <activity android:name=".Dashboard.CustomerDashboard" />
         <activity android:name=".Dashboard.OwnerDashboard" />
         <activity

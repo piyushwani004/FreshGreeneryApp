@@ -1,4 +1,4 @@
-package com.piyush004.projectfirst.owner;
+package com.piyush004.projectfirst.owner.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
