@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClickLogin(View view)
     {
         //LoginActivity.class
-        Intent intent = new Intent(MainActivity.this , LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this , OwnerDashboard.class);
         startActivity(intent);
         finish();
     }

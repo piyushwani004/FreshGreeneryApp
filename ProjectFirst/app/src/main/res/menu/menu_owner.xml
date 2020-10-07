@@ -10,11 +10,12 @@
             android:id="@+id/menu_profile"
             android:icon="@drawable/profile"
             android:title="Profile" />
+
     </group>
     <item android:title="Mess">
         <menu>
             <item
-                android:id="@+id/menu_mess"
+                android:id="@+id/menu_mess_details"
                 android:icon="@drawable/home"
                 android:title="Mess Details" />
             <item
@@ -38,14 +39,14 @@
     </item>
     <item android:title="Communicate">
         <menu>
-          <item
-              android:id="@+id/menu_share"
-              android:icon="@drawable/home"
-              android:title="Share" />
-          <item
-              android:id="@+id/menu_help"
-              android:icon="@drawable/home"
-              android:title="Help" />
+            <item
+                android:id="@+id/menu_share"
+                android:icon="@drawable/home"
+                android:title="Share" />
+            <item
+                android:id="@+id/menu_help"
+                android:icon="@drawable/home"
+                android:title="Help" />
             <item
                 android:id="@+id/menu_logout"
                 android:icon="@drawable/logout"

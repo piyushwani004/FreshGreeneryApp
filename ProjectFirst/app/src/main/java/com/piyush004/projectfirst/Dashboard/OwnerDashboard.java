@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.piyush004.projectfirst.MainActivity;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
+import com.piyush004.projectfirst.owner.messdetails.MessDetailsFragment;
 import com.piyush004.projectfirst.owner.profile.ProfileOwner;
 
 public class OwnerDashboard extends AppCompatActivity {
@@ -59,8 +60,35 @@ public class OwnerDashboard extends AppCompatActivity {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
-                    case R.id.menu_mess:
+                    case R.id.menu_mess_details:
                         Toast.makeText(getApplicationContext(), "mess Panel is Open", Toast.LENGTH_SHORT).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new MessDetailsFragment()).commit();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+
+                    case R.id.menu_messMenu:
+                        Toast.makeText(getApplicationContext(), "mess Menu Panel is Open", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+
+                    case R.id.menu_schadule:
+                        Toast.makeText(getApplicationContext(), "mess Schadule Panel is Open", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+
+                    case R.id.menu_messLocation:
+                        Toast.makeText(getApplicationContext(), "mess Location Panel is Open", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+
+                    case R.id.menu_share:
+                        Toast.makeText(getApplicationContext(), "Share Panel is Open", Toast.LENGTH_SHORT).show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+
+                    case R.id.menu_help:
+                        Toast.makeText(getApplicationContext(), "Help Panel is Open", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
