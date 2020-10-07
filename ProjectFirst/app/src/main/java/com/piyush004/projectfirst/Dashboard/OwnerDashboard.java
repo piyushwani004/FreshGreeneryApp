@@ -13,7 +13,10 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.piyush004.projectfirst.Auth.LoginActivity;
+import com.piyush004.projectfirst.MainActivity;
 import com.piyush004.projectfirst.R;
+import com.piyush004.projectfirst.owner.HomeOwner;
+import com.piyush004.projectfirst.owner.ProfileOwner;
 
 public class OwnerDashboard extends AppCompatActivity {
     @Override
@@ -32,6 +35,11 @@ public class OwnerDashboard extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navmenu);
         navigationView.setItemIconTintList(null);
 
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeOwner()).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
+        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -39,11 +47,15 @@ public class OwnerDashboard extends AppCompatActivity {
 
                     case R.id.menu_home:
                         Toast.makeText(getApplicationContext(), "Home Panel is Open", Toast.LENGTH_SHORT).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new HomeOwner()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.menu_profile:
                         Toast.makeText(getApplicationContext(), "Profile Panel is Open", Toast.LENGTH_SHORT).show();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new ProfileOwner()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
@@ -60,7 +72,7 @@ public class OwnerDashboard extends AppCompatActivity {
                     case R.id.menu_logout:
                         Toast.makeText(getApplicationContext(), "Logout Successful", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        Intent intentlogout = new Intent(OwnerDashboard.this, LoginActivity.class);
+                        Intent intentlogout = new Intent(OwnerDashboard.this, MainActivity.class);
                         startActivity(intentlogout);
                         break;
                 }
