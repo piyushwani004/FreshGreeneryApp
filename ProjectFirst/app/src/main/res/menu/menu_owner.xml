@@ -1,23 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_home"
+            android:icon="@drawable/home"
+            android:title="Home" />
 
-  <item android:id="@+id/menu_home"
-      android:icon="@drawable/home"
-      android:title="Home"/>
+        <item
+            android:id="@+id/menu_profile"
+            android:icon="@drawable/profile"
+            android:title="Profile" />
+    </group>
+    <item android:title="Mess">
+        <menu>
+            <item
+                android:id="@+id/menu_mess"
+                android:icon="@drawable/home"
+                android:title="Mess Details" />
+            <item
+                android:id="@+id/menu_messMenu"
+                android:icon="@drawable/home"
+                android:title="Mess Menu" />
+            <item
+                android:id="@+id/menu_schadule"
+                android:icon="@drawable/home"
+                android:title="Mess schadule" />
+            <item
+                android:id="@+id/menu_messLocation"
+                android:icon="@drawable/home"
+                android:title="Mess Location" />
 
-  <item android:id="@+id/menu_profile"
-      android:icon="@drawable/profile"
-      android:title="Profile"/>
-
-    <item android:id="@+id/menu_mess"
-        android:icon="@drawable/home"
-        android:title="Mess"/>
-
-    <item android:id="@+id/menu_setting"
-        android:icon="@drawable/setting"
-        android:title="Setting"/>
-
-  <item android:id="@+id/menu_logout"
-      android:icon="@drawable/logout"
-      android:title="Logout"/>
+            <item
+                android:id="@+id/menu_setting"
+                android:icon="@drawable/setting"
+                android:title="Setting" />
+        </menu>
+    </item>
+    <item android:title="Communicate">
+        <menu>
+          <item
+              android:id="@+id/menu_share"
+              android:icon="@drawable/home"
+              android:title="Share" />
+          <item
+              android:id="@+id/menu_help"
+              android:icon="@drawable/home"
+              android:title="Help" />
+            <item
+                android:id="@+id/menu_logout"
+                android:icon="@drawable/logout"
+                android:title="Logout" />
+        </menu>
+    </item>
 </menu>
