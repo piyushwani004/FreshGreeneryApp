@@ -1,4 +1,4 @@
-package com.piyush004.projectfirst.owner.messdetails;
+package com.piyush004.projectfirst.owner.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +10,13 @@ import androidx.fragment.app.Fragment;
 
 import com.piyush004.projectfirst.R;
 
-public class MessDetailsFragment extends Fragment {
+public class ProfileOwnerFragment extends Fragment {
 
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.mess_details_fragment_owner, container, false);
+        return inflater.inflate(R.layout.profile_fragment_owner, container, false);
 
     }
-
 }

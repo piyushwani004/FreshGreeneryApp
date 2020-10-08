@@ -15,8 +15,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.piyush004.projectfirst.MainActivity;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
-import com.piyush004.projectfirst.owner.messdetails.MessDetailsFragment;
-import com.piyush004.projectfirst.owner.profile.ProfileOwner;
+import com.piyush004.projectfirst.owner.messdetails.MessDetailsActivity;
+import com.piyush004.projectfirst.owner.profile.ProfileOwnerFragment;
 
 public class OwnerDashboard extends AppCompatActivity {
 
@@ -56,14 +56,14 @@ public class OwnerDashboard extends AppCompatActivity {
                     case R.id.menu_profile:
                         Toast.makeText(getApplicationContext(), "Profile Panel is Open", Toast.LENGTH_SHORT).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new ProfileOwner()).commit();
+                                new ProfileOwnerFragment()).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.menu_mess_details:
                         Toast.makeText(getApplicationContext(), "mess Panel is Open", Toast.LENGTH_SHORT).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new MessDetailsFragment()).commit();
+                        Intent intent = new Intent(OwnerDashboard.this , MessDetailsActivity.class);
+                        startActivity(intent);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
