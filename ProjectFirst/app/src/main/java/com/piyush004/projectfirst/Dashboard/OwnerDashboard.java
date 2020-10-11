@@ -1,15 +1,15 @@
 package com.piyush004.projectfirst.Dashboard;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.piyush004.projectfirst.MainActivity;
@@ -19,6 +19,8 @@ import com.piyush004.projectfirst.owner.messdetails.MessDetailsActivity;
 import com.piyush004.projectfirst.owner.profile.ProfileOwnerFragment;
 
 public class OwnerDashboard extends AppCompatActivity {
+
+    private String login_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,12 @@ public class OwnerDashboard extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navmenu);
         navigationView.setItemIconTintList(null);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            login_name = bundle.getString("login_name_mess_Dashboard");
+
+        }
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeOwnerFragment()).commit();
@@ -47,6 +55,7 @@ public class OwnerDashboard extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
 
                     case R.id.menu_home:
+
                         Toast.makeText(getApplicationContext(), "Home Panel is Open", Toast.LENGTH_SHORT).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new HomeOwnerFragment()).commit();
@@ -62,7 +71,8 @@ public class OwnerDashboard extends AppCompatActivity {
 
                     case R.id.menu_mess_details:
                         Toast.makeText(getApplicationContext(), "mess Details Panel is Open", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(OwnerDashboard.this , MessDetailsActivity.class);
+                        Intent intent = new Intent(OwnerDashboard.this, MessDetailsActivity.class);
+                        intent.putExtra("LoginNameMessDetails",login_name);
                         startActivity(intent);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;

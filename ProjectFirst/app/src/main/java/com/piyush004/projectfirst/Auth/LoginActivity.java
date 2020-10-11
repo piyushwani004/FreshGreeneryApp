@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button button;
     private EditText emailText, passwordText, nameText;
     private ImageView imageView;
-    private String email, pass, type;
+    private String email, pass, type, name;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 
         email = emailText.getText().toString();
         pass = passwordText.getText().toString();
+        name = nameText.getText().toString();
 
         if (email.isEmpty()) {
             progressBar.setVisibility(View.GONE);
@@ -90,8 +91,10 @@ public class LoginActivity extends AppCompatActivity {
                                         if (type.equals(mess)) {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("login_name_mess_Dashboard", name);
                                             Intent intent = new Intent(LoginActivity.this, OwnerDashboard.class);
-                                            intent.putExtra("login_name", nameText.getText().toString());
+                                            intent.putExtras(bundle);
                                             startActivity(intent);
                                         } else if (type.equals(cust)) {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();

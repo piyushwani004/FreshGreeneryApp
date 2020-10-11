@@ -60,8 +60,6 @@ public class MessDetailsActivity extends AppCompatActivity {
 
         buttonSave = findViewById(R.id.button_save);
 
-        Intent intent = getIntent();
-        login_name = intent.getStringExtra("login_name");
 
     }
 
@@ -86,6 +84,12 @@ public class MessDetailsActivity extends AppCompatActivity {
     }
 
     public void onClickSaveEvent(View view) {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            login_name = bundle.getString("LoginNameMessDetails");
+            Toast.makeText(this, "Login Name : " + login_name, Toast.LENGTH_LONG).show();
+        }
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name);
         Toast.makeText(this, login_name, Toast.LENGTH_SHORT).show();
         mess_name = editTextName.getText().toString();
@@ -128,5 +132,6 @@ public class MessDetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show();
 
         }
+
     }
 }
