@@ -125,8 +125,9 @@ public class MessDetailsActivity extends AppCompatActivity {
             databaseReference.child("MessEmail").setValue(messDetailsModel.getMess_email());
             databaseReference.child("MessCity").setValue(messDetailsModel.getMess_city());
             databaseReference.child("MessClosedDays").setValue(messDetailsModel.getMess_closed_days());
-
-            Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Data Added", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(MessDetailsActivity.this, OwnerDashboard.class);
+            startActivity(intent);
 
         }
 
