@@ -1,7 +1,5 @@
 package com.piyush004.projectfirst;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,10 +10,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.piyush004.projectfirst.Auth.LoginActivity;
 import com.piyush004.projectfirst.Auth.SignUpActivity;
-import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private Animation topAnimantion, bottomAnimation, middleAnimation;
     private ImageView imageView1, imageView2;
     private TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -47,16 +46,16 @@ public class MainActivity extends AppCompatActivity {
         buttonLogin.setAnimation(bottomAnimation);
 
     }
-    public void onClickLogin(View view)
-    {
+
+    public void onClickLogin(View view) {
         //LoginActivity.class
-        Intent intent = new Intent(MainActivity.this , OwnerDashboard.class);
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
-    public  void onClickSignUp(View view)
-    {
-        Intent intent = new Intent(MainActivity.this , SignUpActivity.class);
+
+    public void onClickSignUp(View view) {
+        Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
         startActivity(intent);
         finish();
     }

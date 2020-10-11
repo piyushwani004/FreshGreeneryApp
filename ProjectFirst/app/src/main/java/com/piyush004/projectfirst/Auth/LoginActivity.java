@@ -1,8 +1,5 @@
 package com.piyush004.projectfirst.Auth;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
@@ -13,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
             passwordText.setError("Please Enter Password");
             passwordText.requestFocus();
         } else if (!(email.isEmpty() && pass.isEmpty())) {
-            System.out.println(email+pass);
+            System.out.println(email + pass);
             mAuth.signInWithEmailAndPassword(email, pass)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -87,22 +87,19 @@ public class LoginActivity extends AppCompatActivity {
 
                                         System.out.println("Firebase : " + type);
 
-                                        if(type.equals(mess))
-                                        {
+                                        if (type.equals(mess)) {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
                                             Intent intent = new Intent(LoginActivity.this, OwnerDashboard.class);
+                                            intent.putExtra("login_name", nameText.getText().toString());
                                             startActivity(intent);
-                                        }
-                                        else if(type.equals(cust))
-                                        {
+                                        } else if (type.equals(cust)) {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
                                             Intent intent = new Intent(LoginActivity.this, CustomerDashboard.class);
+                                            intent.putExtra("login_name", nameText.getText().toString());
                                             startActivity(intent);
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             Toast.makeText(getApplicationContext(), "Please try again later", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
                                         }

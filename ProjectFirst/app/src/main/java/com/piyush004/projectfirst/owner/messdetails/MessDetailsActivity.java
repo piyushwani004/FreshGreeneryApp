@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 import com.piyush004.projectfirst.R;
 
@@ -28,6 +30,10 @@ public class MessDetailsActivity extends AppCompatActivity {
     private static int SELECT_PHOTO = 1;
     private ImageView imageView;
     private Uri uri;
+    private DatabaseReference databaseReference;
+    private String type = "";
+    private String mess_name, mess_address, mess_mobile, mess_city, mess_email, mess_closed_days;
+    private String login_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,10 @@ public class MessDetailsActivity extends AppCompatActivity {
         editTextClosedDays = findViewById(R.id.edit_text_closed_days);
 
         buttonSave = findViewById(R.id.button_save);
+        Intent intent = getIntent();
+        login_name = intent.getStringExtra("login_name");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name);
+
 
     }
 
@@ -78,6 +88,39 @@ public class MessDetailsActivity extends AppCompatActivity {
     }
 
     public void onClickSaveEvent(View view) {
+        Toast.makeText(this, login_name, Toast.LENGTH_SHORT).show();
+        mess_name = editTextName.getText().toString();
+        mess_address = editTextAddress.getText().toString();
+        mess_mobile = editTextMobile.getText().toString();
+        mess_email = editTextEmail.getText().toString();
+        mess_city = editTextCity.getText().toString();
+        mess_closed_days = editTextClosedDays.getText().toString();
 
+        if (mess_name.isEmpty()) {
+            editTextName.setError("Please Enter Name");
+            editTextName.requestFocus();
+        } else if (mess_address.isEmpty()) {
+            editTextAddress.setError("Please Enter Address");
+            editTextAddress.requestFocus();
+        } else if (mess_mobile.isEmpty()) {
+            editTextMobile.setError("Please Enter Mobile");
+            editTextMobile.requestFocus();
+        } else if (mess_email.isEmpty()) {
+            editTextEmail.setError("Please Re-Enter Email-ID");
+            editTextEmail.requestFocus();
+        } else if (mess_city.isEmpty()) {
+            editTextCity.setError("Please Enter City");
+            editTextCity.requestFocus();
+        } else if (mess_closed_days.isEmpty()) {
+            editTextClosedDays.setError("Please Enter Days");
+            editTextClosedDays.requestFocus();
+        } else if (!(mess_name.isEmpty() && mess_address.isEmpty() && mess_mobile.isEmpty() && mess_email.isEmpty() && mess_city.isEmpty() && mess_closed_days.isEmpty())) {
+
+            MessDetailsModel messDetailsModel = new MessDetailsModel(mess_name, mess_address, mess_mobile, mess_city, mess_email, mess_closed_days);
+            System.out.println(messDetailsModel.toString());
+            databaseReference.setValue(messDetailsModel);
+            Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }
