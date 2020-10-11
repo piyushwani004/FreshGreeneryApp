@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                                             progressBar.setVisibility(View.GONE);
                                             Bundle bundle = new Bundle();
                                             bundle.putString("login_name_mess_Dashboard", name);
+                                            bundle.putString("EmailID",email);
                                             Intent intent = new Intent(LoginActivity.this, OwnerDashboard.class);
                                             intent.putExtras(bundle);
                                             startActivity(intent);

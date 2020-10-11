@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,12 +21,22 @@ import com.piyush004.projectfirst.owner.profile.ProfileOwnerFragment;
 
 public class OwnerDashboard extends AppCompatActivity {
 
-    private String login_name;
+    private TextView textViewName, textViewEmail;
+    private String login_name, login_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_dashboard);
+
+        textViewName = findViewById(R.id.DashboardHeaderName);
+        textViewEmail = findViewById(R.id.DashboardHeaderEmail);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            login_name = bundle.getString("login_name_mess_Dashboard");
+            login_email = bundle.getString("EmailID");
+        }
 
         final DrawerLayout drawerLayout = findViewById(R.id.drawer);
         findViewById(R.id.menuIconId).setOnClickListener(new View.OnClickListener() {
@@ -38,11 +49,6 @@ public class OwnerDashboard extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navmenu);
         navigationView.setItemIconTintList(null);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            login_name = bundle.getString("login_name_mess_Dashboard");
-
-        }
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -72,7 +78,7 @@ public class OwnerDashboard extends AppCompatActivity {
                     case R.id.menu_mess_details:
                         Toast.makeText(getApplicationContext(), "mess Details Panel is Open", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(OwnerDashboard.this, MessDetailsActivity.class);
-                        intent.putExtra("LoginNameMessDetails",login_name);
+                        intent.putExtra("LoginNameMessDetails", login_name);
                         startActivity(intent);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;

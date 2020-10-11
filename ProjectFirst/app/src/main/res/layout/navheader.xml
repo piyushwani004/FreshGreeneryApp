@@ -15,16 +15,18 @@
         app:srcCompat="@mipmap/ic_launcher_round" />
 
     <TextView
+        android:id="@+id/DashboardHeaderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:textSize="18dp"
         android:text="Piyush Ajay Wani"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18dp" />
 
     <TextView
+        android:id="@+id/DashboardHeaderEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14dp"
-        android:text="piyushwani04@gmail.com" />
+        android:text="piyushwani04@gmail.com"
+        android:textSize="14dp" />
 </LinearLayout>

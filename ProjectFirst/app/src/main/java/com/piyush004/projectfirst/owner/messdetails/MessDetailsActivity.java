@@ -87,11 +87,8 @@ public class MessDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             login_name = bundle.getString("LoginNameMessDetails");
-            Toast.makeText(this, "Login Name : " + login_name, Toast.LENGTH_LONG).show();
         }
-
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name);
-        Toast.makeText(this, login_name, Toast.LENGTH_SHORT).show();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
         mess_name = editTextName.getText().toString();
         mess_address = editTextAddress.getText().toString();
         mess_mobile = editTextMobile.getText().toString();
