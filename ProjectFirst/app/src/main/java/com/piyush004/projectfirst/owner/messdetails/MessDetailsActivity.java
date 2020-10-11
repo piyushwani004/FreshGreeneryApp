@@ -31,7 +31,6 @@ public class MessDetailsActivity extends AppCompatActivity {
     private ImageView imageView;
     private Uri uri;
     private DatabaseReference databaseReference;
-    private String type = "";
     private String mess_name, mess_address, mess_mobile, mess_city, mess_email, mess_closed_days;
     private String login_name;
 
@@ -60,10 +59,9 @@ public class MessDetailsActivity extends AppCompatActivity {
         editTextClosedDays = findViewById(R.id.edit_text_closed_days);
 
         buttonSave = findViewById(R.id.button_save);
+
         Intent intent = getIntent();
         login_name = intent.getStringExtra("login_name");
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name);
-
 
     }
 
@@ -88,6 +86,7 @@ public class MessDetailsActivity extends AppCompatActivity {
     }
 
     public void onClickSaveEvent(View view) {
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name);
         Toast.makeText(this, login_name, Toast.LENGTH_SHORT).show();
         mess_name = editTextName.getText().toString();
         mess_address = editTextAddress.getText().toString();
@@ -118,7 +117,14 @@ public class MessDetailsActivity extends AppCompatActivity {
 
             MessDetailsModel messDetailsModel = new MessDetailsModel(mess_name, mess_address, mess_mobile, mess_city, mess_email, mess_closed_days);
             System.out.println(messDetailsModel.toString());
-            databaseReference.setValue(messDetailsModel);
+
+            databaseReference.child("MessName").setValue(messDetailsModel.getMess_name());
+            databaseReference.child("MessAddress").setValue(messDetailsModel.getMess_address());
+            databaseReference.child("MessMobile").setValue(messDetailsModel.getMess_mobile());
+            databaseReference.child("MessEmail").setValue(messDetailsModel.getMess_email());
+            databaseReference.child("MessCity").setValue(messDetailsModel.getMess_city());
+            databaseReference.child("MessClosedDays").setValue(messDetailsModel.getMess_closed_days());
+
             Toast.makeText(this, "Data Added", Toast.LENGTH_SHORT).show();
 
         }

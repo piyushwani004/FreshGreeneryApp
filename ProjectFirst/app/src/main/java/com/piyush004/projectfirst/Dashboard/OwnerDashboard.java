@@ -61,7 +61,7 @@ public class OwnerDashboard extends AppCompatActivity {
                         break;
 
                     case R.id.menu_mess_details:
-                        Toast.makeText(getApplicationContext(), "mess Panel is Open", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "mess Details Panel is Open", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(OwnerDashboard.this , MessDetailsActivity.class);
                         startActivity(intent);
                         drawerLayout.closeDrawer(GravityCompat.START);
