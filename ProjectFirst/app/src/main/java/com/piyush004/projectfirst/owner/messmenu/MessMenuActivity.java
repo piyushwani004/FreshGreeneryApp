@@ -54,9 +54,9 @@ public class MessMenuActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyListAdapter holder, int position, @NonNull MessMenuModel model) {
 
-                holder.textViewName.setText(""+model.getMessMenuName());
-                holder.textViewQuant.setText(""+model.getMessMenuQuantity());
-                holder.textViewPrice.setText(""+model.getMessMenuPrice());
+                holder.textViewName.setText(" Hi"+model.getMessMenuName());
+                holder.textViewQuant.setText("hello "+model.getMessMenuQuantity());
+                holder.textViewPrice.setText("bye"+model.getMessMenuPrice());
 
                 System.out.println(model.getMessMenuName());
                 System.out.println(model.getMessMenuQuantity());
