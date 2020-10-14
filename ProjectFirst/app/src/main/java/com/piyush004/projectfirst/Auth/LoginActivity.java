@@ -52,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordText = findViewById(R.id.passwordTextField);
         imageView = findViewById(R.id.imageView);
         progressBar = findViewById(R.id.progressBar);
-        nameText = findViewById(R.id.editTextPersonName);
 
     }
 
@@ -64,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
 
         email = emailText.getText().toString();
         pass = passwordText.getText().toString();
-        name = nameText.getText().toString();
+
+        final String Result = emailSplit(email);
 
         if (email.isEmpty()) {
             progressBar.setVisibility(View.GONE);
@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        type = dataSnapshot.child(nameText.getText().toString()).child("type").getValue(String.class);
+                                        type = dataSnapshot.child(Result).child("type").getValue(String.class);
 
                                         System.out.println("Firebase : " + type);
 
@@ -92,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
                                             Bundle bundle = new Bundle();
-                                            bundle.putString("login_name_mess_Dashboard", name);
-                                            bundle.putString("EmailID",email);
+                                            bundle.putString("login_name_mess_Dashboard", Result);
+                                            bundle.putString("EmailID", email);
                                             Intent intent = new Intent(LoginActivity.this, OwnerDashboard.class);
                                             intent.putExtras(bundle);
                                             startActivity(intent);
@@ -124,6 +124,16 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(LoginActivity.this, "Error", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String emailSplit(String str) {
+        String resultStr = "";
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) > 64 && str.charAt(i) <= 122) {
+                resultStr = resultStr + str.charAt(i);
+            }
+        }
+        return resultStr;
     }
 
     public void OnClickSignUpLink(View view) {

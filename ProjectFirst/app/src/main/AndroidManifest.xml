@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/food1"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
-        <activity android:name=".owner.messdetails.MessDetailsActivity"></activity>
+        <activity android:name=".owner.messmenu.MessMenuActivity"></activity>
+        <activity android:name=".owner.messdetails.MessDetailsActivity" />
         <activity android:name=".owner.home.HomeOwnerActivity" />
         <activity android:name=".Dashboard.CustomerDashboard" />
         <activity android:name=".Dashboard.OwnerDashboard" />

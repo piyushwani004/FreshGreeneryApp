@@ -1,25 +1,20 @@
 package com.piyush004.projectfirst.Auth;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -110,7 +105,9 @@ public class SignUpActivity extends AppCompatActivity {
         pass = passwordText.getText().toString();
         repass = rePasswordText.getText().toString();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(name);
+        String EmailResult = emailSplit(email);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(EmailResult);
 
         int selectedId = radioGroup.getCheckedRadioButtonId();
         radioButton1 = (RadioButton) findViewById(selectedId);
@@ -164,6 +161,16 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public String emailSplit(String str) {
+        String resultStr = "";
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) > 64 && str.charAt(i) <= 122) {
+                resultStr = resultStr + str.charAt(i);
+            }
+        }
+        return resultStr;
     }
 
     public void OnClickLogInLink(View view) {

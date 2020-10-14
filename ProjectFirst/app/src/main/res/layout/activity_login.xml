@@ -7,11 +7,14 @@
     android:background="@mipmap/loginbackground"
     tools:context=".Auth.LoginActivity">
 
+
     <EditText
         android:id="@+id/emailTextField"
-        android:layout_width="363dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginRight="30dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textPersonName"
@@ -19,15 +22,17 @@
         android:paddingRight="10dp"
         android:textColor="#F4EEEE"
         android:textColorHint="#989298"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPersonName"
-        app:layout_constraintStart_toStartOf="@+id/editTextPersonName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPersonName" />
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
         android:id="@+id/passwordTextField"
-        android:layout_width="363dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -36,11 +41,8 @@
         android:textColor="#FBF9F9"
         android:textColorHint="#989298"
         app:layout_constraintEnd_toEndOf="@+id/emailTextField"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/emailTextField"
         app:layout_constraintTop_toBottomOf="@+id/emailTextField" />
-
-
 
     <Button
         android:id="@+id/LoginBtn"
@@ -120,27 +122,12 @@
         android:id="@+id/imageView3"
         android:layout_width="26dp"
         android:layout_height="28dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="44dp"
         android:onClick="ShowHidePass"
         app:layout_constraintBottom_toBottomOf="@+id/passwordTextField"
         app:layout_constraintEnd_toEndOf="@+id/passwordTextField"
         app:layout_constraintTop_toTopOf="@+id/passwordTextField"
-        app:layout_constraintVertical_bias="0.423"
+        app:layout_constraintVertical_bias="0.409"
         app:srcCompat="@drawable/eye" />
 
-    <EditText
-        android:id="@+id/editTextPersonName"
-        android:layout_width="363dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#989298"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
