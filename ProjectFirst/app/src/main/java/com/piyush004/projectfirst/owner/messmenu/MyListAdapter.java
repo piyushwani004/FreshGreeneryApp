@@ -10,7 +10,9 @@ import com.piyush004.projectfirst.R;
 
 public class MyListAdapter extends RecyclerView.ViewHolder {
 
-    TextView textViewName, textViewQuant, textViewPrice;
+    TextView textViewName;
+    TextView textViewQuant;
+    TextView textViewPrice;
 
     public MyListAdapter(@NonNull View itemView) {
         super(itemView);
@@ -18,5 +20,18 @@ public class MyListAdapter extends RecyclerView.ViewHolder {
         textViewName = itemView.findViewById(R.id.textViewNameMess);
         textViewQuant = itemView.findViewById(R.id.textViewQuantMess);
         textViewPrice = itemView.findViewById(R.id.textViewPriceMess);
+    }
+
+    public void setTxtName(String string) {
+        textViewName.setText(string);
+    }
+
+
+    public void setTxtQuant(String string) {
+        textViewQuant.setText(string);
+    }
+
+    public void setTxtPrice(String string) {
+        textViewPrice.setText(string);
     }
 }

@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 import com.piyush004.projectfirst.R;
-
-import java.util.List;
 
 public class MessMenuActivity extends AppCompatActivity {
 
@@ -29,7 +29,6 @@ public class MessMenuActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DatabaseReference databaseReference;
     private String login_name;
-    private List<MessMenuModel> listData;
     private FirebaseRecyclerOptions<MessMenuModel> options;
     private FirebaseRecyclerAdapter<MessMenuModel, MyListAdapter> adapter;
 
@@ -47,16 +46,27 @@ public class MessMenuActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        final DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
+        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
 
-        options = new FirebaseRecyclerOptions.Builder<MessMenuModel>().setQuery(nm, MessMenuModel.class).build();
+        options = new FirebaseRecyclerOptions.Builder<MessMenuModel>().setQuery(nm, new SnapshotParser<MessMenuModel>() {
+            @NonNull
+            @Override
+            public MessMenuModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                return new MessMenuModel(
+                        snapshot.child("ItemName").getValue().toString(),
+                        snapshot.child("ItemQuantity").getValue().toString(),
+                        snapshot.child("ItemPrice").getValue().toString()
+                );
+            }
+        }).build();
         adapter = new FirebaseRecyclerAdapter<MessMenuModel, MyListAdapter>(options) {
+
             @Override
             protected void onBindViewHolder(@NonNull MyListAdapter holder, int position, @NonNull MessMenuModel model) {
 
-                holder.textViewName.setText(" Hi"+model.getMessMenuName());
-                holder.textViewQuant.setText("hello "+model.getMessMenuQuantity());
-                holder.textViewPrice.setText("bye"+model.getMessMenuPrice());
+                holder.setTxtName(model.getMessMenuName());
+                holder.setTxtQuant(model.getMessMenuQuantity());
+                holder.setTxtPrice(model.getMessMenuPrice());
 
                 System.out.println(model.getMessMenuName());
                 System.out.println(model.getMessMenuQuantity());
@@ -111,12 +121,13 @@ public class MessMenuActivity extends AppCompatActivity {
     }
 
     public void sendDialogDataToActivity(String name, String quan, String price) {
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
         String key = databaseReference.push().getKey();
         databaseReference.child(key).child("ItemName").setValue(name);
         databaseReference.child(key).child("ItemQuantity").setValue(quan);
         databaseReference.child(key).child("ItemPrice").setValue(price);
-        //Toast.makeText(this, "Message is : " + name + quan + price, Toast.LENGTH_SHORT).show();
+
     }
 
 }
