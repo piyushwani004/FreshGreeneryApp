@@ -6,6 +6,11 @@ public class MessMenuModel {
     private String messMenuQuantity;
     private String messMenuPrice;
 
+
+    public MessMenuModel() {
+
+    }
+
     public MessMenuModel(String messMenuName, String messMenuQuantity, String messMenuPrice) {
         this.messMenuName = messMenuName;
         this.messMenuQuantity = messMenuQuantity;
