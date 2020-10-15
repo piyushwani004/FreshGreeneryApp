@@ -16,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.piyush004.projectfirst.MainActivity;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
+import com.piyush004.projectfirst.owner.map.MapsOwnerActivity;
 import com.piyush004.projectfirst.owner.messdetails.MessDetailsActivity;
 import com.piyush004.projectfirst.owner.messmenu.MessMenuActivity;
 import com.piyush004.projectfirst.owner.profile.ProfileOwnerFragment;
@@ -101,6 +102,9 @@ public class OwnerDashboard extends AppCompatActivity {
 
                     case R.id.menu_messLocation:
                         Toast.makeText(getApplicationContext(), "mess Location Panel is Open", Toast.LENGTH_SHORT).show();
+                        Intent intentloc = new Intent(OwnerDashboard.this, MapsOwnerActivity.class);
+                        intentloc.putExtra("LoginNameMessDetails", login_name);
+                        startActivity(intentloc);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
