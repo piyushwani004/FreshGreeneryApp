@@ -37,9 +37,10 @@
         android:clickable="true"
         android:onClick="onClickAddMenuEvent"
         app:backgroundTint="@color/colorAccent"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/add" />
+        app:srcCompat="@drawable/addMenu" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
