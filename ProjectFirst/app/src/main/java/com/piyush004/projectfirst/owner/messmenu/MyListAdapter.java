@@ -34,4 +34,5 @@ public class MyListAdapter extends RecyclerView.ViewHolder {
     public void setTxtPrice(String string) {
         textViewPrice.setText(string);
     }
+
 }

@@ -52,8 +52,10 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
     private DatabaseReference databaseReference;
     private String login_name, messName;
     private Double latitude, longitude;
+    private String firebaseLatitude, firebaseLongitude, firebaseMessName;
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_owner);
@@ -112,6 +114,7 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
             mMap.setMyLocationEnabled(true);
         }
 
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -140,6 +143,7 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
                 mMap.addMarker(markerOptions);
             }
         });
+
 
     }
 
@@ -235,4 +239,41 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
         finish();
 
     }
+
+    public void ShowDatabaseMessLocation() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                firebaseLatitude = snapshot.child("RegisterType").child(login_name).child("MessLocation").child("MessName").getValue(String.class);
+                firebaseLongitude = snapshot.child("RegisterType").child(login_name).child("MessLocation").child("latitude").getValue(String.class);
+                firebaseMessName = snapshot.child("RegisterType").child(login_name).child("MessLocation").child("longitude").getValue(String.class);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        double fireLat = Double.parseDouble(firebaseLatitude);
+        double fireLong = Double.parseDouble(firebaseLongitude);
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        LatLng FirebaseMarker = new LatLng(fireLat, fireLong);
+        // mMap.addMarker(new MarkerOptions().position(FirebaseMarker).title(firebaseMessName));
+
+        MarkerOptions markerOptionsFirebase = new MarkerOptions();
+        markerOptionsFirebase.position(FirebaseMarker);
+        markerOptionsFirebase.title(firebaseMessName);
+        markerOptionsFirebase.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        mCurrLocationMarker = mMap.addMarker(markerOptionsFirebase);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(FirebaseMarker));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+    }
+
 }
