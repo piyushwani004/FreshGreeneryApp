@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                                             Intent intent = new Intent(LoginActivity.this, CustomerDashboard.class);
                                             startActivity(intent);
                                         } else {
-                                            Toast.makeText(getApplicationContext(), "Please try again later", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "Check Your Internet Connection...!!! Please try again later...", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
                                         }
 

@@ -1,6 +1,7 @@
 package com.piyush004.projectfirst.owner.map;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -29,6 +30,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 import com.piyush004.projectfirst.R;
 
 import java.io.IOException;
@@ -42,6 +49,9 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
     Marker mCurrLocationMarker;
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
+    private DatabaseReference databaseReference;
+    private String login_name, messName;
+    private Double latitude, longitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,24 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            login_name = bundle.getString("LoginNameMessDetails");
+        }
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                messName = snapshot.child("MessName").getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     /**
@@ -83,6 +111,36 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+                // Creating a marker
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                // Setting the position for the marker
+                markerOptions.position(latLng);
+
+                if (messName.isEmpty()) {
+                    markerOptions.title("Not Set Mess Name");
+                    Toast.makeText(MapsOwnerActivity.this, "Filed The Form First... ", Toast.LENGTH_SHORT).show();
+                } else {
+                    markerOptions.title(" " + messName + " ");
+                }
+                latitude = latLng.latitude;
+                longitude = latLng.longitude;
+                // Clears the previously touched position
+                mMap.clear();
+
+                // Animating to the touched position
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                // Placing a marker on the touched position
+                mMap.addMarker(markerOptions);
+            }
+        });
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -105,7 +163,6 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
-
     }
 
     @Override
@@ -127,6 +184,7 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
         }
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
         markerOptions.title("Current Position");
@@ -146,18 +204,35 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
     public void searchLocation(View view) throws IOException {
         EditText locationSearch = (EditText) findViewById(R.id.editText);
         String location = locationSearch.getText().toString();
-        List<Address> addressList = null;
+        if (location.isEmpty()) {
+            locationSearch.setError("Search Place First...!!!");
+            locationSearch.requestFocus();
+        } else {
+            List<Address> addressList = null;
 
-        if (location != null || !location.equals("")) {
-            Geocoder geocoder = new Geocoder(this);
-            addressList = geocoder.getFromLocationName(location, 1);
-
-            Address address = addressList.get(0);
-            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-            Toast.makeText(getApplicationContext(), address.getLatitude() + " & " + address.getLongitude(), Toast.LENGTH_LONG).show();
+            if (location != null || !location.equals("")) {
+                Geocoder geocoder = new Geocoder(this);
+                addressList = geocoder.getFromLocationName(location, 1);
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                Toast.makeText(getApplicationContext(), address.getLatitude() + " & " + address.getLongitude(), Toast.LENGTH_LONG).show();
+            }
         }
     }
 
+    public void addLocation(View view) throws IOException {
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessLocation");
+        databaseReference.child("MessName").setValue(messName);
+        databaseReference.child("latitude").setValue(latitude);
+        databaseReference.child("longitude").setValue(longitude);
+        Toast.makeText(this, "Save Location" + latitude + " : " + longitude, Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent(MapsOwnerActivity.this, OwnerDashboard.class);
+        startActivity(intent);
+        finish();
+
+    }
 }

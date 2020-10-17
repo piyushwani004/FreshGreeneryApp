@@ -28,7 +28,7 @@
                 android:title="Mess schadule" />
             <item
                 android:id="@+id/menu_messLocation"
-                android:icon="@drawable/addLoc"
+                android:icon="@drawable/add_loc"
                 android:title="Mess Location" />
 
             <item
