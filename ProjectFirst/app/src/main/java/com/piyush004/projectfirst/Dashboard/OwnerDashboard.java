@@ -19,7 +19,7 @@ import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
 import com.piyush004.projectfirst.owner.map.MapsOwnerActivity;
 import com.piyush004.projectfirst.owner.messdetails.MessDetailsActivity;
 import com.piyush004.projectfirst.owner.messmenu.MessMenuActivity;
-import com.piyush004.projectfirst.owner.profile.ProfileOwnerFragment;
+import com.piyush004.projectfirst.owner.profile.ProfileOwnerActivity;
 
 public class OwnerDashboard extends AppCompatActivity {
 
@@ -72,8 +72,10 @@ public class OwnerDashboard extends AppCompatActivity {
 
                     case R.id.menu_profile:
                         Toast.makeText(getApplicationContext(), "Profile Panel is Open", Toast.LENGTH_SHORT).show();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new ProfileOwnerFragment()).commit();
+                        Intent intentProfile = new Intent(OwnerDashboard.this, ProfileOwnerActivity.class);
+                        intentProfile.putExtra("LoginNameMessDetails", login_name);
+                        intentProfile.putExtra("LoginEmailMessDetails", login_email);
+                        startActivity(intentProfile);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
