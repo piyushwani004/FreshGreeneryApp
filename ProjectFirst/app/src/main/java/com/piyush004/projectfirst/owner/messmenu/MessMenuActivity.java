@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
 public class MessMenuActivity extends AppCompatActivity {
@@ -40,9 +41,8 @@ public class MessMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mess_menu);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            login_name = bundle.getString("LoginNameMessDetails");
-        }
+
+        login_name = LoginKey.loginKey;
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         editTextName = findViewById(R.id.editTextName);

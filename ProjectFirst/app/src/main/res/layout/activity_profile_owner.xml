@@ -55,10 +55,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:tabGravity="fill"
+            app:tabBackground="@color/colorAccent"
             app:tabIndicatorColor="#FFEB3B"
             app:tabIndicatorHeight="1.5dp"
             app:tabMode="fixed"
-            app:tabTextColor="#FFFFFF" />
+            app:tabTextColor="#F44336" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

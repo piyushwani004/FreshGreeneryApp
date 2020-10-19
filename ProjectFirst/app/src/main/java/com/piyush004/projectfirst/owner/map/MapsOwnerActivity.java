@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
 import java.io.IOException;
@@ -64,10 +65,7 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            login_name = bundle.getString("LoginNameMessDetails");
-        }
+        login_name =LoginKey.loginKey;
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {

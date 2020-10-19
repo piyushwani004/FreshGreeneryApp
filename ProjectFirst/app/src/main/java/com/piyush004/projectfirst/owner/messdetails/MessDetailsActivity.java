@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
 public class MessDetailsActivity extends AppCompatActivity {
@@ -85,9 +86,9 @@ public class MessDetailsActivity extends AppCompatActivity {
 
     public void onClickSaveEvent(View view) {
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            login_name = bundle.getString("LoginNameMessDetails");
-        }
+
+        login_name = LoginKey.loginKey;
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
         mess_name = editTextName.getText().toString();
         mess_address = editTextAddress.getText().toString();

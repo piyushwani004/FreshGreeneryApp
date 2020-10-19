@@ -1,6 +1,7 @@
 package com.piyush004.projectfirst.Auth;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -25,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.Dashboard.CustomerDashboard;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.MainActivity;
 import com.piyush004.projectfirst.R;
 
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String mess = "Mess-Owner";
     private String cust = "Customer";
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         pass = passwordText.getText().toString();
 
         final String Result = emailSplit(email);
+
+        LoginKey.loginKey = Result;
+        LoginKey.loginEmail = email;
 
         if (email.isEmpty()) {
             progressBar.setVisibility(View.GONE);
@@ -97,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
                                             Intent intent = new Intent(LoginActivity.this, OwnerDashboard.class);
                                             intent.putExtras(bundle);
                                             startActivity(intent);
+
+                                            emailText.setText("");
+                                            passwordText.setText("");
+
                                         } else if (type.equals(cust)) {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
