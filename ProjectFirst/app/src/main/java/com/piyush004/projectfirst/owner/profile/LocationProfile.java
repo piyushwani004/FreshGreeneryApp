@@ -5,63 +5,85 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LocationProfile#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LocationProfile extends Fragment {
 
+    private GoogleMap mMap;
+    private String login_name, messName;
     View view;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private DatabaseReference databaseReference;
+    private String latitude, longitude;
+    FragmentManager fm;
+    SupportMapFragment myMapFragment;
 
     public LocationProfile() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment LocationProfile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static LocationProfile newInstance(String param1, String param2) {
-        LocationProfile fragment = new LocationProfile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_location_profile, container, false);
+        fm = getChildFragmentManager();
+        myMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMess);
+
+        final String login_name = LoginKey.loginKey;
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessLocation");
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                messName = dataSnapshot.child("MessName").getValue(String.class);
+                latitude = dataSnapshot.child("latitude").getValue(String.class);
+                longitude = dataSnapshot.child("longitude").getValue(String.class);
+
+                final double lati = Double.parseDouble(latitude);
+                final double longi = Double.parseDouble(longitude);
+
+                myMapFragment.getMapAsync(new OnMapReadyCallback() {
+
+                    @Override
+                    public void onMapReady(GoogleMap googlemap) {
+
+                        mMap = googlemap;
+                        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                        //LatLng latLng = new LatLng(19.663280, 75.300293);
+                        LatLng latLng = new LatLng(lati, longi);
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(messName));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                    }
+                });
+
+               // System.out.println("lati " + latitude + "::" + "longi " + longitude + "mess " + messName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         return view;
     }
+
 }

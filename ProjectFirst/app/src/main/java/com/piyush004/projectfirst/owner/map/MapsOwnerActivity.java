@@ -65,7 +65,7 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        login_name =LoginKey.loginKey;
+        login_name = LoginKey.loginKey;
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -226,11 +226,15 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
 
     public void addLocation(View view) throws IOException {
 
+        String lati = Double.toString(latitude);
+        String longi = Double.toString(longitude);
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessLocation");
         databaseReference.child("MessName").setValue(messName);
-        databaseReference.child("latitude").setValue(latitude);
-        databaseReference.child("longitude").setValue(longitude);
-        Toast.makeText(this, "Save Location" + latitude + " : " + longitude, Toast.LENGTH_LONG).show();
+        databaseReference.child("latitude").setValue(lati);
+        databaseReference.child("longitude").setValue(longi);
+        System.out.println(latitude + " :: " + longitude);
+        Toast.makeText(this, "Save Location" + lati + " : " + longi, Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent(MapsOwnerActivity.this, OwnerDashboard.class);
         startActivity(intent);

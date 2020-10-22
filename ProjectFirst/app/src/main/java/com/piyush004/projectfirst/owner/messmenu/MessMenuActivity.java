@@ -88,6 +88,7 @@ public class MessMenuActivity extends AppCompatActivity {
 
         adapter.startListening();
         recyclerView.setAdapter(adapter);
+
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -122,18 +123,21 @@ public class MessMenuActivity extends AppCompatActivity {
         } else if (menuPrice.isEmpty()) {
             editTextPrice.setError("Enter Menu Price...");
             editTextPrice.requestFocus();
+        } else if (!(menuName.isEmpty()) && (menuQuantity.isEmpty()) && (menuPrice.isEmpty())) {
+
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
+            String key = databaseReference.push().getKey();
+            databaseReference.child(key).child("ItemName").setValue(menuName);
+            databaseReference.child(key).child("ItemPrice").setValue(menuPrice);
+            databaseReference.child(key).child("ItemQuantity").setValue(menuQuantity);
+
+            Toast.makeText(MessMenuActivity.this, "Data Added To Database", Toast.LENGTH_SHORT).show();
+            editTextName.setText("");
+            editTextQuantity.setText("");
+            editTextPrice.setText("");
+
+        } else {
+            Toast.makeText(MessMenuActivity.this, "Check Your Internet Connection...", Toast.LENGTH_SHORT).show();
         }
-
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
-        String key = databaseReference.push().getKey();
-        databaseReference.child(key).child("ItemName").setValue(menuName);
-        databaseReference.child(key).child("ItemPrice").setValue(menuPrice);
-        databaseReference.child(key).child("ItemQuantity").setValue(menuQuantity);
-
-        Toast.makeText(MessMenuActivity.this, "Data Added To Database", Toast.LENGTH_SHORT).show();
-        editTextName.setText("");
-        editTextQuantity.setText("");
-        editTextPrice.setText("");
-
     }
 }

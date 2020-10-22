@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String mess = "Mess-Owner";
     private String cust = "Customer";
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
