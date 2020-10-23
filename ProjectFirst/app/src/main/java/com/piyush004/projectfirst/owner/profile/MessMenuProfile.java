@@ -92,8 +92,9 @@ public class MessMenuProfile extends Fragment {
             public MessMenuModel parseSnapshot(@NonNull DataSnapshot snapshot) {
                 return new MessMenuModel(
                         snapshot.child("ItemName").getValue().toString(),
-                        snapshot.child("ItemPrice").getValue().toString(),
-                        snapshot.child("ItemQuantity").getValue().toString()
+                        snapshot.child("ItemQuantity").getValue().toString(),
+                        snapshot.child("ItemPrice").getValue().toString()
+
 
                 );
             }

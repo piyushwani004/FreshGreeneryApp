@@ -30,6 +30,7 @@ public class LocationProfile extends Fragment {
     View view;
     private DatabaseReference databaseReference;
     private String latitude, longitude;
+
     FragmentManager fm;
     SupportMapFragment myMapFragment;
 
