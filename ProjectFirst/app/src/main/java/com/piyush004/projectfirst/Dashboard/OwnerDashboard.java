@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.piyush004.projectfirst.LoginKey;
+import com.piyush004.projectfirst.Auth.LoginActivity;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
 import com.piyush004.projectfirst.owner.map.MapsOwnerActivity;
@@ -53,6 +53,11 @@ public class OwnerDashboard extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navmenu);
         navigationView.setItemIconTintList(null);
 
+        View header = navigationView.getHeaderView(0);
+        textViewName = (TextView) header.findViewById(R.id.DashboardHeaderName);
+        textViewEmail = (TextView) header.findViewById(R.id.DashboardHeaderEmail);
+        textViewName.setText(login_name);
+        textViewEmail.setText(login_email);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -130,9 +135,9 @@ public class OwnerDashboard extends AppCompatActivity {
                     case R.id.menu_logout:
                         Toast.makeText(getApplicationContext(), "Logout Successful", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        //Intent intentlogout = new Intent(OwnerDashboard.this, MainActivity.class);
-                        //startActivity(intentlogout);
-                        auth.signOut();
+                        //auth.signOut();
+                        Intent intentlogout = new Intent(OwnerDashboard.this, LoginActivity.class);
+                        startActivity(intentlogout);
                         break;
                 }
 

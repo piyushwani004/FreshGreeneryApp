@@ -3,7 +3,6 @@ package com.piyush004.projectfirst.owner.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,7 +32,7 @@ public class ProfileOwnerActivity extends AppCompatActivity {
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.addFragment(new MessDetails(), "Mess Details");
+        viewPagerAdapter.addFragment(new MessDetailsProfile(), "Mess Details");
         viewPagerAdapter.addFragment(new MessMenuProfile(), " Mess Menu");
         viewPagerAdapter.addFragment(new LocationProfile(), "Mess Location");
 

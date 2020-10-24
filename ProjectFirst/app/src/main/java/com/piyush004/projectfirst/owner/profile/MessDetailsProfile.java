@@ -1,13 +1,16 @@
 package com.piyush004.projectfirst.owner.profile;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DataSnapshot;
@@ -20,10 +23,10 @@ import com.piyush004.projectfirst.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MessDetails#newInstance} factory method to
+ * Use the {@link MessDetailsProfile#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MessDetails extends Fragment {
+public class MessDetailsProfile extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +42,7 @@ public class MessDetails extends Fragment {
     private String login_name;
     private String Name, Address, Mobile, Email, City, ClosedDays;
 
-    public MessDetails() {
+    public MessDetailsProfile() {
         // Required empty public constructor
     }
 
@@ -52,8 +55,8 @@ public class MessDetails extends Fragment {
      * @return A new instance of fragment MessDetails.
      */
     // TODO: Rename and change types and number of parameters
-    public static MessDetails newInstance(String param1, String param2) {
-        MessDetails fragment = new MessDetails();
+    public static MessDetailsProfile newInstance(String param1, String param2) {
+        MessDetailsProfile fragment = new MessDetailsProfile();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -132,6 +135,50 @@ public class MessDetails extends Fragment {
             @Override
             public void onClick(View v) {
 
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.mess_details_edit_dialogbox, null);
+
+                final TextView name = dialogLayout.findViewById(R.id.edit_text_nameDialog);
+                final TextView address = dialogLayout.findViewById(R.id.edit_text_addressDialog);
+                final TextView mobile = dialogLayout.findViewById(R.id.edit_text_mobileDialog);
+                final TextView email = dialogLayout.findViewById(R.id.edit_text_emailDialog);
+                final TextView city = dialogLayout.findViewById(R.id.edit_text_cityDialog);
+                final TextView closedDays = dialogLayout.findViewById(R.id.edit_text_closed_daysDialog);
+
+                name.setText(textViewName.getText());
+                address.setText(textViewAddress.getText());
+                mobile.setText(textViewMobile.getText());
+                email.setText(textViewEmail.getText());
+                city.setText(textViewCity.getText());
+                closedDays.setText(textViewClosedDay.getText());
+
+                builder.setTitle("Mess Details Edit Form");
+                builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
+                        databaseReference.child("MessName").setValue(name.getText().toString());
+                        databaseReference.child("MessAddress").setValue(address.getText().toString());
+                        databaseReference.child("MessMobile").setValue(mobile.getText().toString());
+                        databaseReference.child("MessEmail").setValue(email.getText().toString());
+                        databaseReference.child("MessCity").setValue(city.getText().toString());
+                        databaseReference.child("MessClosedDays").setValue(closedDays.getText().toString());
+
+                        Toast.makeText(getContext(), "Save", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setNegativeButton("Closed", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.setView(dialogLayout);
+                builder.show();
             }
         });
 

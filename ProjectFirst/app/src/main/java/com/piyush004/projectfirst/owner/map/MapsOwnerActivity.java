@@ -112,7 +112,6 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
             mMap.setMyLocationEnabled(true);
         }
 
-
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -141,8 +140,6 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
                 mMap.addMarker(markerOptions);
             }
         });
-
-
     }
 
     protected synchronized void buildGoogleApiClient() {

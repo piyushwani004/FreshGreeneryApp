@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".owner.profile.MessDetails">
+    tools:context=".owner.profile.MessDetailsProfile">
 
     <TextView
         android:id="@+id/textView7"
@@ -22,7 +22,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Mess Address :"
+        android:text="Address :"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@+id/textView7"
         app:layout_constraintStart_toStartOf="@+id/textView7"
@@ -33,7 +33,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Mess Mobile :"
+        android:text="Mobile :"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@+id/textView8"
         app:layout_constraintStart_toStartOf="@+id/textView8"
@@ -76,18 +76,19 @@
 
     <TextView
         android:id="@+id/textViewMessMobileProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="28dp"
         android:textAlignment="center"
         android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/textViewMessAdressProfile"
-        app:layout_constraintStart_toStartOf="@+id/textViewMessAdressProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.609"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
         app:layout_constraintTop_toBottomOf="@+id/textViewMessAdressProfile" />
 
     <TextView
         android:id="@+id/textViewMessNameProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="63dp"
         android:textAlignment="center"
@@ -104,34 +105,34 @@
         android:textAlignment="center"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@+id/textViewMessNameProfile"
-        app:layout_constraintStart_toStartOf="@+id/textViewMessNameProfile"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/textViewMessNameProfile" />
 
     <TextView
         android:id="@+id/textViewMessCityProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:textAlignment="center"
         android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/textViewMessMobileProfile"
-        app:layout_constraintStart_toStartOf="@+id/textViewMessMobileProfile"
+        app:layout_constraintEnd_toEndOf="@+id/textViewMessEmailProfile"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/textViewMessEmailProfile" />
 
     <TextView
         android:id="@+id/textViewMessClosedDayProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:textAlignment="center"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="@+id/textViewMessCityProfile"
-        app:layout_constraintStart_toStartOf="@+id/textViewMessCityProfile"
+        app:layout_constraintStart_toEndOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/textViewMessCityProfile" />
 
     <TextView
         android:id="@+id/textViewMessEmailProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:textAlignment="center"

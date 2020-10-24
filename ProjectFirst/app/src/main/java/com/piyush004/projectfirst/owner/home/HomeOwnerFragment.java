@@ -1,11 +1,14 @@
 package com.piyush004.projectfirst.owner.home;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +16,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +33,7 @@ import com.piyush004.projectfirst.owner.profile.ProfileOwnerActivity;
 public class HomeOwnerFragment extends Fragment {
 
     private TextView textView;
-    private String MessHeading;
+    private String MenuItem;
     private String login_name, messName;
     private DatabaseReference databaseReference;
     private ToggleButton toggleButton;
@@ -100,6 +104,37 @@ public class HomeOwnerFragment extends Fragment {
         imageViewTodaysMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.todays_menu_dialog, null);
+                final EditText editText = dialogLayout.findViewById(R.id.editTextAddMenuItem);
+                ImageButton imageButton = dialogLayout.findViewById(R.id.imageButtonAddMenu);
+
+                imageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        editText.getText().toString();
+                    }
+                });
+                builder.setTitle("Mess Details Edit Form");
+                builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Toast.makeText(getContext(), "Save", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setNegativeButton("Closed", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.setView(dialogLayout);
+                builder.show();
                 Toast.makeText(getContext(), "ImageView Click", Toast.LENGTH_SHORT).show();
             }
         });

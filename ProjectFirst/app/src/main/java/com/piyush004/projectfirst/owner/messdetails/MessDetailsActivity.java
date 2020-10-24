@@ -85,7 +85,6 @@ public class MessDetailsActivity extends AppCompatActivity {
     }
 
     public void onClickSaveEvent(View view) {
-        Bundle bundle = getIntent().getExtras();
 
         login_name = LoginKey.loginKey;
 
