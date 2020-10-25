@@ -113,7 +113,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:clickable="true"
-                    app:srcCompat="@drawable/google_maps" />
+                    app:srcCompat="@drawable/mess_location_home" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -156,7 +156,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:clickable="true"
-                    app:srcCompat="@drawable/menu" />
+                    app:srcCompat="@drawable/mess_todays_menu_home" />
 
                 <TextView
                     android:layout_width="wrap_content"

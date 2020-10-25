@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +34,8 @@ import com.piyush004.projectfirst.owner.map.MapsOwnerActivity;
 import com.piyush004.projectfirst.owner.messmenu.MessMenuActivity;
 import com.piyush004.projectfirst.owner.profile.ProfileOwnerActivity;
 
+import java.util.ArrayList;
+
 public class HomeOwnerFragment extends Fragment {
 
     private TextView textView;
@@ -38,6 +44,9 @@ public class HomeOwnerFragment extends Fragment {
     private DatabaseReference databaseReference;
     private ToggleButton toggleButton;
     private ImageView imageViewLocation, imageViewTodaysMenu, imageViewProfile, imageViewCustomer, imageViewMessMenu;
+    private ChipGroup chipGroup;
+    private EditText editText;
+    private ImageButton imageButton;
 
     @Nullable
     @Override
@@ -95,7 +104,7 @@ public class HomeOwnerFragment extends Fragment {
         imageViewLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "ImageView Click", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "ImageView Click", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), MapsOwnerActivity.class);
                 startActivity(intent);
             }
@@ -104,24 +113,50 @@ public class HomeOwnerFragment extends Fragment {
         imageViewTodaysMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                final ArrayList<String> list = new ArrayList<String>();
+                final DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("TodaysMessMenu");
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogLayout = inflater.inflate(R.layout.todays_menu_dialog, null);
-                final EditText editText = dialogLayout.findViewById(R.id.editTextAddMenuItem);
-                ImageButton imageButton = dialogLayout.findViewById(R.id.imageButtonAddMenu);
+
+                editText = dialogLayout.findViewById(R.id.editTextTodayMenuEntry);
+                imageButton = dialogLayout.findViewById(R.id.addMenuItemBtn);
+                chipGroup = dialogLayout.findViewById(R.id.chipGroup);
 
                 imageButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        editText.getText().toString();
+                        final Chip chip = new Chip(getContext());
+                        ChipDrawable chipDrawable = ChipDrawable.createFromAttributes(getContext(), null, 0, R.style.Widget_MaterialComponents_Chip_Entry);
+                        chip.setChipDrawable(chipDrawable);
+                        chip.setCheckable(false);
+                        chip.setClickable(false);
+                        chip.setChipIconResource(R.drawable.ic_baseline_restaurant_menu_24);
+                        chip.setIconStartPadding(3f);
+                        chip.setPadding(60, 10, 60, 10);
+                        chip.setText(editText.getText().toString());
+
+                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                chipGroup.removeView(chip);
+                            }
+                        });
+                        chipGroup.addView(chip);
+                        editText.setText("");
                     }
                 });
-                builder.setTitle("Mess Details Edit Form");
+
+                builder.setTitle("Todays Menu Entry Form");
                 builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        for (int j = 0; j < chipGroup.getChildCount(); j++) {
+                            Chip chip = (Chip) chipGroup.getChildAt(j);
+                            Log.i("outside if ", j + " chip = " + chip.getText().toString());
+                            list.add(chip.getText().toString());
+                        }
+                        nm.child("todayMenu").setValue(list);
                         Toast.makeText(getContext(), "Save", Toast.LENGTH_SHORT).show();
                     }
                 });
