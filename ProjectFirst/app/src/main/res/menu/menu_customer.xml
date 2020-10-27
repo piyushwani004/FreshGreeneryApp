@@ -1,23 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu_home_c"
-        android:icon="@drawable/home"
-        android:title="Home"/>
+    <group android:checkableBehavior="single">
 
-    <item android:id="@+id/menu_profile_c"
-        android:icon="@drawable/profile"
-        android:title="Profile"/>
+        <item
+            android:id="@+id/menu_home_c"
+            android:icon="@drawable/home"
+            android:title="Home" />
+        <item
+            android:id="@+id/menu_profile_c"
+            android:icon="@drawable/profile"
+            android:title="Profile" />
 
-    <item android:id="@+id/menu_mess_c"
-        android:icon="@drawable/home"
-        android:title="Mess"/>
+    </group>
 
-    <item android:id="@+id/menu_setting_c"
-        android:icon="@drawable/setting"
-        android:title="Setting"/>
+    <item android:title="Mess">
 
-    <item android:id="@+id/menu_logout_c"
-        android:icon="@drawable/logout"
-        android:title="Logout"/>
+        <menu>
+            <item
+                android:id="@+id/menu_all_mess_c"
+                android:icon="@drawable/mess_details"
+                android:title="All Mess" />
+            <item
+                android:id="@+id/menu_messLocation_c"
+                android:icon="@drawable/add_loc"
+                android:title="Mess Location" />
+
+            <item
+                android:id="@+id/menu_setting_c"
+                android:icon="@drawable/setting"
+                android:title="Setting" />
+        </menu>
+    </item>
+
+    <item android:title="Communicate">
+
+        <menu>
+            <item
+                android:id="@+id/menu_share_c"
+                android:icon="@drawable/share"
+                android:title="Share" />
+            <item
+                android:id="@+id/menu_help_c"
+                android:icon="@drawable/help"
+                android:title="Help" />
+            <item
+                android:id="@+id/menu_logout_c"
+                android:icon="@drawable/logout"
+                android:title="Logout" />
+        </menu>
+    </item>
+
 </menu>

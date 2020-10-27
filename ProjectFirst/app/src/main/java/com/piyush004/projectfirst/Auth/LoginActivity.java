@@ -109,7 +109,11 @@ public class LoginActivity extends AppCompatActivity {
                                         } else if (type.equals(cust)) {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_LONG).show();
                                             progressBar.setVisibility(View.GONE);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("login_name_mess_Dashboard", Result);
+                                            bundle.putString("EmailID", email);
                                             Intent intent = new Intent(LoginActivity.this, CustomerDashboard.class);
+                                            intent.putExtras(bundle);
                                             startActivity(intent);
                                         } else {
                                             Toast.makeText(getApplicationContext(), "Check Your Internet Connection...!!! Please try again later...", Toast.LENGTH_LONG).show();

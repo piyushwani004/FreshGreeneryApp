@@ -9,7 +9,8 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarcustomer"
@@ -29,14 +30,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:gravity="center"
                 android:layout_marginLeft="30dp"
-                android:textSize="20dp"
+                android:gravity="center"
                 android:text="Customer Dashboard Page"
-                android:textColor="#FFFFFF"/>
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="20dp" />
 
         </androidx.appcompat.widget.Toolbar>
+
+        <FrameLayout
+            android:id="@+id/fragment_container_c"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
@@ -46,6 +52,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navheader"
-        app:menu="@menu/menu_customer"/>
+        app:menu="@menu/menu_customer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

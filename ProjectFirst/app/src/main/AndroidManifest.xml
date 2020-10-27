@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/food1"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".owner.profile.ProfileOwnerActivity"></activity>
+        <activity android:name=".customer.all_mess.CustomerAllMessActivity"></activity>
+        <activity android:name=".owner.profile.ProfileOwnerActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

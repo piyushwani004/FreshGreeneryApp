@@ -1,5 +1,6 @@
 package com.piyush004.projectfirst.owner.home;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,11 +19,13 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.TooltipCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.tooltip.TooltipDrawable;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -171,6 +174,15 @@ public class HomeOwnerFragment extends Fragment {
                 builder.setView(dialogLayout);
                 builder.show();
                 Toast.makeText(getContext(), "ImageView Click", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        imageViewTodaysMenu.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+               Toast.makeText(getContext(), "long Click Listener", Toast.LENGTH_SHORT).show();
+
+                return true;
             }
         });
 
