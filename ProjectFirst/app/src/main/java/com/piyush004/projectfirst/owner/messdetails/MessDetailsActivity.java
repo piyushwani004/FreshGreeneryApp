@@ -1,5 +1,6 @@
 package com.piyush004.projectfirst.owner.messdetails;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,14 +13,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
+
+import java.util.UUID;
 
 public class MessDetailsActivity extends AppCompatActivity {
 
@@ -34,6 +44,8 @@ public class MessDetailsActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private String mess_name, mess_address, mess_mobile, mess_city, mess_email, mess_closed_days;
     private String login_name;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +73,7 @@ public class MessDetailsActivity extends AppCompatActivity {
 
         buttonSave = findViewById(R.id.button_save);
 
+        login_name = LoginKey.loginKey;
 
     }
 
@@ -86,7 +99,6 @@ public class MessDetailsActivity extends AppCompatActivity {
 
     public void onClickSaveEvent(View view) {
 
-        login_name = LoginKey.loginKey;
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
         mess_name = editTextName.getText().toString();
@@ -117,7 +129,7 @@ public class MessDetailsActivity extends AppCompatActivity {
         } else if (!(mess_name.isEmpty() && mess_address.isEmpty() && mess_mobile.isEmpty() && mess_email.isEmpty() && mess_city.isEmpty() && mess_closed_days.isEmpty())) {
 
             MessDetailsModel messDetailsModel = new MessDetailsModel(mess_name, mess_address, mess_mobile, mess_city, mess_email, mess_closed_days);
-            System.out.println(messDetailsModel.toString());
+            //System.out.println(messDetailsModel.toString());
 
             databaseReference.child("MessName").setValue(messDetailsModel.getMess_name());
             databaseReference.child("MessAddress").setValue(messDetailsModel.getMess_address());
@@ -125,11 +137,47 @@ public class MessDetailsActivity extends AppCompatActivity {
             databaseReference.child("MessEmail").setValue(messDetailsModel.getMess_email());
             databaseReference.child("MessCity").setValue(messDetailsModel.getMess_city());
             databaseReference.child("MessClosedDays").setValue(messDetailsModel.getMess_closed_days());
+            uploadImage();
             Toast.makeText(this, "Data Added", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(MessDetailsActivity.this, OwnerDashboard.class);
             startActivity(intent);
 
         }
 
+    }
+
+    private void uploadImage() {
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        if (uri != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("images/").child(login_name);
+            ref.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MessDetailsActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(MessDetailsActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+        }
     }
 }

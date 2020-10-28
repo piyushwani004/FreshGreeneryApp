@@ -21,4 +21,21 @@ public class MyHolder extends RecyclerView.ViewHolder {
         this.textViewCity = itemView.findViewById(R.id.city_card_c);
 
     }
+
+    public void setTxtTitle(String string) {
+        textViewTitle.setText(string);
+    }
+
+
+    public void setTxtAddress(String string) {
+        textViewAddress.setText(string);
+    }
+
+    public void setTxtMobile(String string) {
+        textViewMobile.setText(string);
+    }
+
+    public void setTxtCity(String string) {
+        textViewCity.setText(string);
+    }
 }

@@ -4,8 +4,18 @@ public class AllMessModel {
 
     private String title;
     private String address;
-    private String modile;
+    private String mobile;
     private String city;
+
+    public AllMessModel() {
+    }
+
+    public AllMessModel(String title, String address, String mobile, String city) {
+        this.title = title;
+        this.address = address;
+        this.mobile = mobile;
+        this.city = city;
+    }
 
     public String getTitle() {
         return title;
@@ -24,11 +34,11 @@ public class AllMessModel {
     }
 
     public String getModile() {
-        return modile;
+        return mobile;
     }
 
     public void setModile(String modile) {
-        this.modile = modile;
+        this.mobile = modile;
     }
 
     public String getCity() {

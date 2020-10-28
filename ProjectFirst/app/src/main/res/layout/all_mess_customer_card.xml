@@ -7,7 +7,6 @@
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,7 +16,7 @@
             android:id="@+id/imageViewMess_c"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             app:srcCompat="@mipmap/ic_launcher_round" />
 
         <TextView
@@ -74,17 +73,6 @@
             android:text="City"
             android:textColor="#B5B4B6"
             android:textSize="18dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/city_card_c"
-            android:layout_marginStart="100dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@id/imageViewMess_c"
-            android:layout_toRightOf="@+id/imageViewMess_c"
-            android:text="View" />
     </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

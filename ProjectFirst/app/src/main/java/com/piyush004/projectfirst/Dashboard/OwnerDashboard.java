@@ -59,6 +59,7 @@ public class OwnerDashboard extends AppCompatActivity {
         textViewName.setText(login_name);
         textViewEmail.setText(login_email);
 
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeOwnerFragment()).commit();
