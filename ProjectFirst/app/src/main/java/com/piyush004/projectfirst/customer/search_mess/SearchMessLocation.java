@@ -2,6 +2,8 @@ package com.piyush004.projectfirst.customer.search_mess;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -29,6 +31,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
 import java.io.IOException;
@@ -42,6 +50,7 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
     private Marker mCurrLocationMarker;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    private String login_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +60,16 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_c);
         mapFragment.getMapAsync(this);
+
+        login_name = LoginKey.loginKey;
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        googleMap.setMapType(googleMap.MAP_TYPE_NORMAL);
+        //mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
@@ -67,10 +81,42 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
-        // Add a marker in Sydney and move the camera
-        //LatLng sydney = new LatLng(-34, 151);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("MessLocation");
+        df.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                String name = snapshot.child("MessName").getValue().toString();
+                String lati = snapshot.child("latitude").getValue().toString();
+                String longi = snapshot.child("longitude").getValue().toString();
+
+                LatLng location = new LatLng(Double.parseDouble(lati), Double.parseDouble(longi));
+                mMap.addMarker(new MarkerOptions().position(location).title(name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     protected synchronized void buildGoogleApiClient() {
