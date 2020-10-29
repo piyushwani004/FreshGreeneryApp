@@ -44,7 +44,7 @@ public class MessMenuActivity extends AppCompatActivity {
 
         login_name = LoginKey.loginKey;
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
         editTextName = findViewById(R.id.editTextName);
         editTextQuantity = findViewById(R.id.editTextQuantity);
         editTextPrice = findViewById(R.id.editTextPrice);
@@ -52,7 +52,7 @@ public class MessMenuActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
+        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("MessMenuBook").child(login_name);
 
         options = new FirebaseRecyclerOptions.Builder<MessMenuModel>().setQuery(nm, new SnapshotParser<MessMenuModel>() {
             @NonNull
@@ -123,9 +123,9 @@ public class MessMenuActivity extends AppCompatActivity {
         } else if (menuPrice.isEmpty()) {
             editTextPrice.setError("Enter Menu Price...");
             editTextPrice.requestFocus();
-        } else if (!(menuName.isEmpty()) && (menuQuantity.isEmpty()) && (menuPrice.isEmpty())) {
+        } else if (!((menuName.isEmpty()) && (menuQuantity.isEmpty()) && (menuPrice.isEmpty()))) {
 
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
+            databaseReference = FirebaseDatabase.getInstance().getReference().child("MessMenuBook").child(login_name);
             String key = databaseReference.push().getKey();
             databaseReference.child(key).child("ItemName").setValue(menuName);
             databaseReference.child(key).child("ItemPrice").setValue(menuPrice);

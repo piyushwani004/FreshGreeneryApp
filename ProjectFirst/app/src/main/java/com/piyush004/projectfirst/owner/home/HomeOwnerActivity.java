@@ -9,9 +9,6 @@ import com.piyush004.projectfirst.R;
 
 public class HomeOwnerActivity extends AppCompatActivity {
 
-    private DatabaseReference databaseReference;
-    private Double latitude, longitude;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

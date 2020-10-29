@@ -67,7 +67,7 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
 
         login_name = LoginKey.loginKey;
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -221,12 +221,12 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
         }
     }
 
-    public void addLocation(View view) throws IOException {
+    public void addLocation(View view)  {
 
         String lati = Double.toString(latitude);
         String longi = Double.toString(longitude);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessLocation");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("MessLocation").child(login_name);
         databaseReference.child("MessName").setValue(messName);
         databaseReference.child("latitude").setValue(lati);
         databaseReference.child("longitude").setValue(longi);

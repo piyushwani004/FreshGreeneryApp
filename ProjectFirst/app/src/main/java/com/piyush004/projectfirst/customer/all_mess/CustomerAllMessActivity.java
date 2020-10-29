@@ -44,17 +44,19 @@ public class CustomerAllMessActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name);
+        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("Mess");
 
         options = new FirebaseRecyclerOptions.Builder<AllMessModel>().setQuery(nm, new SnapshotParser<AllMessModel>() {
             @NonNull
             @Override
             public AllMessModel parseSnapshot(@NonNull DataSnapshot snapshot) {
                 return new AllMessModel(
-                        snapshot.child("MessDetails").child("MessName").getValue().toString(),
-                        snapshot.child("MessDetails").child("MessAddress").getValue().toString(),
-                        snapshot.child("MessDetails").child("MessMobile").getValue().toString(),
-                        snapshot.child("MessDetails").child("MessCity").getValue().toString()
+
+                        snapshot.child("MessName").getValue().toString(),
+                        snapshot.child("MessAddress").getValue().toString(),
+                        snapshot.child("MessMobile").getValue().toString(),
+                        snapshot.child("MessCity").getValue().toString()
+
                 );
             }
         }).build();
@@ -67,13 +69,14 @@ public class CustomerAllMessActivity extends AppCompatActivity {
                 holder.setTxtAddress(model.getAddress());
                 holder.setTxtMobile(model.getModile());
                 holder.setTxtCity(model.getCity());
+
             }
 
             @NonNull
             @Override
             public MyHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.all_mess_customer_card, parent, false);
 
                 return new MyHolder(view);
             }

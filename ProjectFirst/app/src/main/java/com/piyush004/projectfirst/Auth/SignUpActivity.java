@@ -107,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         String EmailResult = emailSplit(email);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(EmailResult);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(EmailResult);
 
         int selectedId = radioGroup.getCheckedRadioButtonId();
         radioButton1 = (RadioButton) findViewById(selectedId);

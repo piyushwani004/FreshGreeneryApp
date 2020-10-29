@@ -1,6 +1,5 @@
 package com.piyush004.projectfirst.owner.home;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,13 +18,11 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.android.material.chip.ChipGroup;
-import com.google.android.material.tooltip.TooltipDrawable;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,7 +64,7 @@ public class HomeOwnerFragment extends Fragment {
         imageViewMessMenu = view.findViewById(R.id.imageViewMessMenu);
 
         login_name = LoginKey.loginKey;
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessLocation");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("MessLocation").child(login_name);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -84,12 +81,32 @@ public class HomeOwnerFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
+
+        });
+
+        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
+        df.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String Messstatus = snapshot.child("Status").getValue(String.class);
+                if (Messstatus == null) {
+                    toggleButton.setText("Status");
+                } else {
+                    toggleButton.setText(Messstatus);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
 
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessStatus");
+                databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
                 Toast.makeText(getContext(), toggleButton.getText(), Toast.LENGTH_SHORT).show();
                 String status = toggleButton.getText().toString();
                 databaseReference.child("Status").setValue(status);
@@ -117,7 +134,7 @@ public class HomeOwnerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final ArrayList<String> list = new ArrayList<String>();
-                final DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("TodaysMessMenu");
+                final DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getLayoutInflater();
                 View dialogLayout = inflater.inflate(R.layout.todays_menu_dialog, null);
@@ -180,7 +197,7 @@ public class HomeOwnerFragment extends Fragment {
         imageViewTodaysMenu.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-               Toast.makeText(getContext(), "long Click Listener", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "long Click Listener", Toast.LENGTH_SHORT).show();
 
                 return true;
             }

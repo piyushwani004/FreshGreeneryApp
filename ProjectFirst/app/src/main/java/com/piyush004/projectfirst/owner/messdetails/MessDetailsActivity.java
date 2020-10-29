@@ -29,8 +29,6 @@ import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
-import java.util.UUID;
-
 public class MessDetailsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -99,8 +97,7 @@ public class MessDetailsActivity extends AppCompatActivity {
 
     public void onClickSaveEvent(View view) {
 
-
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
         mess_name = editTextName.getText().toString();
         mess_address = editTextAddress.getText().toString();
         mess_mobile = editTextMobile.getText().toString();

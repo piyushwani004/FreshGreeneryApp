@@ -89,17 +89,17 @@ public class MessDetailsProfile extends Fragment {
         login_name = LoginKey.loginKey;
         buttonEdit = (Button) view.findViewById(R.id.buttonEditProfile);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess");
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Name = snapshot.child(login_name).child("MessDetails").child("MessName").getValue(String.class);
-                Address = snapshot.child(login_name).child("MessDetails").child("MessAddress").getValue(String.class);
-                Mobile = snapshot.child(login_name).child("MessDetails").child("MessMobile").getValue(String.class);
-                Email = snapshot.child(login_name).child("MessDetails").child("MessEmail").getValue(String.class);
-                City = snapshot.child(login_name).child("MessDetails").child("MessCity").getValue(String.class);
-                ClosedDays = snapshot.child(login_name).child("MessDetails").child("MessClosedDays").getValue(String.class);
+                Name = snapshot.child(login_name).child("MessName").getValue(String.class);
+                Address = snapshot.child(login_name).child("MessAddress").getValue(String.class);
+                Mobile = snapshot.child(login_name).child("MessMobile").getValue(String.class);
+                Email = snapshot.child(login_name).child("MessEmail").getValue(String.class);
+                City = snapshot.child(login_name).child("MessCity").getValue(String.class);
+                ClosedDays = snapshot.child(login_name).child("MessClosedDays").getValue(String.class);
 
                 if (Name.isEmpty()) {
                     textViewName.setText("");
@@ -158,7 +158,7 @@ public class MessDetailsProfile extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessDetails");
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
                         databaseReference.child("MessName").setValue(name.getText().toString());
                         databaseReference.child("MessAddress").setValue(address.getText().toString());
                         databaseReference.child("MessMobile").setValue(mobile.getText().toString());

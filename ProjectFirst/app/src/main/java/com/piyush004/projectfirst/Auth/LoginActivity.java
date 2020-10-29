@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onClickSignIn(View view) {
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
         progressBar.setVisibility(View.VISIBLE);
 

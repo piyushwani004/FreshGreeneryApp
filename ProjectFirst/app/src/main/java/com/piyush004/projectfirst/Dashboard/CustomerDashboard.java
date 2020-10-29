@@ -18,6 +18,7 @@ import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.customer.all_mess.CustomerAllMessActivity;
 import com.piyush004.projectfirst.customer.home.CustomerHomeFragment;
 import com.piyush004.projectfirst.customer.profile.CustomerProfileFragment;
+import com.piyush004.projectfirst.customer.search_mess.SearchMessLocation;
 
 public class CustomerDashboard extends AppCompatActivity {
 
@@ -84,6 +85,8 @@ public class CustomerDashboard extends AppCompatActivity {
 
                     case R.id.menu_messLocation_c:
                         Toast.makeText(getApplicationContext(), "Mess Location is Open", Toast.LENGTH_LONG).show();
+                        Intent intentLocation = new Intent(CustomerDashboard.this, SearchMessLocation.class);
+                        startActivity(intentLocation);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 

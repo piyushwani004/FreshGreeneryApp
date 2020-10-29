@@ -84,7 +84,7 @@ public class MessMenuProfile extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessMenu");
+        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("MessMenuBook").child(login_name);
 
         options = new FirebaseRecyclerOptions.Builder<MessMenuModel>().setQuery(nm, new SnapshotParser<MessMenuModel>() {
             @NonNull

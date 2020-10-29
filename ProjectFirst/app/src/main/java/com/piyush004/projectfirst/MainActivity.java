@@ -18,7 +18,7 @@ import com.piyush004.projectfirst.Auth.SignUpActivity;
 public class MainActivity extends AppCompatActivity {
 
     private Button buttonLogin, buttonSignUp;
-    private Animation topAnimantion, bottomAnimation, middleAnimation;
+    private Animation topAnimation, bottomAnimation, middleAnimation;
     private ImageView imageView1, imageView2;
     private TextView textView;
 
@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
         imageView2 = findViewById(R.id.imageViewMiddel);
         textView = findViewById(R.id.textView);
 
-        topAnimantion = AnimationUtils.loadAnimation(this, R.anim.top_animation);
+        topAnimation = AnimationUtils.loadAnimation(this, R.anim.top_animation);
         bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
         middleAnimation = AnimationUtils.loadAnimation(this, R.anim.middle_animation);
 
-        imageView1.setAnimation(topAnimantion);
+        imageView1.setAnimation(topAnimation);
         textView.setAnimation(middleAnimation);
         imageView2.setAnimation(middleAnimation);
         buttonSignUp.setAnimation(bottomAnimation);

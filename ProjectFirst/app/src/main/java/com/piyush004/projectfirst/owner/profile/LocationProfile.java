@@ -47,9 +47,9 @@ public class LocationProfile extends Fragment {
         fm = getChildFragmentManager();
         myMapFragment = (SupportMapFragment) fm.findFragmentById(R.id.locationMess);
 
-        final String login_name = LoginKey.loginKey;
+        login_name = LoginKey.loginKey;
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("RegisterType").child(login_name).child("MessLocation");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("MessLocation").child(login_name);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
