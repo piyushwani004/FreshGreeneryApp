@@ -6,15 +6,34 @@ public class AllMessModel {
     private String address;
     private String mobile;
     private String city;
+    private String img;
 
     public AllMessModel() {
     }
 
-    public AllMessModel(String title, String address, String mobile, String city) {
+
+    public AllMessModel(String title, String address, String mobile, String city , String img) {
         this.title = title;
         this.address = address;
         this.mobile = mobile;
         this.city = city;
+        this.img = img;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getTitle() {
@@ -33,13 +52,6 @@ public class AllMessModel {
         this.address = address;
     }
 
-    public String getModile() {
-        return mobile;
-    }
-
-    public void setModile(String modile) {
-        this.mobile = modile;
-    }
 
     public String getCity() {
         return city;

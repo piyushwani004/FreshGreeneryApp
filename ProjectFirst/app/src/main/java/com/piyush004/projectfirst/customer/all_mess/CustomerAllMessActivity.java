@@ -56,7 +56,8 @@ public class CustomerAllMessActivity extends AppCompatActivity {
                         snapshot.child("MessName").getValue().toString(),
                         snapshot.child("MessAddress").getValue().toString(),
                         snapshot.child("MessMobile").getValue().toString(),
-                        snapshot.child("MessCity").getValue().toString()
+                        snapshot.child("MessCity").getValue().toString(),
+                        snapshot.child("ImageURl").getValue().toString()
 
                 );
             }
@@ -68,10 +69,11 @@ public class CustomerAllMessActivity extends AppCompatActivity {
 
                 holder.setTxtTitle(model.getTitle());
                 holder.setTxtAddress(model.getAddress());
-                holder.setTxtMobile(model.getModile());
+                holder.setTxtMobile(model.getMobile());
                 holder.setTxtCity(model.getCity());
+                holder.setTxtImg(model.getImg());
 
-                holder.textViewTitle.setOnClickListener(new View.OnClickListener() {
+                holder.imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(CustomerAllMessActivity.this, "click " + model.getTitle(), Toast.LENGTH_SHORT).show();
