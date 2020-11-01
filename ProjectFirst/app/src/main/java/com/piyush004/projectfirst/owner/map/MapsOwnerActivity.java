@@ -221,13 +221,12 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
         }
     }
 
-    public void addLocation(View view)  {
+    public void addLocation(View view) {
 
         String lati = Double.toString(latitude);
         String longi = Double.toString(longitude);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("MessLocation").child(login_name);
-        databaseReference.child("MessName").setValue(messName);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
         databaseReference.child("latitude").setValue(lati);
         databaseReference.child("longitude").setValue(longi);
         System.out.println(latitude + " :: " + longitude);
@@ -236,42 +235,6 @@ public class MapsOwnerActivity extends FragmentActivity implements OnMapReadyCal
         Intent intent = new Intent(MapsOwnerActivity.this, OwnerDashboard.class);
         startActivity(intent);
         finish();
-
-    }
-
-    public void ShowDatabaseMessLocation() {
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                firebaseLatitude = snapshot.child("RegisterType").child(login_name).child("MessLocation").child("MessName").getValue(String.class);
-                firebaseLongitude = snapshot.child("RegisterType").child(login_name).child("MessLocation").child("latitude").getValue(String.class);
-                firebaseMessName = snapshot.child("RegisterType").child(login_name).child("MessLocation").child("longitude").getValue(String.class);
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        double fireLat = Double.parseDouble(firebaseLatitude);
-        double fireLong = Double.parseDouble(firebaseLongitude);
-
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        LatLng FirebaseMarker = new LatLng(fireLat, fireLong);
-        // mMap.addMarker(new MarkerOptions().position(FirebaseMarker).title(firebaseMessName));
-
-        MarkerOptions markerOptionsFirebase = new MarkerOptions();
-        markerOptionsFirebase.position(FirebaseMarker);
-        markerOptionsFirebase.title(firebaseMessName);
-        markerOptionsFirebase.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        mCurrLocationMarker = mMap.addMarker(markerOptionsFirebase);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(FirebaseMarker));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
 
     }
 

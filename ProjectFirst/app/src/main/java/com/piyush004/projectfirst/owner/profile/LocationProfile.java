@@ -49,7 +49,7 @@ public class LocationProfile extends Fragment {
 
         login_name = LoginKey.loginKey;
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("MessLocation").child(login_name);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

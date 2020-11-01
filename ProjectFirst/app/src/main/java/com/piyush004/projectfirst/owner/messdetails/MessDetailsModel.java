@@ -8,6 +8,8 @@ public class MessDetailsModel {
     private String mess_city;
     private String mess_email;
     private String mess_closed_days;
+    private Integer mess_image;
+
 
     public MessDetailsModel(String mess_name, String mess_address, String mess_mobile, String mess_city, String mess_email, String mess_closed_days) {
         this.mess_name = mess_name;
@@ -64,6 +66,14 @@ public class MessDetailsModel {
 
     public void setMess_closed_days(String mess_closed_days) {
         this.mess_closed_days = mess_closed_days;
+    }
+
+    public Integer getMess_image() {
+        return mess_image;
+    }
+
+    public void setMess_image(Integer mess_image) {
+        this.mess_image = mess_image;
     }
 
     @Override

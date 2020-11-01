@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,12 +64,19 @@ public class CustomerAllMessActivity extends AppCompatActivity {
         adapter = new FirebaseRecyclerAdapter<AllMessModel, MyHolder>(options) {
 
             @Override
-            protected void onBindViewHolder(@NonNull MyHolder holder, int position, @NonNull AllMessModel model) {
+            protected void onBindViewHolder(@NonNull MyHolder holder, int position, @NonNull final AllMessModel model) {
 
                 holder.setTxtTitle(model.getTitle());
                 holder.setTxtAddress(model.getAddress());
                 holder.setTxtMobile(model.getModile());
                 holder.setTxtCity(model.getCity());
+
+                holder.textViewTitle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(CustomerAllMessActivity.this, "click " + model.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
 
@@ -86,9 +94,22 @@ public class CustomerAllMessActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
     public void onClickBackAllMess(View view) {
         Intent intentProfile = new Intent(CustomerAllMessActivity.this, CustomerDashboard.class);
         startActivity(intentProfile);
     }
+
 
 }

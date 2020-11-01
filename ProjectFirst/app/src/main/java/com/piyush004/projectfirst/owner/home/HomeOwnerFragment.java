@@ -41,7 +41,7 @@ public class HomeOwnerFragment extends Fragment {
     private TextView textView;
     private String MenuItem;
     private String login_name, messName;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference , databaseReferenceLoc;
     private ToggleButton toggleButton;
     private ImageView imageViewLocation, imageViewTodaysMenu, imageViewProfile, imageViewCustomer, imageViewMessMenu;
     private ChipGroup chipGroup;
@@ -103,6 +103,9 @@ public class HomeOwnerFragment extends Fragment {
             }
         });
 
+
+
+
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +113,7 @@ public class HomeOwnerFragment extends Fragment {
                 Toast.makeText(getContext(), toggleButton.getText(), Toast.LENGTH_SHORT).show();
                 String status = toggleButton.getText().toString();
                 databaseReference.child("Status").setValue(status);
+
                 switch (status) {
                     case "Open":
                         toggleButton.setTextColor(Color.GREEN);

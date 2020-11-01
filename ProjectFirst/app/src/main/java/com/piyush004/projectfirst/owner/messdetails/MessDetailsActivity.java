@@ -151,12 +151,24 @@ public class MessDetailsActivity extends AppCompatActivity {
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            StorageReference ref = storageReference.child("images/").child(login_name);
+            final StorageReference ref = storageReference.child("images/").child(login_name);
             ref.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
+
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    String imguri = uri.toString();
+                                    DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
+                                    df.child("ImageURl").setValue(imguri);
+
+                                }
+                            });
+
                             Toast.makeText(MessDetailsActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
                         }
                     })

@@ -1,9 +1,11 @@
 package com.piyush004.projectfirst.customer.search_mess;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -56,6 +59,7 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_mess_location);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_c);
@@ -82,17 +86,29 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
             mMap.setMyLocationEnabled(true);
         }
 
-        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("MessLocation");
+        DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Mess");
         df.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String name = snapshot.child("MessName").getValue().toString();
                 String lati = snapshot.child("latitude").getValue().toString();
                 String longi = snapshot.child("longitude").getValue().toString();
+                String status = snapshot.child("Status").getValue().toString();
+
+                System.out.println(snapshot.getChildren());
+                System.out.println(snapshot.getKey());
 
                 LatLng location = new LatLng(Double.parseDouble(lati), Double.parseDouble(longi));
-                mMap.addMarker(new MarkerOptions().position(location).title(name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+                mMap.addMarker(new MarkerOptions()
+                                .position(location)
+                                .title(name)
+                                .snippet(status)
+                                .icon(bitmapDescriptorFromVector(getApplicationContext(), R.mipmap.medium_logo_mess, name))
+                        // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                );
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
+
+
             }
 
             @Override
@@ -117,6 +133,22 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
             }
         });
 
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Toast.makeText(SearchMessLocation.this, "Window Click Listener", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorId, String text) {
+        Drawable VectorDrawable = ContextCompat.getDrawable(context, vectorId);
+        VectorDrawable.setBounds(0, 0, VectorDrawable.getIntrinsicWidth(), VectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(VectorDrawable.getIntrinsicWidth(), VectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        VectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -161,7 +193,6 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(latLng);
-        markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
