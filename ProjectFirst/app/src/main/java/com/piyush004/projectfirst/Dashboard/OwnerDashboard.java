@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +15,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.Auth.LoginActivity;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
@@ -21,12 +27,14 @@ import com.piyush004.projectfirst.owner.map.MapsOwnerActivity;
 import com.piyush004.projectfirst.owner.messdetails.MessDetailsActivity;
 import com.piyush004.projectfirst.owner.messmenu.MessMenuActivity;
 import com.piyush004.projectfirst.owner.profile.ProfileOwnerActivity;
+import com.squareup.picasso.Picasso;
 
 public class OwnerDashboard extends AppCompatActivity {
 
     private TextView textViewName, textViewEmail;
     private String login_name, login_email;
     private FirebaseAuth auth;
+    private ImageView imageViewHead;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +43,7 @@ public class OwnerDashboard extends AppCompatActivity {
 
         textViewName = findViewById(R.id.DashboardHeaderName);
         textViewEmail = findViewById(R.id.DashboardHeaderEmail);
+        imageViewHead = findViewById(R.id.DashboardHeaderImg);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -56,9 +65,24 @@ public class OwnerDashboard extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         textViewName = (TextView) header.findViewById(R.id.DashboardHeaderName);
         textViewEmail = (TextView) header.findViewById(R.id.DashboardHeaderEmail);
-        textViewName.setText(login_name);
+        imageViewHead = (ImageView) header.findViewById(R.id.DashboardHeaderImg);
         textViewEmail.setText(login_email);
 
+        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
+        nm.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String uri = snapshot.child("ImageURl").getValue(String.class);
+                String messName = snapshot.child("MessName").getValue(String.class);
+                Picasso.get().load(uri).into(imageViewHead);
+                textViewName.setText(messName);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
