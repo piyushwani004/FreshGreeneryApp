@@ -7,17 +7,28 @@ public class AllMessModel {
     private String mobile;
     private String city;
     private String img;
+    private String key;
 
     public AllMessModel() {
     }
 
 
-    public AllMessModel(String title, String address, String mobile, String city , String img) {
+    public AllMessModel(String title, String address, String mobile, String city , String img , String key) {
         this.title = title;
         this.address = address;
         this.mobile = mobile;
         this.city = city;
         this.img = img;
+        this.key = key;
+    }
+
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getMobile() {

@@ -4,16 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.piyush004.projectfirst.R;
+import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MessProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import de.hdodenhof.circleimageview.CircleImageView;
+
+
 public class MessProfileFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -25,9 +25,24 @@ public class MessProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private String t, a, m, c, img, key;
+
+    private CircleImageView circleImageView;
+    private TextView textViewMessName;
+
     public MessProfileFragment() {
         // Required empty public constructor
     }
+
+    public MessProfileFragment(String title, String address, String mobile, String city, String image, String key) {
+        this.t = title;
+        this.a = address;
+        this.m = mobile;
+        this.c = city;
+        this.img = image;
+        this.key = key;
+    }
+
 
     /**
      * Use this factory method to create a new instance of
@@ -62,7 +77,11 @@ public class MessProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mess_profile, container, false);
 
+        circleImageView = view.findViewById(R.id.circle_img_mess);
+        textViewMessName = view.findViewById(R.id.mess_name_profile);
 
+        Picasso.get().load(img).into(circleImageView);
+        textViewMessName.setText(t);
 
 
         return view;

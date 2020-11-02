@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.projectfirst.Dashboard.CustomerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
+import com.piyush004.projectfirst.customer.mess_profile.MessProfileFragment;
 
 public class CustomerAllMessActivity extends AppCompatActivity {
 
@@ -57,9 +58,10 @@ public class CustomerAllMessActivity extends AppCompatActivity {
                         snapshot.child("MessAddress").getValue().toString(),
                         snapshot.child("MessMobile").getValue().toString(),
                         snapshot.child("MessCity").getValue().toString(),
-                        snapshot.child("ImageURl").getValue().toString()
-
+                        snapshot.child("ImageURl").getValue().toString(),
+                        snapshot.getKey()
                 );
+
             }
         }).build();
         adapter = new FirebaseRecyclerAdapter<AllMessModel, MyHolder>(options) {
@@ -76,7 +78,10 @@ public class CustomerAllMessActivity extends AppCompatActivity {
                 holder.imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(CustomerAllMessActivity.this, "click " + model.getTitle(), Toast.LENGTH_SHORT).show();
+                        System.out.println(model.getKey());
+                       Toast.makeText(CustomerAllMessActivity.this, "click " + model.getKey(), Toast.LENGTH_SHORT).show();
+                        AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).addToBackStack(null).commit();
                     }
                 });
 
