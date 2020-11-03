@@ -95,7 +95,6 @@ public class OwnerDashboard extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
 
                     case R.id.menu_home:
-                        //Toast.makeText(getApplicationContext(), LoginKey.loginKey, Toast.LENGTH_SHORT).show();
                         Toast.makeText(getApplicationContext(), "Home Panel is Open", Toast.LENGTH_SHORT).show();
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new HomeOwnerFragment()).commit();
@@ -126,11 +125,6 @@ public class OwnerDashboard extends AppCompatActivity {
                         intentmenu.putExtra("LoginNameMessDetails", login_name);
                         intentmenu.putExtra("LoginEmailMessDetails", login_email);
                         startActivity(intentmenu);
-                        drawerLayout.closeDrawer(GravityCompat.START);
-                        break;
-
-                    case R.id.menu_schadule:
-                        Toast.makeText(getApplicationContext(), "mess Schadule Panel is Open", Toast.LENGTH_SHORT).show();
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 

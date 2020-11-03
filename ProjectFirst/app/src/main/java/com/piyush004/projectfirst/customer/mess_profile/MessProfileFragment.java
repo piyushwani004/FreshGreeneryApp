@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.projectfirst.R;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +27,7 @@ public class MessProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private String t, a, m, c, img, key;
+    private String Title, Address, Mobile, City, Img, key;
 
     private CircleImageView circleImageView;
     private TextView textViewMessName;
@@ -35,11 +37,11 @@ public class MessProfileFragment extends Fragment {
     }
 
     public MessProfileFragment(String title, String address, String mobile, String city, String image, String key) {
-        this.t = title;
-        this.a = address;
-        this.m = mobile;
-        this.c = city;
-        this.img = image;
+        this.Title = title;
+        this.Address = address;
+        this.Mobile = mobile;
+        this.City = city;
+        this.Img = image;
         this.key = key;
     }
 
@@ -76,12 +78,14 @@ public class MessProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mess_profile, container, false);
+        
+        DatabaseReference databaseReferenceProfile = FirebaseDatabase.getInstance().getReference().child("Mess").child(key);
 
         circleImageView = view.findViewById(R.id.circle_img_mess);
         textViewMessName = view.findViewById(R.id.mess_name_profile);
 
-        Picasso.get().load(img).into(circleImageView);
-        textViewMessName.setText(t);
+        Picasso.get().load(Img).into(circleImageView);
+        textViewMessName.setText(Title);
 
 
         return view;

@@ -39,14 +39,15 @@ import java.util.ArrayList;
 public class HomeOwnerFragment extends Fragment {
 
     private TextView textView;
-    private String MenuItem;
     private String login_name, messName;
-    private DatabaseReference databaseReference , databaseReferenceLoc;
+    private DatabaseReference databaseReference, databaseReferenceLoc;
     private ToggleButton toggleButton;
-    private ImageView imageViewLocation, imageViewTodaysMenu, imageViewProfile, imageViewCustomer, imageViewMessMenu;
+    private ImageView imageViewLocation, imageViewTodaysMenu, imageViewProfile, imageViewMessRate, imageViewMessMenu;
     private ChipGroup chipGroup;
     private EditText editText;
     private ImageButton imageButton;
+    private EditText editTextBoys, editTextGirls;
+    private String boy, girl;
 
     @Nullable
     @Override
@@ -60,10 +61,12 @@ public class HomeOwnerFragment extends Fragment {
         imageViewLocation = view.findViewById(R.id.locationHome);
         imageViewTodaysMenu = view.findViewById(R.id.imageViewTodaysMenu);
         imageViewProfile = view.findViewById(R.id.imageViewProfile);
-        imageViewCustomer = view.findViewById(R.id.imageViewCustomer);
+        imageViewMessRate = view.findViewById(R.id.imageViewMessRates);
         imageViewMessMenu = view.findViewById(R.id.imageViewMessMenu);
 
         login_name = LoginKey.loginKey;
+
+
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -104,8 +107,6 @@ public class HomeOwnerFragment extends Fragment {
         });
 
 
-
-
         toggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +129,6 @@ public class HomeOwnerFragment extends Fragment {
         imageViewLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getContext(), "ImageView Click", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), MapsOwnerActivity.class);
                 startActivity(intent);
             }
@@ -216,10 +216,65 @@ public class HomeOwnerFragment extends Fragment {
             }
         });
 
-        imageViewCustomer.setOnClickListener(new View.OnClickListener() {
+        imageViewMessRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "ImageView Click", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.mess_rate_dialog, null);
+
+                editTextBoys = dialogLayout.findViewById(R.id.editTextBoys);
+                editTextGirls = dialogLayout.findViewById(R.id.editTextGirls);
+
+                final DatabaseReference datafer = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
+
+                datafer.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boy = snapshot.child("BoysMessRate").getValue(String.class);
+                        girl = snapshot.child("GirlsMessRate").getValue(String.class);
+
+                        if (boy == null) {
+                            editTextBoys.setText("");
+                        } else if (girl == null) {
+                            editTextGirls.setText("");
+                        } else if (!(boy == null && girl == null)) {
+                            editTextBoys.setText(boy);
+                            editTextGirls.setText(girl);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                builder.setTitle("Mess Rates");
+                builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        boy = editTextBoys.getText().toString();
+                        girl = editTextGirls.getText().toString();
+                        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Mess").child(login_name);
+                        df.child("BoysMessRate").setValue(boy);
+                        df.child("GirlsMessRate").setValue(girl);
+
+                        Toast.makeText(getContext(), "Data Save", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                builder.setNegativeButton("Closed", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.setView(dialogLayout);
+                builder.show();
+
             }
         });
 
@@ -234,4 +289,5 @@ public class HomeOwnerFragment extends Fragment {
 
         return view;
     }
+
 }

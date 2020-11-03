@@ -22,10 +22,7 @@
                 android:id="@+id/menu_messMenu"
                 android:icon="@drawable/mess_menu"
                 android:title="Mess Menu" />
-            <item
-                android:id="@+id/menu_schadule"
-                android:icon="@drawable/mess_schdule"
-                android:title="Mess schadule" />
+
             <item
                 android:id="@+id/menu_messLocation"
                 android:icon="@drawable/add_loc"

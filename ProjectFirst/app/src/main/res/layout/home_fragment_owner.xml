@@ -236,16 +236,16 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageViewCustomer"
+                    android:id="@+id/imageViewMessRates"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:clickable="true"
-                    app:srcCompat="@drawable/people_home" />
+                    app:srcCompat="@drawable/ic_baseline_attach_money_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Customers"
+                    android:text="Mess Rates"
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textSize="20dp"
