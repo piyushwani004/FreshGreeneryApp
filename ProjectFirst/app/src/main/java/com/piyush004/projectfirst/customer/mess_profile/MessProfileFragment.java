@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.R;
 import com.squareup.picasso.Picasso;
 
@@ -26,11 +31,10 @@ public class MessProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private String Title, Address, Mobile, City, Img, key;
-
     private CircleImageView circleImageView;
-    private TextView textViewMessName;
+    private TextView textViewMessName, textViewAddress, textViewMobile, textViewEmail, textViewCity, textViewStatus, textViewBoysRate, textViewGirlsRate;
+    private Button button;
 
     public MessProfileFragment() {
         // Required empty public constructor
@@ -78,15 +82,47 @@ public class MessProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mess_profile, container, false);
-        
+
         DatabaseReference databaseReferenceProfile = FirebaseDatabase.getInstance().getReference().child("Mess").child(key);
 
         circleImageView = view.findViewById(R.id.circle_img_mess);
+
         textViewMessName = view.findViewById(R.id.mess_name_profile);
+        textViewAddress = view.findViewById(R.id.mess_address_profile);
+        textViewCity = view.findViewById(R.id.mess_city_profile);
+        textViewMobile = view.findViewById(R.id.mess_mobile_profile);
+        textViewEmail = view.findViewById(R.id.mess_email_profile);
+        textViewBoysRate = view.findViewById(R.id.messRateForBoys);
+        textViewGirlsRate = view.findViewById(R.id.messRateForGirls);
+        textViewStatus = view.findViewById(R.id.mess_status_profile);
 
         Picasso.get().load(Img).into(circleImageView);
         textViewMessName.setText(Title);
+        textViewAddress.setText(Address);
+        textViewMobile.setText(Mobile);
+        textViewCity.setText(City);
 
+        databaseReferenceProfile.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                String email = snapshot.child("MessEmail").getValue(String.class);
+                String status = snapshot.child("Status").getValue(String.class);
+                String boysRate = snapshot.child("BoysMessRate").getValue(String.class);
+                String girlRate = snapshot.child("GirlsMessRate").getValue(String.class);
+
+                textViewEmail.setText(email);
+                textViewStatus.setText(status);
+                textViewBoysRate.setText(boysRate + "Rs");
+                textViewGirlsRate.setText(girlRate + "Rs");
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         return view;
     }

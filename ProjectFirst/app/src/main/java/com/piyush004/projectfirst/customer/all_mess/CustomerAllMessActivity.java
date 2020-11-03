@@ -23,6 +23,7 @@ import com.piyush004.projectfirst.Dashboard.CustomerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.customer.mess_profile.MessProfileFragment;
+import com.piyush004.projectfirst.customer.profile.CustomerProfileFragment;
 
 public class CustomerAllMessActivity extends AppCompatActivity {
 
@@ -80,7 +81,7 @@ public class CustomerAllMessActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         System.out.println(model.getKey());
                        Toast.makeText(CustomerAllMessActivity.this, "click " + model.getKey(), Toast.LENGTH_SHORT).show();
-                        AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                         AppCompatActivity activity = (AppCompatActivity) v.getContext();
                         activity.getSupportFragmentManager().beginTransaction().replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).addToBackStack(null).commit();
                     }
                 });
