@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.Auth.LoginActivity;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
 import com.piyush004.projectfirst.owner.map.MapsOwnerActivity;
@@ -40,6 +41,8 @@ public class OwnerDashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_dashboard);
+
+        login_name = LoginKey.loginKey;
 
         textViewName = findViewById(R.id.DashboardHeaderName);
         textViewEmail = findViewById(R.id.DashboardHeaderEmail);

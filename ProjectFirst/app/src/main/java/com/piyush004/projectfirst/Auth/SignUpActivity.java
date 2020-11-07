@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -38,6 +39,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioButton radioButton1;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView2);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioButton1 = (RadioButton) findViewById(R.id.radioButtonOwner);
-
+        progressBar = findViewById(R.id.signUpProgressbar);
 
     }
 
@@ -100,6 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     public void onClickRegister(View view) {
+        progressBar.setVisibility(View.VISIBLE);
         name = nameText.getText().toString();
         email = emailText.getText().toString();
         pass = passwordText.getText().toString();
@@ -152,10 +155,12 @@ public class SignUpActivity extends AppCompatActivity {
                         Toast.makeText(SignUpActivity.this.getApplicationContext(),
                                 "SignUp unsuccessful: " + task.getException().getMessage(),
                                 Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
                     } else {
                         databaseReference.child("username").setValue(email);
                         databaseReference.child("type").setValue(regType);
                         Toast.makeText(SignUpActivity.this, "Register Completed", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
                         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                     }
                 }

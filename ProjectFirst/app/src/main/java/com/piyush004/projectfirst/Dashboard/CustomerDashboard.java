@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.Auth.LoginActivity;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.customer.all_mess.CustomerAllMessActivity;
 import com.piyush004.projectfirst.customer.home.CustomerHomeFragment;
@@ -38,6 +39,7 @@ public class CustomerDashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_dashboard);
 
+        login_name = LoginKey.loginKey;
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             login_name = bundle.getString("login_name_mess_Dashboard");

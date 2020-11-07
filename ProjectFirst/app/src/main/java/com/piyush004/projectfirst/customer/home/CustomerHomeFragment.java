@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,19 +24,13 @@ import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.customer.search_mess.SearchMessLocation;
 import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CustomerHomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class CustomerHomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
     private TextView textViewCurrentMess, textViewProfile;
@@ -44,20 +39,12 @@ public class CustomerHomeFragment extends Fragment {
     private Thread threadProfile = null;
     private String login_name;
     private String messCurrentMess;
+    private ProgressBar progressBar;
 
     public CustomerHomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment CustomerHome.
-     */
-    // TODO: Rename and change types and number of parameters
     public static CustomerHomeFragment newInstance(String param1, String param2) {
         CustomerHomeFragment fragment = new CustomerHomeFragment();
         Bundle args = new Bundle();
@@ -87,8 +74,8 @@ public class CustomerHomeFragment extends Fragment {
         imageViewSchedule = view.findViewById(R.id.imageViewMessRates_c);
         imageViewMessMenu = view.findViewById(R.id.imageViewMessMenu_c);
         textViewProfile = view.findViewById(R.id.textCustProfile_c);
-
-
+        progressBar = view.findViewById(R.id.homeProgressbar);
+        progressBar.setVisibility(View.VISIBLE);
         threadMessName = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -176,7 +163,7 @@ public class CustomerHomeFragment extends Fragment {
                 startActivity(intentLocation);
             }
         });
-
+        progressBar.setVisibility(View.GONE);
         return view;
     }
 }

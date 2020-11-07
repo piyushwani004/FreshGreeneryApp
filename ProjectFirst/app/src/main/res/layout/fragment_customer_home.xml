@@ -268,4 +268,11 @@
 
     </GridLayout>
 
+    <ProgressBar
+        android:id="@+id/homeProgressbar"
+        android:layout_width="177dp"
+        android:layout_height="204dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:visibility="gone" />
+
 </FrameLayout>
