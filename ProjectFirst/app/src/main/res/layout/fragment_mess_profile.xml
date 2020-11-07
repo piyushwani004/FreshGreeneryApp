@@ -255,7 +255,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/buttonstyleithgradient"
-                    android:text="Follow Me"
+                    android:text="Join Now"
                     android:textColor="#fff" />
 
             </LinearLayout>

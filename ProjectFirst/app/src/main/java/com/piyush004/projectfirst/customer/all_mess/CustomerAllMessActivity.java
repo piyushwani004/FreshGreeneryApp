@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +25,6 @@ import com.piyush004.projectfirst.Dashboard.CustomerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.customer.mess_profile.MessProfileFragment;
-import com.piyush004.projectfirst.customer.profile.CustomerProfileFragment;
 
 public class CustomerAllMessActivity extends AppCompatActivity {
 
@@ -80,9 +81,14 @@ public class CustomerAllMessActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         System.out.println(model.getKey());
-                       Toast.makeText(CustomerAllMessActivity.this, "click " + model.getKey(), Toast.LENGTH_SHORT).show();
-                         AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                        activity.getSupportFragmentManager().beginTransaction().replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).addToBackStack(null).commit();
+
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).commit();
+
+                        //Toast.makeText(CustomerAllMessActivity.this, "click " + model.getKey(), Toast.LENGTH_SHORT).show();
+                        //  AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                        //activity.getSupportFragmentManager().beginTransaction().replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).addToBackStack(null).commit();
                     }
                 });
 

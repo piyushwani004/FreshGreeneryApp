@@ -53,7 +53,7 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
     private Marker mCurrLocationMarker;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-    private String login_name;
+    private String login_name, key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,17 +95,17 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
                 String longi = snapshot.child("longitude").getValue().toString();
                 String status = snapshot.child("Status").getValue().toString();
 
-                System.out.println(snapshot.getChildren());
-                System.out.println(snapshot.getKey());
+                key = snapshot.getKey();
 
                 LatLng location = new LatLng(Double.parseDouble(lati), Double.parseDouble(longi));
-                mMap.addMarker(new MarkerOptions()
-                                .position(location)
-                                .title(name)
-                                .snippet(status)
-                                .icon(bitmapDescriptorFromVector(getApplicationContext(), R.mipmap.medium_logo_mess, name))
-                        // .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                );
+
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(location);
+                markerOptions.title(name);
+                markerOptions.snippet(status);
+                markerOptions.icon(bitmapDescriptorFromVector(getApplicationContext(), R.mipmap.medium_logo_mess, name));
+
+                mMap.addMarker(markerOptions);
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 13));
 
 
@@ -137,6 +137,8 @@ public class SearchMessLocation extends FragmentActivity implements OnMapReadyCa
             @Override
             public void onInfoWindowClick(Marker marker) {
                 Toast.makeText(SearchMessLocation.this, "Window Click Listener", Toast.LENGTH_SHORT).show();
+
+
             }
         });
 

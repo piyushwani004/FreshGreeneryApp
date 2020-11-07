@@ -126,7 +126,6 @@ public class MessDetailsActivity extends AppCompatActivity {
         } else if (!(mess_name.isEmpty() && mess_address.isEmpty() && mess_mobile.isEmpty() && mess_email.isEmpty() && mess_city.isEmpty() && mess_closed_days.isEmpty())) {
 
             MessDetailsModel messDetailsModel = new MessDetailsModel(mess_name, mess_address, mess_mobile, mess_city, mess_email, mess_closed_days);
-            //System.out.println(messDetailsModel.toString());
 
             databaseReference.child("MessName").setValue(messDetailsModel.getMess_name());
             databaseReference.child("MessAddress").setValue(messDetailsModel.getMess_address());

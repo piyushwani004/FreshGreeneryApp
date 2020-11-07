@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 import com.squareup.picasso.Picasso;
 
@@ -31,13 +33,17 @@ public class MessProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private String Title, Address, Mobile, City, Img, key;
+    private String Title, Address, Mobile, City, Img, key , login_name;
     private CircleImageView circleImageView;
     private TextView textViewMessName, textViewAddress, textViewMobile, textViewEmail, textViewCity, textViewStatus, textViewBoysRate, textViewGirlsRate;
     private Button button;
 
     public MessProfileFragment() {
         // Required empty public constructor
+    }
+
+    public MessProfileFragment(String LocKey) {
+        this.key = LocKey;
     }
 
     public MessProfileFragment(String title, String address, String mobile, String city, String image, String key) {
@@ -82,7 +88,7 @@ public class MessProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mess_profile, container, false);
-
+        login_name = LoginKey.loginKey;
         DatabaseReference databaseReferenceProfile = FirebaseDatabase.getInstance().getReference().child("Mess").child(key);
 
         circleImageView = view.findViewById(R.id.circle_img_mess);
@@ -96,11 +102,8 @@ public class MessProfileFragment extends Fragment {
         textViewGirlsRate = view.findViewById(R.id.messRateForGirls);
         textViewStatus = view.findViewById(R.id.mess_status_profile);
 
-        Picasso.get().load(Img).into(circleImageView);
-        textViewMessName.setText(Title);
-        textViewAddress.setText(Address);
-        textViewMobile.setText(Mobile);
-        textViewCity.setText(City);
+        button = view.findViewById(R.id.mess_button_profile);
+
 
         databaseReferenceProfile.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -111,6 +114,17 @@ public class MessProfileFragment extends Fragment {
                 String boysRate = snapshot.child("BoysMessRate").getValue(String.class);
                 String girlRate = snapshot.child("GirlsMessRate").getValue(String.class);
 
+                Title = snapshot.child("MessName").getValue(String.class);
+                Address = snapshot.child("MessAddress").getValue(String.class);
+                Mobile = snapshot.child("MessMobile").getValue(String.class);
+                City = snapshot.child("MessCity").getValue(String.class);
+                Img = snapshot.child("ImageURl").getValue(String.class);
+
+                Picasso.get().load(Img).into(circleImageView);
+                textViewMessName.setText(Title);
+                textViewAddress.setText(Address);
+                textViewMobile.setText(Mobile);
+                textViewCity.setText(City);
                 textViewEmail.setText(email);
                 textViewStatus.setText(status);
                 textViewBoysRate.setText(boysRate + "Rs");
@@ -120,6 +134,17 @@ public class MessProfileFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Customer").child(login_name);
+                databaseReference.child("CustCurrentMess").setValue(key);
+                Toast.makeText(getContext(), "Save Current Mess :", Toast.LENGTH_SHORT).show();
 
             }
         });

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,17 +14,24 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.Auth.LoginActivity;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.customer.all_mess.CustomerAllMessActivity;
 import com.piyush004.projectfirst.customer.home.CustomerHomeFragment;
 import com.piyush004.projectfirst.customer.profile.CustomerProfileFragment;
 import com.piyush004.projectfirst.customer.search_mess.SearchMessLocation;
+import com.squareup.picasso.Picasso;
 
 public class CustomerDashboard extends AppCompatActivity {
 
     private TextView textViewName, textViewEmail;
     private String login_name, login_email;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +57,24 @@ public class CustomerDashboard extends AppCompatActivity {
         View header = navigationView.getHeaderView(0);
         textViewName = (TextView) header.findViewById(R.id.DashboardHeaderName);
         textViewEmail = (TextView) header.findViewById(R.id.DashboardHeaderEmail);
+        imageView = (ImageView) header.findViewById(R.id.DashboardHeaderImg);
         textViewName.setText(login_name);
         textViewEmail.setText(login_email);
+
+        DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("Customer").child(login_name);
+        nm.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String uri = snapshot.child("ImageURl").getValue(String.class);
+                Picasso.get().load(uri).into(imageView);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container_c,
