@@ -60,16 +60,17 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/messPhoto"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="5dp"
-                    android:clickable="true"
+                    android:layout_marginTop="5dp"
+                    android:src="@drawable/profile"
                     android:onClick="onClickImageViewMessDetails"
-                    app:srcCompat="@mipmap/image_profile" />
+                    app:civ_border_color="@color/colorAccent"
+                    android:clickable="true"
+                    app:civ_border_width="2dp" />
 
             </LinearLayout>
 
@@ -243,8 +244,6 @@
                     app:cornerRadius="10dp" />
 
             </LinearLayout>
-
-
 
 
         </LinearLayout>
