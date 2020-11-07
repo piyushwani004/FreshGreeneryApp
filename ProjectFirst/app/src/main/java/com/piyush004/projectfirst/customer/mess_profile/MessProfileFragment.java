@@ -20,6 +20,8 @@ import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -33,10 +35,11 @@ public class MessProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private String Title, Address, Mobile, City, Img, key , login_name;
+    private String Title, Address, Mobile, City, Img, key, login_name;
     private CircleImageView circleImageView;
     private TextView textViewMessName, textViewAddress, textViewMobile, textViewEmail, textViewCity, textViewStatus, textViewBoysRate, textViewGirlsRate;
     private Button button;
+    private int month, year, day;
 
     public MessProfileFragment() {
         // Required empty public constructor
@@ -88,6 +91,12 @@ public class MessProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mess_profile, container, false);
+
+        Calendar c = Calendar.getInstance();
+        day = c.get(Calendar.DAY_OF_MONTH);
+        month = c.get(Calendar.MONTH);
+        year = c.get(Calendar.YEAR);
+
         login_name = LoginKey.loginKey;
         DatabaseReference databaseReferenceProfile = FirebaseDatabase.getInstance().getReference().child("Mess").child(key);
 
@@ -144,6 +153,9 @@ public class MessProfileFragment extends Fragment {
 
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Customer").child(login_name);
                 databaseReference.child("CustCurrentMess").setValue(key);
+                databaseReference.child("CustJoinDay").setValue(day);
+                databaseReference.child("CustJoinMonth").setValue(month);
+                databaseReference.child("CustJoinYear").setValue(year);
                 Toast.makeText(getContext(), "Save Current Mess :", Toast.LENGTH_SHORT).show();
 
             }

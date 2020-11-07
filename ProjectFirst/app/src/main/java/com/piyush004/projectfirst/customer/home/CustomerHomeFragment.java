@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
+import com.piyush004.projectfirst.customer.schedule.MessScheduleActivity;
 import com.piyush004.projectfirst.customer.search_mess.SearchMessLocation;
 import com.squareup.picasso.Picasso;
 
@@ -71,7 +72,7 @@ public class CustomerHomeFragment extends Fragment {
         textViewCurrentMess = view.findViewById(R.id.cust_current_mess_c);
         imageViewLocation = view.findViewById(R.id.locationHome_c);
         imageViewProfile = view.findViewById(R.id.imageViewProfile_c);
-        imageViewSchedule = view.findViewById(R.id.imageViewMessRates_c);
+        imageViewSchedule = view.findViewById(R.id.imageViewMessSchedule_c);
         imageViewMessMenu = view.findViewById(R.id.imageViewMessMenu_c);
         textViewProfile = view.findViewById(R.id.textCustProfile_c);
         progressBar = view.findViewById(R.id.homeProgressbar);
@@ -163,6 +164,15 @@ public class CustomerHomeFragment extends Fragment {
                 startActivity(intentLocation);
             }
         });
+
+        imageViewSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSch = new Intent(getActivity(), MessScheduleActivity.class);
+                startActivity(intentSch);
+            }
+        });
+
         progressBar.setVisibility(View.GONE);
         return view;
     }
