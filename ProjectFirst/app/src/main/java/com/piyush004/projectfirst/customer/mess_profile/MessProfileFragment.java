@@ -1,6 +1,10 @@
 package com.piyush004.projectfirst.customer.mess_profile;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +22,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
+import com.piyush004.projectfirst.customer.schedule.MessScheduleActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.content.ContentValues.TAG;
 
 
 public class MessProfileFragment extends Fragment {
@@ -40,6 +47,7 @@ public class MessProfileFragment extends Fragment {
     private TextView textViewMessName, textViewAddress, textViewMobile, textViewEmail, textViewCity, textViewStatus, textViewBoysRate, textViewGirlsRate;
     private Button button;
     private int month, year, day;
+    private Thread thread = null;
 
     public MessProfileFragment() {
         // Required empty public constructor
@@ -58,16 +66,6 @@ public class MessProfileFragment extends Fragment {
         this.key = key;
     }
 
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MessProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static MessProfileFragment newInstance(String param1, String param2) {
         MessProfileFragment fragment = new MessProfileFragment();
         Bundle args = new Bundle();
@@ -113,6 +111,38 @@ public class MessProfileFragment extends Fragment {
 
         button = view.findViewById(R.id.mess_button_profile);
 
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        DatabaseReference dfcheck = FirebaseDatabase.getInstance().getReference().child("Customer").child(login_name);
+                        dfcheck.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                String messCurrentMess = snapshot.child("CustCurrentMess").getValue(String.class);
+                                Log.d(TAG, "onDataChange: " + messCurrentMess);
+                                if (messCurrentMess == null) {
+                                    button.setVisibility(View.VISIBLE);
+                                } else {
+                                    button.setVisibility(View.GONE);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        thread.start();
 
         databaseReferenceProfile.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -156,10 +186,18 @@ public class MessProfileFragment extends Fragment {
                 databaseReference.child("CustJoinDay").setValue(day);
                 databaseReference.child("CustJoinMonth").setValue(month);
                 databaseReference.child("CustJoinYear").setValue(year);
+
+                DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("ManageCustomer").child(key);
+                String key = df.push().getKey();
+                df.child(key).setValue(login_name);
+
                 Toast.makeText(getContext(), "Save Current Mess :", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), MessScheduleActivity.class);
+                startActivity(intent);
 
             }
         });
+
 
         return view;
     }

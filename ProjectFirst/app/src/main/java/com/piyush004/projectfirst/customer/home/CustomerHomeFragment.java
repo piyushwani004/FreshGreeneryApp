@@ -10,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -67,7 +66,7 @@ public class CustomerHomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_customer_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_customer_home, container, false);
         login_name = LoginKey.loginKey;
         textViewCurrentMess = view.findViewById(R.id.cust_current_mess_c);
         imageViewLocation = view.findViewById(R.id.locationHome_c);
@@ -77,6 +76,7 @@ public class CustomerHomeFragment extends Fragment {
         textViewProfile = view.findViewById(R.id.textCustProfile_c);
         progressBar = view.findViewById(R.id.homeProgressbar);
         progressBar.setVisibility(View.VISIBLE);
+
         threadMessName = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -170,6 +170,18 @@ public class CustomerHomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intentSch = new Intent(getActivity(), MessScheduleActivity.class);
                 startActivity(intentSch);
+            }
+        });
+
+
+        textViewCurrentMess.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Customer").child(login_name);
+                df.child("CustCurrentMess").removeValue();
+                Toast.makeText(getContext(), "Remove Mess Name  Successfully", Toast.LENGTH_LONG).show();
+                return true;
             }
         });
 

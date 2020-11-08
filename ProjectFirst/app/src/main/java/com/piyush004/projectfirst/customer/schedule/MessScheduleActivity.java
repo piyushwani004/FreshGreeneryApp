@@ -104,4 +104,18 @@ public class MessScheduleActivity extends AppCompatActivity {
         });
         threadCalender.start();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        threadCalender.stop();
+        threadMessName.stop();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        threadCalender.start();
+        threadMessName.start();
+    }
 }

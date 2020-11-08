@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/food1"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".customer.schedule.MessScheduleActivity"></activity>
+        <activity android:name=".owner.manage_customer.Manage_Customer_activity"></activity>
+        <activity android:name=".customer.schedule.MessScheduleActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
