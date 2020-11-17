@@ -42,6 +42,7 @@
 
         </RelativeLayout>
 
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="300dp"
             android:layout_height="120dp"
@@ -49,7 +50,6 @@
             android:layout_marginTop="180dp"
             android:background="#B3B5B4"
             app:cardCornerRadius="10dp">
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp">

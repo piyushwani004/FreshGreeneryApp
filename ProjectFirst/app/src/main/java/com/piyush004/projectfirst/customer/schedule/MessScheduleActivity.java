@@ -25,7 +25,7 @@ public class MessScheduleActivity extends AppCompatActivity {
 
     private CalendarView calendarView;
     private String login_name;
-    private TextView textViewName;
+    private TextView textViewName, textViewJoinDate, textViewRemDays;
     private Thread threadMessName, threadCalender;
     private ImageButton imageButtonbackBTN;
 
@@ -40,6 +40,8 @@ public class MessScheduleActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         textViewName = findViewById(R.id.textViewMessNameShedule);
         imageButtonbackBTN = findViewById(R.id.messScaduleBackBtn);
+        textViewJoinDate = findViewById(R.id.messJoiningDate);
+        textViewRemDays = findViewById(R.id.messRemainingDays);
 
         threadMessName = new Thread(new Runnable() {
             @Override
@@ -81,23 +83,34 @@ public class MessScheduleActivity extends AppCompatActivity {
             @Override
             public void run() {
                 DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Customer").child(login_name);
+                final Calendar calendar = Calendar.getInstance();
                 df.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        int day = snapshot.child("CustJoinDay").getValue(Integer.class);
-                        int month = snapshot.child("CustJoinMonth").getValue(Integer.class);
-                        int year = snapshot.child("CustJoinYear").getValue(Integer.class);
+                        Integer day = snapshot.child("CustJoinDay").getValue(Integer.class);
+                        Integer month = snapshot.child("CustJoinMonth").getValue(Integer.class);
+                        Integer year = snapshot.child("CustJoinYear").getValue(Integer.class);
 
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(Calendar.YEAR, year);
-                        calendar.set(Calendar.MONTH, month);
-                        calendar.set(Calendar.DAY_OF_MONTH, day);
+                        if (day == null && month == null && year == null) {
 
-                        long milliTime = calendar.getTimeInMillis();
+                            calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+                            calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+                            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
+                            long milliTime = calendar.getTimeInMillis();
+                            calendarView.setDate(milliTime, true, true);
+                            textViewJoinDate.setText(" Not Set Mess ");
 
-                        calendarView.setDate(milliTime, true, true);
+                        } else if (!(day == null && month == null && year == null)) {
 
+                            calendar.set(Calendar.YEAR, year);
+                            calendar.set(Calendar.MONTH, month);
+                            calendar.set(Calendar.DAY_OF_MONTH, day);
+                            long milliTime = calendar.getTimeInMillis();
+                            calendarView.setDate(milliTime, true, true);
+                            textViewJoinDate.setText(day + " / " + month + " / " + year);
+
+                        }
                     }
 
                     @Override

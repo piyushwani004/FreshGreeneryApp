@@ -214,7 +214,6 @@ public class CustomerHomeFragment extends Fragment {
             }
         });
 
-
         progressBar.setVisibility(View.GONE);
         return view;
     }
