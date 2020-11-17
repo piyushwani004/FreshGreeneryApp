@@ -2,6 +2,7 @@ package com.piyush004.projectfirst.Dashboard;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +35,7 @@ public class CustomerDashboard extends AppCompatActivity {
     private TextView textViewName, textViewEmail;
     private String login_name, login_email;
     private ImageView imageView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,23 @@ public class CustomerDashboard extends AppCompatActivity {
             login_email = bundle.getString("EmailID");
         }
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefresh_c);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                startActivity(getIntent());
+                finish();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 4000);
+
+            }
+        });
         final DrawerLayout drawerLayout = findViewById(R.id.drawercustomer);
         findViewById(R.id.menuIconIdcustomer).setOnClickListener(new View.OnClickListener() {
             @Override

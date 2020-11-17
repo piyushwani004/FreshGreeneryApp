@@ -1,7 +1,10 @@
 package com.piyush004.projectfirst.customer.schedule;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CalendarView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.piyush004.projectfirst.Dashboard.CustomerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
@@ -23,6 +27,7 @@ public class MessScheduleActivity extends AppCompatActivity {
     private String login_name;
     private TextView textViewName;
     private Thread threadMessName, threadCalender;
+    private ImageButton imageButtonbackBTN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +39,7 @@ public class MessScheduleActivity extends AppCompatActivity {
 
         calendarView = findViewById(R.id.calendarView);
         textViewName = findViewById(R.id.textViewMessNameShedule);
-
+        imageButtonbackBTN = findViewById(R.id.messScaduleBackBtn);
 
         threadMessName = new Thread(new Runnable() {
             @Override
@@ -103,19 +108,14 @@ public class MessScheduleActivity extends AppCompatActivity {
             }
         });
         threadCalender.start();
+
+        imageButtonbackBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentSch = new Intent(MessScheduleActivity.this, CustomerDashboard.class);
+                startActivity(intentSch);
+            }
+        });
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        threadCalender.stop();
-        threadMessName.stop();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        threadCalender.start();
-        threadMessName.start();
-    }
 }
