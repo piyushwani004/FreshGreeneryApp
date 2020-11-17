@@ -24,6 +24,7 @@ import com.piyush004.projectfirst.Auth.LoginActivity;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
+import com.piyush004.projectfirst.owner.manage_customer.ManageCustomerActivity;
 import com.piyush004.projectfirst.owner.map.MapsOwnerActivity;
 import com.piyush004.projectfirst.owner.messdetails.MessDetailsActivity;
 import com.piyush004.projectfirst.owner.messmenu.MessMenuActivity;
@@ -136,6 +137,12 @@ public class OwnerDashboard extends AppCompatActivity {
                         Intent intentloc = new Intent(OwnerDashboard.this, MapsOwnerActivity.class);
                         intentloc.putExtra("LoginNameMessDetails", login_name);
                         startActivity(intentloc);
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        break;
+
+                    case R.id.menu_manageCustomer:
+                        Toast.makeText(getApplicationContext(), "Customers Panel is Open", Toast.LENGTH_SHORT).show();
+                        Intent intentCust = new Intent(OwnerDashboard.this, ManageCustomerActivity.class);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 

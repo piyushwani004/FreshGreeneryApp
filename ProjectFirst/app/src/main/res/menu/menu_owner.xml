@@ -29,6 +29,11 @@
                 android:title="Mess Location" />
 
             <item
+                android:id="@+id/menu_manageCustomer"
+                android:icon="@drawable/setting"
+                android:title="Customers" />
+
+            <item
                 android:id="@+id/menu_setting"
                 android:icon="@drawable/setting"
                 android:title="Setting" />

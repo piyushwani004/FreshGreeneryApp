@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.piyush004.projectfirst.R;
 
-public class Manage_Customer_activity extends AppCompatActivity {
+public class ManageCustomerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
