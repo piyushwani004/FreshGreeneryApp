@@ -57,7 +57,7 @@ public class SignUpActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         radioButton1 = (RadioButton) findViewById(R.id.radioButtonOwner);
         progressBar = findViewById(R.id.signUpProgressbar);
-
+        progressBar.setVisibility(View.GONE);
     }
 
 
@@ -102,7 +102,6 @@ public class SignUpActivity extends AppCompatActivity {
 
 
     public void onClickRegister(View view) {
-        progressBar.setVisibility(View.VISIBLE);
         name = nameText.getText().toString();
         email = emailText.getText().toString();
         pass = passwordText.getText().toString();
@@ -146,6 +145,7 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (email.isEmpty() && pass.isEmpty()) {
             Toast.makeText(this, "Fields Are Empty", Toast.LENGTH_SHORT).show();
         } else if (!(email.isEmpty() && pass.isEmpty())) {
+            progressBar.setVisibility(View.VISIBLE);
             firebaseAuth.createUserWithEmailAndPassword(email, repass).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {

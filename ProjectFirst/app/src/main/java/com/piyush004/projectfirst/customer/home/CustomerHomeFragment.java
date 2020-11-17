@@ -41,11 +41,11 @@ public class CustomerHomeFragment extends Fragment {
     private ImageView imageViewLocation, imageViewProfile, imageViewSchedule, imageViewMessMenu;
     private Thread threadMessName = null;
     private Thread threadProfile = null;
-    private String login_name;
+    private String login_name, key;
     private String messCurrentMess;
     private ProgressBar progressBar;
     private AlertDialog.Builder builder;
-
+    private DatabaseReference dff;
     public CustomerHomeFragment() {
         // Required empty public constructor
     }
@@ -185,6 +185,19 @@ public class CustomerHomeFragment extends Fragment {
             public boolean onLongClick(View v) {
 
                 final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Customer").child(login_name);
+                df.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        key = snapshot.child("CustCurrentMess").getValue(String.class);
+                        System.out.println(key);
+                        dff = FirebaseDatabase.getInstance().getReference().child("ManageCustomer").child(key);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
                 builder = new AlertDialog.Builder(getContext());
                 builder.setMessage("Do you want to delete current Mess ?")
@@ -196,6 +209,7 @@ public class CustomerHomeFragment extends Fragment {
                                 df.child("CustJoinDay").removeValue();
                                 df.child("CustJoinMonth").removeValue();
                                 df.child("CustJoinYear").removeValue();
+                                dff.child(login_name).removeValue();
                                 textViewCurrentMess.setText("Not Set");
                                 Toast.makeText(getContext(), "Remove Mess Name Successfully", Toast.LENGTH_LONG).show();
 

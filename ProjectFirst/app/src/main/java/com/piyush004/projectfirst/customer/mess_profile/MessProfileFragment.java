@@ -42,7 +42,7 @@ public class MessProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private String Title, Address, Mobile, City, Img, key, login_name;
+    private String Title, Address, Mobile, City, Img, key, login_name , custName;
     private CircleImageView circleImageView;
     private TextView textViewMessName, textViewAddress, textViewMobile, textViewEmail, textViewCity, textViewStatus, textViewBoysRate, textViewGirlsRate;
     private Button button;
@@ -188,8 +188,7 @@ public class MessProfileFragment extends Fragment {
                 databaseReference.child("CustJoinYear").setValue(year);
 
                 DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("ManageCustomer").child(key);
-                String key = df.push().getKey();
-                df.child(key).setValue(login_name);
+                df.child(login_name).setValue(login_name);
 
                 Toast.makeText(getContext(), "Save Current Mess :", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getContext(), MessScheduleActivity.class);
