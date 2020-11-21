@@ -12,8 +12,15 @@ It is a virtual manager for one's mess. By using this app one can calculate meal
 
 # Product features
  * Online real-time database.
- * Code to enroll mess.
+ * free to enroll mess.
  * Calculate meal rates automatically.
  * Completely free.
  * Ad-free.
  * Easily Search Mess on Google Map near Current Location.
+
+# Techologies 
+* Android Studio 
+* java 
+* Firebase Database 
+* Material Design 
+* Google Map Api
