@@ -80,15 +80,12 @@ public class CustomerAllMessActivity extends AppCompatActivity {
                 holder.imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        System.out.println(model.getKey());
+//                        System.out.println(model.getKey());
 
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).commit();
 
-                        //Toast.makeText(CustomerAllMessActivity.this, "click " + model.getKey(), Toast.LENGTH_SHORT).show();
-                        //  AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                        //activity.getSupportFragmentManager().beginTransaction().replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).addToBackStack(null).commit();
                     }
                 });
 
