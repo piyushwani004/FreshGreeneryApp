@@ -30,7 +30,7 @@
 
             <item
                 android:id="@+id/menu_manageCustomer"
-                android:icon="@drawable/setting"
+                android:icon="@drawable/ic_baseline_group_24"
                 android:title="Customers" />
 
             <item

@@ -143,6 +143,7 @@ public class OwnerDashboard extends AppCompatActivity {
                     case R.id.menu_manageCustomer:
                         Toast.makeText(getApplicationContext(), "Customers Panel is Open", Toast.LENGTH_SHORT).show();
                         Intent intentCust = new Intent(OwnerDashboard.this, ManageCustomerActivity.class);
+                        startActivity(intentCust);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
