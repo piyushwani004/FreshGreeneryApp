@@ -2,6 +2,8 @@ package com.piyush004.projectfirst.owner.manage_customer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
+import com.piyush004.projectfirst.owner.home.HomeOwnerFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class ManageCustomerActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
-    private TextView textViewDay, textViewDate;
+    private TextView textViewDay, textViewDate, textViewTime;
     private String login_name;
     private String name, address, city, mobile, img, date;
     private int day, month, year;
@@ -56,6 +59,7 @@ public class ManageCustomerActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycleViewMessCustomer);
         textViewDay = (TextView) findViewById(R.id.textViewDay);
         textViewDate = (TextView) findViewById(R.id.textViewDate);
+        textViewTime = (TextView) findViewById(R.id.textViewTime);
         buttonSubmit = (Button) findViewById(R.id.buttonSubmitSchedule);
 
         recyclerView.setHasFixedSize(true);
@@ -63,6 +67,7 @@ public class ManageCustomerActivity extends AppCompatActivity {
 
         textViewDate.setText(currentDate());
         textViewDay.setText(currentDay());
+        textViewTime.setText(getRemainingTime());
 
         DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("ManageCustomer").child(login_name);
 
@@ -81,7 +86,7 @@ public class ManageCustomerActivity extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull final MyMessCustHolder holder, int position, @NonNull final MessCustomerModel model) {
-                String key = model.getKey();
+                final String key = model.getKey();
 
                 //System.out.println("key : " + key);
 
@@ -105,6 +110,17 @@ public class ManageCustomerActivity extends AppCompatActivity {
                         holder.setTxtMobile(mobile);
                         holder.setTxtCity(date);
                         holder.setTxtImg(img);
+
+                        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (holder.checkBox.isChecked()) {
+                                    list.add(key);
+                                } else {
+                                    list.remove(key);
+                                }
+                            }
+                        });
 
                     }
 
@@ -158,5 +174,32 @@ public class ManageCustomerActivity extends AppCompatActivity {
     public String currentDay() {
         return new SimpleDateFormat("EEEE").format(Calendar.getInstance().getTime());
     }
+
+    private String getRemainingTime() {
+        String delegate = "hh:mm aaa";
+        return (String) DateFormat.format(delegate, Calendar.getInstance().getTime());
+    }
+
+    public void onClickGetData(View view) {
+        DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("ScheduleCustomer").child(login_name);
+        Log.d("List :", list.toString());
+        String date = currentDate();
+        String time = getRemainingTime();
+        Log.d("Time :", time);
+
+        Calendar now = Calendar.getInstance();
+        if (now.get(Calendar.AM_PM) == Calendar.AM) {
+            // AM
+            dff.child(date).child("AM").setValue(list);
+        } else {
+            // PM
+            dff.child(date).child("PM").setValue(list);
+        }
+
+        Toast.makeText(this, "Data Submitted", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, HomeOwnerFragment.class);
+        startActivity(intent);
+    }
+
 
 }

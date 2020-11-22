@@ -86,7 +86,7 @@
             android:layout_marginLeft="160dp"
             android:layout_toEndOf="@id/imageViewMess_o"
             android:layout_toRightOf="@+id/imageViewMess_o"
-            android:text="P"
+            android:text=" "
             android:textSize="20dp" />
 
     </RelativeLayout>
