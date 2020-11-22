@@ -189,10 +189,8 @@ public class ManageCustomerActivity extends AppCompatActivity {
 
         Calendar now = Calendar.getInstance();
         if (now.get(Calendar.AM_PM) == Calendar.AM) {
-            // AM
             dff.child(date).child("AM").setValue(list);
         } else {
-            // PM
             dff.child(date).child("PM").setValue(list);
         }
 
