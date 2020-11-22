@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="15dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewMess_o"
@@ -77,6 +77,18 @@
             android:text="Joining Date"
             android:textColor="#B5B4B6"
             android:textSize="18dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox_o"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_card_o"
+            android:layout_marginLeft="160dp"
+            android:layout_toEndOf="@id/imageViewMess_o"
+            android:layout_toRightOf="@+id/imageViewMess_o"
+            android:text="P"
+            android:textSize="20dp" />
+
     </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -1,6 +1,7 @@
 package com.piyush004.projectfirst.owner.manage_customer;
 
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ public class MyMessCustHolder extends RecyclerView.ViewHolder {
 
     TextView textViewTitle, textViewAddress, textViewMobile, textViewCity;
     ImageView imageView;
-
+    CheckBox checkBox;
 
     public MyMessCustHolder(@NonNull View itemView) {
         super(itemView);
@@ -24,6 +25,7 @@ public class MyMessCustHolder extends RecyclerView.ViewHolder {
         this.textViewMobile = itemView.findViewById(R.id.mobile_card_o);
         this.textViewCity = itemView.findViewById(R.id.join_date_card_o);
         this.imageView = itemView.findViewById(R.id.imageViewMess_o);
+        this.checkBox = itemView.findViewById(R.id.checkBox_o);
     }
 
     public void setTxtTitle(String string) {

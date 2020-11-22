@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,15 +27,24 @@ import com.piyush004.projectfirst.Dashboard.OwnerDashboard;
 import com.piyush004.projectfirst.LoginKey;
 import com.piyush004.projectfirst.R;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 public class ManageCustomerActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
+    private TextView textViewDay, textViewDate;
     private String login_name;
     private String name, address, city, mobile, img, date;
     private int day, month, year;
+    private Button buttonSubmit;
+    List<String> list = new ArrayList<String>();
     private FirebaseRecyclerOptions<MessCustomerModel> options;
     private FirebaseRecyclerAdapter<MessCustomerModel, MyMessCustHolder> adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +54,15 @@ public class ManageCustomerActivity extends AppCompatActivity {
         login_name = LoginKey.loginKey;
         toolbar = (Toolbar) findViewById(R.id.toolbar2_o);
         recyclerView = (RecyclerView) findViewById(R.id.recycleViewMessCustomer);
+        textViewDay = (TextView) findViewById(R.id.textViewDay);
+        textViewDate = (TextView) findViewById(R.id.textViewDate);
+        buttonSubmit = (Button) findViewById(R.id.buttonSubmitSchedule);
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        textViewDate.setText(currentDate());
+        textViewDay.setText(currentDay());
 
         DatabaseReference nm = FirebaseDatabase.getInstance().getReference().child("ManageCustomer").child(login_name);
 
@@ -64,7 +83,7 @@ public class ManageCustomerActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull final MyMessCustHolder holder, int position, @NonNull final MessCustomerModel model) {
                 String key = model.getKey();
 
-                System.out.println("key : " + key);
+                //System.out.println("key : " + key);
 
                 DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Customer").child(key);
                 df.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -80,13 +99,13 @@ public class ManageCustomerActivity extends AppCompatActivity {
                         month = snapshot.child("CustJoinMonth").getValue(Integer.class);
                         year = snapshot.child("CustJoinYear").getValue(Integer.class);
                         date = day + "/" + month + "/" + year;
-                        System.out.println(name + mobile + address + name + date);
 
                         holder.setTxtTitle(name);
                         holder.setTxtAddress(address);
                         holder.setTxtMobile(mobile);
                         holder.setTxtCity(date);
                         holder.setTxtImg(img);
+
                     }
 
                     @Override
@@ -96,16 +115,6 @@ public class ManageCustomerActivity extends AppCompatActivity {
 
                 });
 
-               /* holder.imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        System.out.println(model.getKey());
-                        FragmentManager fragmentManager = getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.wrapper, new MessProfileFragment(model.getTitle(), model.getAddress(), model.getMobile(), model.getCity() , model.getImg() , model.getKey())).commit();
-
-                    }
-                });*/
 
             }
 
@@ -117,6 +126,7 @@ public class ManageCustomerActivity extends AppCompatActivity {
 
                 return new MyMessCustHolder(view);
             }
+
         };
 
         adapter.startListening();
@@ -140,4 +150,13 @@ public class ManageCustomerActivity extends AppCompatActivity {
         Intent intentProfile = new Intent(ManageCustomerActivity.this, OwnerDashboard.class);
         startActivity(intentProfile);
     }
+
+    public String currentDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+    }
+
+    public String currentDay() {
+        return new SimpleDateFormat("EEEE").format(Calendar.getInstance().getTime());
+    }
+
 }
