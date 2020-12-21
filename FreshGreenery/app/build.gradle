@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -31,5 +32,14 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
 
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.8'
+    implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
 }
