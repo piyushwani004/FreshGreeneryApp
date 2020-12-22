@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Auth.SignInFragment">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="50dp"
+        android:gravity="top|center"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="220dp"
+            android:layout_height="40dp"
+            android:background="@drawable/plaintext_bg"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Email"
+            android:inputType="textPersonName" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/EditTextLayoutPassword_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:hint=" password "
+            android:padding="0dp"
+            android:textColorHint="#A8A9AA"
+            app:counterMaxLength="4"
+            app:errorEnabled="true"
+            app:passwordToggleEnabled="true"
+            app:shapeAppearance="@style/Cut">
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="220dp"
+                android:layout_height="40dp"
+                android:background="@drawable/plaintext_bg"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/TextForgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="20dp"
+            android:text="Forgot Password ?"
+            android:textColor="@color/colorApp"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.5">
+
+        <Button
+            android:id="@+id/button_sign_in"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:background="@drawable/gradient_button"
+            android:text="Sign In"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+</FrameLayout>
