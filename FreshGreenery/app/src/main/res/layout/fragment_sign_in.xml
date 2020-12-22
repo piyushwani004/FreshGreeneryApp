@@ -9,14 +9,14 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginTop="50dp"
         android:gravity="top|center"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/editTextEmail"
-            android:layout_width="220dp"
+            android:layout_width="250dp"
             android:layout_height="40dp"
+            android:layout_marginTop="50dp"
             android:background="@drawable/plaintext_bg"
             android:ems="10"
             android:gravity="center"
@@ -34,12 +34,13 @@
             android:textColorHint="#A8A9AA"
             app:counterMaxLength="4"
             app:errorEnabled="true"
+            app:hintTextColor="@color/colorApp"
             app:passwordToggleEnabled="true"
             app:shapeAppearance="@style/Cut">
 
             <EditText
                 android:id="@+id/editTextPassword"
-                android:layout_width="220dp"
+                android:layout_width="250dp"
                 android:layout_height="40dp"
                 android:background="@drawable/plaintext_bg"
                 android:ems="10"
@@ -70,19 +71,13 @@
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.5">
+        android:padding="20dp">
 
         <Button
             android:id="@+id/button_sign_in"
             android:layout_width="250dp"
             android:layout_height="40dp"
-            android:background="@drawable/gradient_button"
+            android:background="@drawable/gradient_bg"
             android:text="Sign In"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
