@@ -1,12 +1,14 @@
 package com.piyush004.freshgreenery.Auth;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,8 @@ public class SignUpFragment extends Fragment {
     private String name, email, pass, vfpass;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
+
+    private ProgressBar progressBar;
 
     private String mParam1;
     private String mParam2;
@@ -73,6 +77,7 @@ public class SignUpFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         editTextVfPassword = view.findViewById(R.id.editTextVerifyPassword);
+        progressBar = view.findViewById(R.id.progressBar);
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +87,6 @@ public class SignUpFragment extends Fragment {
                 email = editTextEmail.getText().toString();
                 pass = editTextPassword.getText().toString();
                 vfpass = editTextVfPassword.getText().toString();
-
 
                 if (name.isEmpty()) {
                     editTextName.setError("Please Enter Name");
@@ -99,13 +103,13 @@ public class SignUpFragment extends Fragment {
                 } else if (!(isValidEmail(email))) {
                     editTextEmail.setError("Please Enter Valid Email..!!!");
                 } else if (!(isValidPassword(pass))) {
-                    //Toast.makeText(RegisterActivity.this, "Passwords must contain at least six characters, including uppercase, lowercase letters and numbers", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Passwords must contain at least six characters, including uppercase, lowercase letters and numbers", Toast.LENGTH_LONG).show();
                     editTextPassword.setError("Passwords must contain at least six characters, including uppercase, lowercase letters and numbers");
                 } else if (!(pass.equals(vfpass))) {
-                    // Toast.makeText(RegisterActivity.this, "Password Does Not Match", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Password Does Not Match", Toast.LENGTH_SHORT).show();
                     editTextVfPassword.setError("Password Does Not Match");
                 } else if (!(email.isEmpty() && pass.isEmpty())) {
-                    // progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
 
                     firebaseAuth.createUserWithEmailAndPassword(email, pass)
                             .addOnCompleteListener((Activity) getContext(), new OnCompleteListener() {
@@ -117,7 +121,7 @@ public class SignUpFragment extends Fragment {
                                         Toast.makeText(getContext(),
                                                 "Registration Error " + task.getException().getMessage(),
                                                 Toast.LENGTH_SHORT).show();
-                                        //progressBar.setVisibility(View.GONE);
+                                        progressBar.setVisibility(View.GONE);
                                     } else {
 
                                         databaseReference = FirebaseDatabase.getInstance().getReference().child("AppUsers");
@@ -126,8 +130,14 @@ public class SignUpFragment extends Fragment {
                                         databaseReference.child(key).child("Name").setValue(name);
                                         databaseReference.child(key).child("Email").setValue(email);
                                         databaseReference.child(key).child("Password").setValue(pass);
-                                        //progressBar.setVisibility(View.GONE);
+                                        progressBar.setVisibility(View.GONE);
                                         Toast.makeText(getContext(), "Successfully registered", Toast.LENGTH_SHORT).show();
+
+                                        editTextName.setText(" ");
+                                        editTextEmail.setText(" ");
+                                        editTextPassword.setText(" ");
+                                        editTextVfPassword.setText(" ");
+                                        startActivity(new Intent(getContext(), AuthActivity.class));
                                     }
                                 }
                             });
