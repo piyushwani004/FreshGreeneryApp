@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         progressBar.setVisibility(View.VISIBLE);
 
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -59,10 +58,12 @@ public class MainActivity extends AppCompatActivity {
                             if (User.equals(AdminUsername)) {
                                 progressBar.setVisibility(View.GONE);
                                 startActivity(new Intent(MainActivity.this, AdminActivity.class));
+                                finish();
                                 Toast.makeText(MainActivity.this, "Welcome Admin ", Toast.LENGTH_LONG).show();
                             } else if (!(User.equals(AdminUsername))) {
                                 progressBar.setVisibility(View.GONE);
                                 startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                                finish();
                                 Toast.makeText(MainActivity.this, "Welcome " + firebaseAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
                             }
                         }

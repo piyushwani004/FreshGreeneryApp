@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -42,8 +43,8 @@ public class SignInFragment extends Fragment {
     private DatabaseReference reference;
     private String email, pass, AdminUsername, AdminPassword;
     private TextView textViewForPass;
-
-
+    public View view;
+    private InputMethodManager inputMethodManager;
     private String mParam1;
     private String mParam2;
 
@@ -73,7 +74,7 @@ public class SignInFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
+        view = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -125,7 +126,6 @@ public class SignInFragment extends Fragment {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(getContext(), "Admin Login successful!", Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(getContext(), AdminActivity.class));
-
                                 } else if (!(email.equals(AdminUsername))) {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(getContext(), "Users Login successful!", Toast.LENGTH_LONG).show();
@@ -200,4 +200,8 @@ public class SignInFragment extends Fragment {
         return pat.matcher(email).matches();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }

@@ -107,16 +107,18 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_sign_up"
             android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:background="@drawable/gradient_bg"
+            android:layout_height="50dp"
             android:text="Sign Up"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="18dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:backgroundTint="@color/colorApp"
+            app:cornerRadius="20dp"
+            app:strokeColor="#EA155D" />
 
     </LinearLayout>
 
