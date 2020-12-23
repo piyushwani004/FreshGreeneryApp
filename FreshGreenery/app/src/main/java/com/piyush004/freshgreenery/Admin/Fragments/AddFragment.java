@@ -1,15 +1,26 @@
 package com.piyush004.freshgreenery.Admin.Fragments;
 
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+
 import com.google.android.material.button.MaterialButton;
 import com.piyush004.freshgreenery.R;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class AddFragment extends Fragment {
@@ -19,13 +30,13 @@ public class AddFragment extends Fragment {
 
     private String mParam1;
     private String mParam2;
-
+    Bitmap yourBitmap;
+    private static int SELECT_PHOTO = 1;
+    private Uri uri;
     private CircleImageView circleImageView;
     private EditText editTextPrice;
     private MaterialButton materialButtonAdd;
     private View view;
-
-    private final static int ALL_PERMISSIONS_RESULT = 107;
 
     public AddFragment() {
         // Required empty public constructor
@@ -51,7 +62,7 @@ public class AddFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_add, container, false);
@@ -60,15 +71,46 @@ public class AddFragment extends Fragment {
         materialButtonAdd = view.findViewById(R.id.buttonAdd);
         editTextPrice = view.findViewById(R.id.editTextPrice);
 
-
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent photoPickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                photoPickerIntent.addCategory(Intent.CATEGORY_OPENABLE);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
             }
         });
 
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK && data != null) {
+
+            if (resultCode == RESULT_OK) {
+                uri = data.getData();
+                Picasso.get()
+                        .load(uri)
+                        .resize(500, 500)
+                        .centerCrop().rotate(0)
+                        .into(circleImageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                Toast.makeText(getContext(), "Fetched image from Gallery", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+        }
+    }
+
 
 }
