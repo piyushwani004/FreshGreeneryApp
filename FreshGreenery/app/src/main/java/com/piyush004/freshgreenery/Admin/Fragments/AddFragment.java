@@ -114,7 +114,7 @@ public class AddFragment extends Fragment implements
             }
         });
 
-        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
+
         materialButtonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,14 +130,8 @@ public class AddFragment extends Fragment implements
                     editTextPrice.requestFocus();
                 } else if (!(Name.isEmpty() && Price.isEmpty())) {
 
-                    String key = df.push().getKey();
-                    df.child(key).child("ID").setValue(key);
-                    df.child(key).child("Name").setValue(Name);
-                    df.child(key).child("Price").setValue(Price);
-                    df.child(key).child("Quantity").setValue(Quanty);
                     uploadImage();
-                    Toast.makeText(getContext(), "Data Save", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getContext(), AdminActivity.class));
+
                 }
             }
         });
@@ -184,6 +178,7 @@ public class AddFragment extends Fragment implements
     private void uploadImage() {
         storage = getInstance();
         storageReference = storage.getReference();
+        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
         if (uri != null) {
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Uploading...");
@@ -201,13 +196,19 @@ public class AddFragment extends Fragment implements
                                 public void onSuccess(Uri uri) {
 
                                     String imguri = uri.toString();
-                                    DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
-                                    df.child("ImageURl").setValue(imguri);
+                                    String key = df.push().getKey();
+                                    df.child(key).child("ID").setValue(key);
+                                    df.child(key).child("Name").setValue(Name);
+                                    df.child(key).child("Price").setValue(Price);
+                                    df.child(key).child("Quantity").setValue(Quanty);
+                                    df.child(key).child("ImageURl").setValue(imguri);
 
                                 }
                             });
 
-                            Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Save Data", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getContext(), AdminActivity.class));
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -239,4 +240,6 @@ public class AddFragment extends Fragment implements
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+
 }
