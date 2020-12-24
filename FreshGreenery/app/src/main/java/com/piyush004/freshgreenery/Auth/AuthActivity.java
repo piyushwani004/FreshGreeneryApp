@@ -10,12 +10,14 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 import com.piyush004.freshgreenery.R;
 
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
+
 public class AuthActivity extends AppCompatActivity {
 
     private ViewPagerAdapter viewPagerAdapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private View mIndicator;
+    private View mIndicator, viewAuth;
     private int indicatorWidth;
 
     @Override
@@ -27,7 +29,7 @@ public class AuthActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayoutAuth);
         viewPager = findViewById(R.id.ViewPagerAuth);
         mIndicator = findViewById(R.id.indicator);
-
+        viewAuth = findViewById(R.id.viewAuth);
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.addFragment(new SignInFragment(), " SignIn ");
@@ -49,6 +51,14 @@ public class AuthActivity extends AppCompatActivity {
                 FrameLayout.LayoutParams indicatorParams = (FrameLayout.LayoutParams) mIndicator.getLayoutParams();
                 indicatorParams.width = indicatorWidth;
                 mIndicator.setLayoutParams(indicatorParams);
+            }
+        });
+
+
+        viewAuth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtil.hideKeyboard(AuthActivity.this);
             }
         });
 

@@ -7,6 +7,13 @@
     android:background="#FBF1F1"
     tools:context=".Auth.AuthActivity">
 
+
+    <View
+        android:id="@+id/viewAuth"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         style="@style/CustomCardViewStyle"

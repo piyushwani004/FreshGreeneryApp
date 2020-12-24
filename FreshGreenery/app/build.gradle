@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.github.barteksc:android-pdf-viewer:3.1.0-beta.1'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
     implementation 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
+    implementation 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+
 
     implementation 'com.firebaseui:firebase-ui-database:6.3.0'
     implementation 'com.firebaseui:firebase-ui-firestore:6.3.0'

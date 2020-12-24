@@ -29,6 +29,8 @@ import com.piyush004.freshgreenery.Admin.AdminActivity;
 import com.piyush004.freshgreenery.Dashboard.HomeActivity;
 import com.piyush004.freshgreenery.R;
 
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
+
 import java.util.regex.Pattern;
 
 public class SignInFragment extends Fragment {
@@ -43,7 +45,7 @@ public class SignInFragment extends Fragment {
     private DatabaseReference reference;
     private String email, pass, AdminUsername, AdminPassword;
     private TextView textViewForPass;
-    public View view;
+    public View view, viewSignin;
     private InputMethodManager inputMethodManager;
     private String mParam1;
     private String mParam2;
@@ -82,6 +84,7 @@ public class SignInFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         textViewForPass = view.findViewById(R.id.TextForgetPassword);
+        viewSignin = view.findViewById(R.id.viewFragSignIn);
         button = view.findViewById(R.id.button_sign_in);
 
         reference = FirebaseDatabase.getInstance().getReference().child("Admin");
@@ -95,6 +98,14 @@ public class SignInFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+
+
+        viewSignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtil.hideKeyboard(getActivity());
             }
         });
 

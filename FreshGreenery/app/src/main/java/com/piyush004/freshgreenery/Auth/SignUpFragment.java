@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.freshgreenery.R;
 
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,7 +38,7 @@ public class SignUpFragment extends Fragment {
     private String name, email, pass, vfpass;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-
+    private View viewSignout;
     private ProgressBar progressBar;
 
     private String mParam1;
@@ -77,7 +79,17 @@ public class SignUpFragment extends Fragment {
         editTextEmail = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
         editTextVfPassword = view.findViewById(R.id.editTextVerifyPassword);
+        viewSignout = view.findViewById(R.id.viewFragSignUp);
         progressBar = view.findViewById(R.id.progressBar);
+
+
+        viewSignout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtil.hideKeyboard(getActivity());
+            }
+        });
+
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
