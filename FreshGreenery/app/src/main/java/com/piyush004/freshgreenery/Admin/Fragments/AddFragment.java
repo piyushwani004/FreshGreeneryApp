@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
@@ -207,7 +208,9 @@ public class AddFragment extends Fragment implements
                             });
 
                             Toast.makeText(getContext(), "Save Data", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getContext(), AdminActivity.class));
+                            editTextName.setText("");
+                            editTextPrice.setText("");
+                            Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
 
                         }
                     })
