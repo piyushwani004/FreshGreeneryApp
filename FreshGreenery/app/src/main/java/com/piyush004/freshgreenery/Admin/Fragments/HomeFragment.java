@@ -1,44 +1,45 @@
 package com.piyush004.freshgreenery.Admin.Fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.piyush004.freshgreenery.R;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.piyush004.freshgreenery.R;
+import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
+import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
+
+
 public class HomeFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private View view;
+    private RecyclerView recyclerView;
+
+    private FirebaseRecyclerOptions<HomeModel> options;
+    private FirebaseRecyclerAdapter<HomeModel, Holder> adapter;
+
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
@@ -60,7 +61,57 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+
+        view = inflater.inflate(R.layout.fragment_home, container, false);
+        recyclerView = view.findViewById(R.id.recy_frag_home);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
+        options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
+
+            @NonNull
+            @Override
+            public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                return new HomeModel(
+
+                        snapshot.child("Name").getValue(String.class),
+                        snapshot.child("Date").getValue(String.class),
+                        snapshot.child("Price").getValue(String.class),
+                        snapshot.child("Quantity").getValue(String.class),
+                        snapshot.child("ImageURl").getValue(String.class)
+                );
+
+            }
+        }).build();
+
+        adapter = new FirebaseRecyclerAdapter<HomeModel, Holder>(options) {
+
+            @Override
+            protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull HomeModel model) {
+
+                holder.setTxtName(model.getName());
+                holder.setTxtDate(model.getDate());
+                holder.setTxtPrice(model.getPrice());
+                holder.setTxtQuantity(model.getQuantity());
+                holder.setImgURL(model.getImgURL());
+
+            }
+
+            @NonNull
+            @Override
+            public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_card, parent, false);
+
+                return new Holder(view);
+            }
+        };
+
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
+
+
+        return view;
     }
 }

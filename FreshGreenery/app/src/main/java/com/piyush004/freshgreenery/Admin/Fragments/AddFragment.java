@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +24,25 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.piyush004.freshgreenery.Admin.AdminActivity;
 import com.piyush004.freshgreenery.R;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -56,10 +66,17 @@ public class AddFragment extends Fragment implements
     private MaterialButton materialButtonAdd;
     private View view, viewKey;
     private Spinner spinner;
-    private String Name, Price, Quanty;
-    private String[] Quantity = {"/kg", "Quintal", "others"};
+    private SimpleDateFormat simpleDateFormat;
+    private String date;
+    private String Name, Price, Quanty, ImgURL;
+    private String[] Quantity = {"/kg", "/Quintal"};
     private StorageReference storageReference;
     private FirebaseStorage storage;
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    private ArrayList<String> arrayList = new ArrayList<>();
+    MaterialBetterSpinner materialBetterSpinner;
+
+    // String[] SPINNER_DATA = {"ANDROID", "PHP", "BLOGGER", "WORDPRESS"};
 
     public AddFragment() {
         // Required empty public constructor
@@ -96,8 +113,38 @@ public class AddFragment extends Fragment implements
         editTextPrice = view.findViewById(R.id.editTextPrice);
         editTextName = view.findViewById(R.id.editTextName);
         spinner = view.findViewById(R.id.spinner);
-
         spinner.setOnItemSelectedListener(this);
+
+
+        materialBetterSpinner = (MaterialBetterSpinner) view.findViewById(R.id.material_spinner);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, SPINNER_DATA);
+        //materialBetterSpinner.setAdapter(adapter);
+        showDataSpinner();
+        materialBetterSpinner.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                String Search = materialBetterSpinner.getText().toString();
+                Log.d("value", Search);
+
+            }
+        });
+
+
+        Date data = new Date();
+        simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        date = simpleDateFormat.format(data);
 
 
         ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, Quantity);
@@ -196,13 +243,14 @@ public class AddFragment extends Fragment implements
                                 @Override
                                 public void onSuccess(Uri uri) {
 
-                                    String imguri = uri.toString();
+                                    ImgURL = uri.toString();
                                     String key = df.push().getKey();
                                     df.child(key).child("ID").setValue(key);
                                     df.child(key).child("Name").setValue(Name);
                                     df.child(key).child("Price").setValue(Price);
                                     df.child(key).child("Quantity").setValue(Quanty);
-                                    df.child(key).child("ImageURl").setValue(imguri);
+                                    df.child(key).child("ImageURl").setValue(ImgURL);
+                                    df.child(key).child("Date").setValue(date);
 
                                 }
                             });
@@ -242,6 +290,27 @@ public class AddFragment extends Fragment implements
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private void showDataSpinner() {
+        databaseReference.child("VegetableEntry").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList.clear();
+                for (DataSnapshot item : dataSnapshot.getChildren()) {
+                    arrayList.add(item.child("Name").getValue(String.class));
+                }
+                arrayList.add("Nothing");
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
+                materialBetterSpinner.setAdapter(arrayAdapter);
+                materialBetterSpinner.setText("");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

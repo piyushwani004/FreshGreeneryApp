@@ -16,6 +16,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/material_spinner"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:hint="Select Here"
+            android:textColor="@color/colorApp"
+            android:textColorHint="#d10e3b"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/circular_add_images"
             android:layout_width="150dp"
@@ -26,8 +41,9 @@
             app:civ_border_color="@color/colorApp"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/material_spinner" />
 
         <EditText
             android:id="@+id/editTextPrice"

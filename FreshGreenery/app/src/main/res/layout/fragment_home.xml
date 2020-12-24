@@ -6,4 +6,9 @@
     tools:context=".Admin.Fragments.HomeFragment">
 
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recy_frag_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/home_card" />
 </FrameLayout>
