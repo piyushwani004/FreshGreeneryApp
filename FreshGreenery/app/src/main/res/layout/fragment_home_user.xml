@@ -3,19 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.Fragments.HomeFragment">
+    tools:context=".User.FragmentHomeUser">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeFragHome"
+        android:id="@+id/swipeFragHomeUser"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recy_frag_home"
+            android:id="@+id/recyFragHomeUser"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/admin_home_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </FrameLayout>

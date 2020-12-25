@@ -2,12 +2,12 @@ package com.piyush004.freshgreenery.Admin.Fragments;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,15 +67,16 @@ public class AddFragment extends Fragment implements
     private View view, viewKey;
     private Spinner spinner;
     private SimpleDateFormat simpleDateFormat;
-    private String date;
+    private String date, key;
     private String Name, Price, Quanty, ImgURL;
+    private String UpName, UpPrice, UpQuanty, UpImgURL;
     private String[] Quantity = {"/kg", "/Quintal"};
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    private ArrayList<String> arrayList = new ArrayList<>();
+    public ArrayList<String> arrayList = new ArrayList<>();
     private MaterialBetterSpinner materialBetterSpinner;
-    private ArrayAdapter<String> arrayAdapter;
+    public ArrayAdapter arrayAdapter;
 
     public AddFragment() {
         // Required empty public constructor
@@ -119,7 +120,7 @@ public class AddFragment extends Fragment implements
         materialBetterSpinner = (MaterialBetterSpinner) view.findViewById(R.id.material_spinner);
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, SPINNER_DATA);
         //materialBetterSpinner.setAdapter(adapter);
-        showDataSpinner();
+        showDataSpinner(getContext());
         materialBetterSpinner.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -135,19 +136,74 @@ public class AddFragment extends Fragment implements
             @Override
             public void afterTextChanged(Editable s) {
 
-                String Search = materialBetterSpinner.getText().toString();
+                final String Search = materialBetterSpinner.getText().toString();
                 if (!(Search.equals("Nothing"))) {
-                    Log.d("if", Search);
+
+                    databaseReference.child("VegetableEntry").orderByChild("Name").equalTo(Search).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                                key = child.getKey();
+
+                                databaseReference.child("VegetableEntry").child(key).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                        editTextName.setText(snapshot.child("Name").getValue(String.class));
+                                        editTextPrice.setText(snapshot.child("Price").getValue(String.class));
+                                        Picasso.get().load(snapshot.child("ImageURl").getValue(String.class))
+                                                .resize(500, 500)
+                                                .centerCrop()
+                                                .rotate(0)
+                                                .into(circleImageView);
+                                        uri = Uri.parse(snapshot.child("ImageURl").getValue(String.class));
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                 } else {
-                    //arrayAdapter.clear();
-                    Log.d("else", Search);
-                    //arrayList.clear();
+                    editTextName.setText("");
+                    editTextPrice.setText("");
+                    Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
+                    // Log.d("else", Search);
+                }
+            }
+        });
+
+        materialButtonUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(key);
+
+                UpName = editTextName.getText().toString();
+                UpPrice = editTextPrice.getText().toString();
+
+                if (UpName.isEmpty()) {
+                    editTextName.setError("Please Select Name");
+                    editTextName.requestFocus();
+                } else if (UpPrice.isEmpty()) {
+                    editTextPrice.setError("Please Select Name");
+                    editTextPrice.requestFocus();
+                } else if (!(UpName.isEmpty() && UpPrice.isEmpty())) {
+
+                    uploadUpdatedImage(key, getContext());
+
                 }
 
             }
         });
-
-
         Date data = new Date();
         simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
         date = simpleDateFormat.format(data);
@@ -238,7 +294,7 @@ public class AddFragment extends Fragment implements
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            final StorageReference ref = storageReference.child("Upload" + System.currentTimeMillis() + ".PDF");
+            final StorageReference ref = storageReference.child(Name + System.currentTimeMillis() + ".img");
             ref.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -287,6 +343,62 @@ public class AddFragment extends Fragment implements
     }
 
 
+    public void uploadUpdatedImage(String Key, final Context context) {
+        storage = getInstance();
+        storageReference = storage.getReference();
+        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(Key);
+        if (uri != null) {
+            final ProgressDialog progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle("Updating...");
+            progressDialog.show();
+
+            final StorageReference ref = storageReference.child(UpName + System.currentTimeMillis() + ".img");
+            ref.putFile(uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            progressDialog.dismiss();
+
+                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    UpImgURL = uri.toString();
+                                    df.child("Name").setValue(UpName);
+                                    df.child("Price").setValue(UpPrice);
+                                    df.child("Quantity").setValue(Quanty);
+                                    df.child("ImageURl").setValue(UpImgURL);
+
+                                }
+                            });
+
+                            Toast.makeText(getContext(), "Save Data", Toast.LENGTH_SHORT).show();
+                            editTextName.setText("");
+                            editTextPrice.setText("");
+                            Glide.with(context).load(R.drawable.carrots).into(circleImageView);
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getContext(), "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                    .getTotalByteCount());
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                        }
+                    });
+        }
+
+    }
+
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // Toast.makeText(getContext(), Quantity[position], Toast.LENGTH_LONG).show();
@@ -298,7 +410,7 @@ public class AddFragment extends Fragment implements
 
     }
 
-    private void showDataSpinner() {
+    private void showDataSpinner(final Context context) {
         databaseReference.child("VegetableEntry").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -307,9 +419,9 @@ public class AddFragment extends Fragment implements
                     arrayList.add(item.child("Name").getValue(String.class));
                 }
                 arrayList.add("Nothing");
-                arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
+                arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList);
                 materialBetterSpinner.setAdapter(arrayAdapter);
-                materialBetterSpinner.setText("");
+                materialBetterSpinner.setText("Select Content");
             }
 
             @Override

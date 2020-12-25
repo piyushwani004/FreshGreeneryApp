@@ -13,10 +13,23 @@
         android:layout_height="wrap_content"
         android:padding="10dp">
 
+        <TextView
+            android:id="@+id/Date_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:text="Date"
+            android:textAlignment="textEnd"
+            android:textColor="@color/colorGray"
+            android:textSize="14dp"
+            android:textStyle="bold|italic" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageViewHome"
             android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_below="@+id/Date_card"
+            android:layout_marginTop="10dp"
             android:clickable="true"
             android:src="@drawable/carrots"
             app:civ_border_color="@color/colorApp"
@@ -27,28 +40,14 @@
 
 
         <TextView
-            android:id="@+id/Date_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/imageViewHome"
-            android:layout_toRightOf="@+id/imageViewHome"
-            android:text="Date"
-            android:textAlignment="textEnd"
-            android:textColor="@color/colorGray"
-            android:textSize="14dp"
-            android:textStyle="bold|italic" />
-
-        <TextView
             android:id="@+id/Title_card"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/Date_card"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/imageViewHome"
-            android:layout_toRightOf="@+id/imageViewHome"
+            android:layout_below="@+id/imageViewHome"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
             android:text="Title"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="22dp"
             android:textStyle="bold|italic" />
@@ -58,11 +57,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Title_card"
-            android:layout_marginStart="20dp"
-            android:layout_toEndOf="@id/imageViewHome"
-            android:layout_toRightOf="@+id/imageViewHome"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
             android:text="Price"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:textColor="#777474"
             android:textSize="16dp"
             android:textStyle="bold|italic" />
@@ -72,13 +70,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Title_card"
-            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/Price_card"
             android:text="Quantity"
             android:textAlignment="textStart"
             android:textColor="#777474"
             android:textSize="16dp"
             android:textStyle="bold|italic" />
+
 
     </RelativeLayout>
 

@@ -41,7 +41,7 @@ public class Holder extends RecyclerView.ViewHolder {
     }
 
     public void setTxtQuantity(String string) {
-        textViewQuanty.setText(string);
+        textViewQuanty.setText(" " + string);
     }
 
     public void setImgURL(String string) {

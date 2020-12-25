@@ -131,8 +131,6 @@ public class AdminActivity extends AppCompatActivity {
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.show();
                 break;
-
-
         }
         return true;
     }
