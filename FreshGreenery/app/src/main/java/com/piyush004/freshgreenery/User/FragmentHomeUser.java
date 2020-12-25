@@ -1,5 +1,6 @@
 package com.piyush004.freshgreenery.User;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -114,6 +116,25 @@ public class FragmentHomeUser extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+                        builderDelete = new AlertDialog.Builder(getContext());
+                        builderDelete.setMessage("Do You Want To add to cart ?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        Toast.makeText(getContext(), "Add Content Successfully", Toast.LENGTH_LONG).show();
+
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                        AlertDialog alert = builderDelete.create();
+                        alert.setTitle("Add to Cart Alert");
+                        alert.show();
 
                     }
                 });
