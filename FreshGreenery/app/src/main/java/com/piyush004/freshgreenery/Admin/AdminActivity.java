@@ -79,6 +79,7 @@ public class AdminActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, AuthActivity.class));
+
         }
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

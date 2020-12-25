@@ -136,11 +136,15 @@ public class SignInFragment extends Fragment {
 
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(getContext(), "Admin Login successful!", Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(getContext(), AdminActivity.class));
+                                    Intent intent = new Intent(getContext(), AdminActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+
                                 } else if (!(email.equals(AdminUsername))) {
                                     progressBar.setVisibility(View.GONE);
                                     Toast.makeText(getContext(), "Users Login successful!", Toast.LENGTH_LONG).show();
                                     Intent intent = new Intent(getContext(), HomeActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                 }
                                 editTextEmail.setText("");
