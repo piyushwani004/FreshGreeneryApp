@@ -63,7 +63,7 @@ public class AddFragment extends Fragment implements
     private Uri uri;
     private CircleImageView circleImageView;
     private EditText editTextPrice, editTextName;
-    private MaterialButton materialButtonAdd;
+    private MaterialButton materialButtonAdd, materialButtonUpdate;
     private View view, viewKey;
     private Spinner spinner;
     private SimpleDateFormat simpleDateFormat;
@@ -74,9 +74,8 @@ public class AddFragment extends Fragment implements
     private FirebaseStorage storage;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private ArrayList<String> arrayList = new ArrayList<>();
-    MaterialBetterSpinner materialBetterSpinner;
-
-    // String[] SPINNER_DATA = {"ANDROID", "PHP", "BLOGGER", "WORDPRESS"};
+    private MaterialBetterSpinner materialBetterSpinner;
+    private ArrayAdapter<String> arrayAdapter;
 
     public AddFragment() {
         // Required empty public constructor
@@ -110,6 +109,7 @@ public class AddFragment extends Fragment implements
         viewKey = view.findViewById(R.id.viewFragAdd);
         circleImageView = view.findViewById(R.id.circular_add_images);
         materialButtonAdd = view.findViewById(R.id.buttonAdd);
+        materialButtonUpdate = view.findViewById(R.id.buttonUpdate);
         editTextPrice = view.findViewById(R.id.editTextPrice);
         editTextName = view.findViewById(R.id.editTextName);
         spinner = view.findViewById(R.id.spinner);
@@ -136,7 +136,13 @@ public class AddFragment extends Fragment implements
             public void afterTextChanged(Editable s) {
 
                 String Search = materialBetterSpinner.getText().toString();
-                Log.d("value", Search);
+                if (!(Search.equals("Nothing"))) {
+                    Log.d("if", Search);
+                } else {
+                    //arrayAdapter.clear();
+                    Log.d("else", Search);
+                    //arrayList.clear();
+                }
 
             }
         });
@@ -301,7 +307,7 @@ public class AddFragment extends Fragment implements
                     arrayList.add(item.child("Name").getValue(String.class));
                 }
                 arrayList.add("Nothing");
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
+                arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_dropdown_item, arrayList);
                 materialBetterSpinner.setAdapter(arrayAdapter);
                 materialBetterSpinner.setText("");
             }

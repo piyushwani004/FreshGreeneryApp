@@ -22,7 +22,7 @@ import com.piyush004.freshgreenery.Dashboard.HomeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static int SPLASH_SCREEN_TIME_OUT = 2000;
+    private static int SPLASH_SCREEN_TIME_OUT = 1000;
 
     private ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
