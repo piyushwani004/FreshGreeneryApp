@@ -33,7 +33,7 @@ public class Holder extends RecyclerView.ViewHolder {
     }
 
     public void setTxtPrice(String string) {
-        textViewPrice.setText(string);
+        textViewPrice.setText("Rs " + string);
     }
 
     public void setTxtDate(String string) {

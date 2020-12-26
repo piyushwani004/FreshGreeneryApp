@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +24,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -34,8 +39,9 @@ public class FragmentHomeUser extends Fragment {
 
     private String mParam1;
     private String mParam2;
-
+    private FirebaseAuth firebaseAuth;
     private View view;
+    private Spinner spinner;
     private RecyclerView recyclerView;
     private AlertDialog.Builder builderDelete;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -45,7 +51,11 @@ public class FragmentHomeUser extends Fragment {
             R.anim.layout_animation_right_to_left,
             R.anim.layout_animation_down_to_up,
             R.anim.layout_animation_left_to_right};
+    private EditText editTextQuanty;
 
+    private String Cardkey, SpinnerQuantity, EditTextQuantity;
+    private String[] Quantity = {"/kg", "/Quintal", "0.5kilo"};
+    public ArrayAdapter arrayAdapter;
 
     public FragmentHomeUser() {
         // Required empty public constructor
@@ -75,12 +85,14 @@ public class FragmentHomeUser extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_home_user, container, false);
 
+        firebaseAuth = FirebaseAuth.getInstance();
         recyclerView = view.findViewById(R.id.recyFragHomeUser);
         swipeRefreshLayout = view.findViewById(R.id.swipeFragHomeUser);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(manager);
+
 
         //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -117,25 +129,57 @@ public class FragmentHomeUser extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        builderDelete = new AlertDialog.Builder(getContext());
-                        builderDelete.setMessage("Do You Want To add to cart ?")
-                                .setCancelable(false)
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
+                        Cardkey = model.getID();
+                        final String Uid = firebaseAuth.getCurrentUser().getUid();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View dialogLayout = inflater.inflate(R.layout.add_to_cart_dialoge, null);
 
-                                        Toast.makeText(getContext(), "Add Content Successfully : " + model.getID(), Toast.LENGTH_LONG).show();
+                        editTextQuanty = dialogLayout.findViewById(R.id.editTextQuantityDia);
+                        spinner = dialogLayout.findViewById(R.id.spinnerDia);
+                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                SpinnerQuantity = Quantity[position];
+                            }
 
-                                    }
-                                })
-                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                });
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
 
-                        AlertDialog alert = builderDelete.create();
-                        alert.setTitle("Add to Cart Alert");
-                        alert.show();
+                            }
+                        });
+
+
+                        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, Quantity);
+                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinner.setAdapter(aa);
+
+
+                        builder.setTitle("Add Cart Alert");
+                        builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                EditTextQuantity = editTextQuanty.getText().toString();
+
+                                final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(Uid);
+                                String key = df.push().getKey();
+                                df.child(key).child("CardID").setValue(Cardkey);
+                                df.child(key).child("Quantity").setValue(EditTextQuantity);
+                                df.child(key).child("Quant").setValue(SpinnerQuantity);
+
+                                Toast.makeText(getContext(), "Add to cart Successfully", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        builder.setNegativeButton("Closed", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+
+                        builder.setView(dialogLayout);
+                        builder.show();
 
                     }
                 });
@@ -190,5 +234,6 @@ public class FragmentHomeUser extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
+
 
 }
