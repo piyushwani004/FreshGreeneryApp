@@ -85,6 +85,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
+
         options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
 
             @NonNull

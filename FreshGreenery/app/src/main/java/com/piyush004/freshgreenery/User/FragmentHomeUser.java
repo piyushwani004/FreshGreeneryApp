@@ -26,8 +26,10 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.freshgreenery.R;
 import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
 import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
@@ -54,6 +56,7 @@ public class FragmentHomeUser extends Fragment {
     private EditText editTextQuanty;
 
     private String Cardkey, SpinnerQuantity, EditTextQuantity;
+    private String ImgURL, Name, Price, VegQuant;
     private String[] Quantity = {"/kg", "/Quintal", "0.5kilo"};
     public ArrayAdapter arrayAdapter;
 
@@ -162,12 +165,37 @@ public class FragmentHomeUser extends Fragment {
                                 EditTextQuantity = editTextQuanty.getText().toString();
 
                                 final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(Uid);
-                                String key = df.push().getKey();
-                                df.child(key).child("CardID").setValue(Cardkey);
-                                df.child(key).child("Quantity").setValue(EditTextQuantity);
-                                df.child(key).child("Quant").setValue(SpinnerQuantity);
+                                final String key = df.push().getKey();
 
-                                Toast.makeText(getContext(), "Add to cart Successfully", Toast.LENGTH_SHORT).show();
+
+                                final DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(Cardkey);
+                                dff.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        ImgURL = snapshot.child("ImageURl").getValue(String.class);
+                                        Name = snapshot.child("Name").getValue(String.class);
+                                        Price = snapshot.child("Price").getValue(String.class);
+                                        VegQuant = snapshot.child("Quantity").getValue(String.class);
+
+
+                                        df.child(key).child("CardID").setValue(Cardkey);
+                                        df.child(key).child("UserQuantity").setValue(EditTextQuantity);
+                                        df.child(key).child("UserQuant").setValue(SpinnerQuantity);
+
+                                        df.child(key).child("CartImageURl").setValue(ImgURL);
+                                        df.child(key).child("CartName").setValue(Name);
+                                        df.child(key).child("CartPrice").setValue(Price);
+                                        df.child(key).child("CartQuantity").setValue(VegQuant);
+                                        Toast.makeText(getContext(), "Add to cart Successfully", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+
                             }
                         });
 
