@@ -96,7 +96,8 @@ public class FragmentHomeUser extends Fragment {
                         snapshot.child("Date").getValue(String.class),
                         snapshot.child("Price").getValue(String.class),
                         snapshot.child("Quantity").getValue(String.class),
-                        snapshot.child("ImageURl").getValue(String.class)
+                        snapshot.child("ImageURl").getValue(String.class),
+                        snapshot.child("ID").getValue(String.class)
                 );
 
             }
@@ -122,7 +123,7 @@ public class FragmentHomeUser extends Fragment {
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        Toast.makeText(getContext(), "Add Content Successfully", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "Add Content Successfully : " + model.getID(), Toast.LENGTH_LONG).show();
 
                                     }
                                 })

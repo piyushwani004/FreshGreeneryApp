@@ -96,7 +96,8 @@ public class HomeFragment extends Fragment {
                         snapshot.child("Date").getValue(String.class),
                         snapshot.child("Price").getValue(String.class),
                         snapshot.child("Quantity").getValue(String.class),
-                        snapshot.child("ImageURl").getValue(String.class)
+                        snapshot.child("ImageURl").getValue(String.class),
+                        snapshot.child("ID").getValue(String.class)
                 );
 
             }

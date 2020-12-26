@@ -56,8 +56,8 @@
             android:gravity="center"
             android:hint="Price"
             android:inputType="numberDecimal"
-            app:layout_constraintStart_toStartOf="@+id/editTextName"
-            app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+            app:layout_constraintStart_toStartOf="@+id/Address_address"
+            app:layout_constraintTop_toBottomOf="@+id/Address_address" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -95,7 +95,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextPrice" />
 
         <EditText
-            android:id="@+id/editTextName"
+            android:id="@+id/Address_address"
             android:layout_width="300dp"
             android:layout_height="40dp"
             android:layout_marginTop="40dp"
@@ -115,9 +115,9 @@
             android:layout_height="40dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/plaintext_bg"
-            app:layout_constraintEnd_toEndOf="@+id/editTextName"
+            app:layout_constraintEnd_toEndOf="@+id/Address_address"
             app:layout_constraintStart_toEndOf="@+id/editTextPrice"
-            app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+            app:layout_constraintTop_toBottomOf="@+id/Address_address" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

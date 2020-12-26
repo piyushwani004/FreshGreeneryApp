@@ -112,7 +112,7 @@ public class AddFragment extends Fragment implements
         materialButtonAdd = view.findViewById(R.id.buttonAdd);
         materialButtonUpdate = view.findViewById(R.id.buttonUpdate);
         editTextPrice = view.findViewById(R.id.editTextPrice);
-        editTextName = view.findViewById(R.id.editTextName);
+        editTextName = view.findViewById(R.id.Address_address);
         spinner = view.findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
 

@@ -7,17 +7,19 @@ public class HomeModel {
     private String Price;
     private String Quantity;
     private String ImgURL;
+    private String ID;
 
     public HomeModel() {
 
     }
 
-    public HomeModel(String name, String date, String price, String quantity, String imgURL) {
+    public HomeModel(String name, String date, String price, String quantity, String imgURL, String id) {
         Name = name;
         Date = date;
         Price = price;
         Quantity = quantity;
         ImgURL = imgURL;
+        ID = id;
     }
 
     public String getName() {
@@ -60,6 +62,14 @@ public class HomeModel {
         ImgURL = imgURL;
     }
 
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
     @Override
     public String toString() {
         return "HomeModel{" +
@@ -68,7 +78,7 @@ public class HomeModel {
                 ", Price='" + Price + '\'' +
                 ", Quantity='" + Quantity + '\'' +
                 ", ImgURL='" + ImgURL + '\'' +
+                ", ID='" + ID + '\'' +
                 '}';
     }
-
 }

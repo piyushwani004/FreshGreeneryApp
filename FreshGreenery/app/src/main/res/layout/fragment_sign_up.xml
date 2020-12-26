@@ -29,7 +29,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/editTextName"
+            android:id="@+id/Address_address"
             android:layout_width="250dp"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
