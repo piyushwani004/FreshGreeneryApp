@@ -62,15 +62,15 @@ public class AddFragment extends Fragment implements
     private static int SELECT_PHOTO = 1;
     private Uri uri;
     private CircleImageView circleImageView;
-    private EditText editTextPrice, editTextName;
+    private EditText editTextPrice, editTextName, editTextTotalQuantity;
     private MaterialButton materialButtonAdd, materialButtonUpdate;
     private View view, viewKey;
     private Spinner spinner;
     private SimpleDateFormat simpleDateFormat;
     private String date, key;
-    private String Name, Price, Quanty, ImgURL;
+    private String Name, Price, Quanty, ImgURL, TotalQuantity;
     private String UpName, UpPrice, UpQuanty, UpImgURL;
-    private String[] Quantity = {"/1kg", "/250gm", "/500gm", "/piece", "/1dozen"};
+    private String[] Quantity = {"1kg", "250gm", "500gm", "piece", "dozen"};
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -113,6 +113,7 @@ public class AddFragment extends Fragment implements
         materialButtonUpdate = view.findViewById(R.id.buttonUpdate);
         editTextPrice = view.findViewById(R.id.editTextPrice);
         editTextName = view.findViewById(R.id.Address_address);
+        editTextTotalQuantity = view.findViewById(R.id.editTextTotalQuantity);
         spinner = view.findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
 
@@ -231,6 +232,7 @@ public class AddFragment extends Fragment implements
 
                 Name = editTextName.getText().toString();
                 Price = editTextPrice.getText().toString();
+                TotalQuantity = editTextTotalQuantity.getText().toString();
 
                 if (Name.isEmpty()) {
                     editTextName.setError("Please Enter Name");
@@ -238,6 +240,9 @@ public class AddFragment extends Fragment implements
                 } else if (Price.isEmpty()) {
                     editTextPrice.setError("Please Enter Price");
                     editTextPrice.requestFocus();
+                } else if (TotalQuantity.isEmpty()) {
+                    editTextTotalQuantity.setError("Please Enter Quantity");
+                    editTextTotalQuantity.requestFocus();
                 } else if (!(Name.isEmpty() && Price.isEmpty())) {
 
                     uploadImage();
@@ -313,7 +318,7 @@ public class AddFragment extends Fragment implements
                                     df.child(key).child("Quantity").setValue(Quanty);
                                     df.child(key).child("ImageURl").setValue(ImgURL);
                                     df.child(key).child("Date").setValue(date);
-
+                                    df.child(key).child("TotalQuantity").setValue(TotalQuantity);
                                 }
                             });
 
@@ -375,6 +380,7 @@ public class AddFragment extends Fragment implements
                             Toast.makeText(getContext(), "Save Data", Toast.LENGTH_SHORT).show();
                             editTextName.setText("");
                             editTextPrice.setText("");
+                            editTextTotalQuantity.setText("");
                             Glide.with(context).load(R.drawable.carrots).into(circleImageView);
 
                         }

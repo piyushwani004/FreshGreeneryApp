@@ -45,7 +45,6 @@
         android:elevation="8dp"
         app:itemIconTint="@drawable/color_selector"
         app:itemTextColor="#FFFFFF"
-        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"

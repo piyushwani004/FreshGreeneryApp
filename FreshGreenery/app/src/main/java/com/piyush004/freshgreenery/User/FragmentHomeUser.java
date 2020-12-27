@@ -104,7 +104,8 @@ public class FragmentHomeUser extends Fragment {
                         snapshot.child("Price").getValue(String.class),
                         snapshot.child("Quantity").getValue(String.class),
                         snapshot.child("ImageURl").getValue(String.class),
-                        snapshot.child("ID").getValue(String.class)
+                        snapshot.child("ID").getValue(String.class),
+                        snapshot.child("TotalQuantity").getValue(String.class)
                 );
 
             }
@@ -119,6 +120,7 @@ public class FragmentHomeUser extends Fragment {
                 holder.setTxtPrice(model.getPrice());
                 holder.setTxtQuantity(model.getQuantity());
                 holder.setImgURL(model.getImgURL());
+                holder.setTxtTotalQuantity(model.getTotalQuantity());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

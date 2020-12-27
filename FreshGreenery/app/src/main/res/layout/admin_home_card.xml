@@ -79,6 +79,20 @@
             android:textSize="16dp"
             android:textStyle="bold|italic" />
 
+        <TextView
+            android:id="@+id/TotalQuantity_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Price_card"
+            android:layout_marginStart="20dp"
+            android:layout_toRightOf="@+id/imageViewHome"
+            android:text="Quantity"
+            android:textAlignment="textStart"
+            android:textColor="#777474"
+            android:textSize="16dp"
+            android:textStyle="bold|italic" />
+
+
     </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>

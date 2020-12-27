@@ -43,6 +43,9 @@ import com.piyush004.freshgreenery.R;
 import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
 import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static android.content.ContentValues.TAG;
 
 public class FragmentCartUser extends Fragment {
@@ -62,7 +65,7 @@ public class FragmentCartUser extends Fragment {
     private View view;
     private Thread threadAddress = null;
     private Thread threadRecycle = null;
-    private String mobile, address, city, society, flat, key, orderBy;
+    private String mobile, address, city, society, flat, key, orderBy, date, NoOfItems;
     private MaterialButton materialButton;
     private TextView textViewMobile, textViewCity, textViewAddress, textViewSociety, textViewFlatNo;
     private FirebaseAuth firebaseAuth;
@@ -72,6 +75,9 @@ public class FragmentCartUser extends Fragment {
     private AlertDialog.Builder builderDelete;
     private FirebaseRecyclerOptions<HomeModel> options;
     private FirebaseRecyclerAdapter<HomeModel, Holder> adapter;
+    private SimpleDateFormat simpleDateFormat;
+    private TextView cart_date, cartNoItems, cartCharges, cartTotalCharge, cartOrderMethod;
+
 
     private RecyclerView recyclerView;
 
@@ -105,6 +111,11 @@ public class FragmentCartUser extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
+        Date data = new Date();
+        simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+        date = simpleDateFormat.format(data);
+
+
         arrowItem = view.findViewById(R.id.arrow_button_Items);
         hiddenViewItem = view.findViewById(R.id.hidden_view_Items);
         linearLayoutItem = view.findViewById(R.id.linearItem);
@@ -131,6 +142,15 @@ public class FragmentCartUser extends Fragment {
         hiddenViewAddress = view.findViewById(R.id.hidden_view_Address);
         linearLayoutAddress = view.findViewById(R.id.linearAddress);
 
+        // billing Section id
+        cart_date = view.findViewById(R.id.cart_date);
+        cartNoItems = view.findViewById(R.id.cartNoItems);
+        cartCharges = view.findViewById(R.id.cartCharges);
+        cartTotalCharge = view.findViewById(R.id.cartTotalCharge);
+        cartOrderMethod = view.findViewById(R.id.cartOrderMethod);
+
+        cart_date.setText(date);
+
         radioGroup.setOnCheckedChangeListener(
                 new RadioGroup.OnCheckedChangeListener() {
 
@@ -140,7 +160,8 @@ public class FragmentCartUser extends Fragment {
                         radioButton = (RadioButton) group.findViewById(checkedId);
                         if (null != radioButton && checkedId > -1) {
                             orderBy = radioButton.getText().toString();
-                            // Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
+                            cartOrderMethod.setText(orderBy);
+                            Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -180,6 +201,8 @@ public class FragmentCartUser extends Fragment {
                             new AutoTransition());
                     hiddenViewBill.setVisibility(View.VISIBLE);
                     arrowBill.setImageResource(R.drawable.ic_baseline_expand_less_24);
+
+
                 }
             }
         });
@@ -260,7 +283,8 @@ public class FragmentCartUser extends Fragment {
                                         holder.setTxtTitleImgCart(model.getImgURL());
 
                                         Log.e(TAG, "count=======" + adapter.getItemCount());
-
+                                        NoOfItems = String.valueOf(adapter.getItemCount());
+                                        cartNoItems.setText(NoOfItems);
 
                                         holder.imageViewMinusCart.setOnClickListener(new View.OnClickListener() {
                                             @Override
@@ -269,6 +293,13 @@ public class FragmentCartUser extends Fragment {
                                                 int i = Integer.parseInt(holder.textViewUserQuantityCard.getText().toString());
                                                 Log.e(TAG, "get=======" + i);
                                                 i = i - 1;
+                                                if (i < 1) {
+                                                    holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
+
+                                                } else {
+
+                                                    holder.imageViewMinusCart.setVisibility(View.VISIBLE);
+                                                }
 
                                                 holder.setTxtUserQuantCart(String.valueOf(i));
 
@@ -281,6 +312,13 @@ public class FragmentCartUser extends Fragment {
                                                 int i = Integer.parseInt((String) holder.textViewUserQuantityCard.getText());
                                                 Log.e(TAG, "get=======" + i);
                                                 i = i + 1;
+                                                if (i > 0) {
+                                                    holder.imageViewMinusCart.setVisibility(View.VISIBLE);
+
+                                                } else {
+
+                                                    holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
+                                                }
                                                 holder.setTxtUserQuantCart(String.valueOf(i));
 
                                             }

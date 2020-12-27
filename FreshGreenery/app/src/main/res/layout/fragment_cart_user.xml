@@ -320,7 +320,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="20dp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -337,6 +337,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/cart_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Not Set"
@@ -360,6 +361,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/cartNoItems"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Not Set"
@@ -377,11 +379,12 @@
                     <TextView
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Quantity : "
+                        android:text="Order Methode : "
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/cartOrderMethod"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Not Set"
@@ -404,6 +407,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/cartCharges"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Not Set"
@@ -426,6 +430,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/cartTotalCharge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Not Set"

@@ -16,7 +16,7 @@ public class Holder extends RecyclerView.ViewHolder {
 
 
     //Home Page Holder Components...
-    public TextView textViewDate, textViewName, textViewPrice, textViewQuanty;
+    public TextView textViewDate, textViewName, textViewPrice, textViewQuanty, TotalQuantity_card;
     public CircleImageView circleImageViewHome;
 
     //Cart page Holder Components...
@@ -32,6 +32,8 @@ public class Holder extends RecyclerView.ViewHolder {
         this.textViewPrice = itemView.findViewById(R.id.Price_card);
         this.textViewDate = itemView.findViewById(R.id.Date_card);
         this.textViewQuanty = itemView.findViewById(R.id.Quantity_card);
+        this.TotalQuantity_card = itemView.findViewById(R.id.TotalQuantity_card);
+
         this.circleImageViewHome = itemView.findViewById(R.id.imageViewHome);
 
         this.imageViewTitleCart = itemView.findViewById(R.id.list_image);
@@ -45,6 +47,7 @@ public class Holder extends RecyclerView.ViewHolder {
 
     }
 
+    //Home Section
     public void setTxtName(String string) {
         textViewName.setText(string);
     }
@@ -59,7 +62,11 @@ public class Holder extends RecyclerView.ViewHolder {
     }
 
     public void setTxtQuantity(String string) {
-        textViewQuanty.setText(" " + string);
+        textViewQuanty.setText(" /" + string);
+    }
+
+    public void setTxtTotalQuantity(String quantity) {
+        TotalQuantity_card.setText(quantity);
     }
 
     public void setImgURL(String string) {
@@ -67,6 +74,7 @@ public class Holder extends RecyclerView.ViewHolder {
     }
 
 
+    //cart Section
     public void setTxtTitleCart(String string) {
         textViewTitleCart.setText(string);
     }

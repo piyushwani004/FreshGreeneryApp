@@ -6,6 +6,7 @@ public class HomeModel {
     private String Date;
     private String Price;
     private String Quantity;
+    private String TotalQuantity;
     private String ImgURL;
     private String ID;
 
@@ -20,13 +21,22 @@ public class HomeModel {
         ImgURL = imgURL;
     }
 
-    public HomeModel(String name, String date, String price, String quantity, String imgURL, String id) {
+    public HomeModel(String name, String date, String price, String quantity, String imgURL, String id, String TotQuant) {
         Name = name;
         Date = date;
         Price = price;
         Quantity = quantity;
         ImgURL = imgURL;
         ID = id;
+        TotalQuantity = TotQuant;
+    }
+
+    public String getTotalQuantity() {
+        return TotalQuantity;
+    }
+
+    public void setTotalQuantity(String totalQuantity) {
+        TotalQuantity = totalQuantity;
     }
 
     public String getName() {
