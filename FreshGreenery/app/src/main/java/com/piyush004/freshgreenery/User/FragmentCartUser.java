@@ -330,11 +330,10 @@ public class FragmentCartUser extends Fragment {
                                                     }
                                                 });
 
-
                                                 int i = Integer.parseInt(holder.textViewUserQuantityCard.getText().toString());
 
                                                 i = i - 1;
-                                                if (i <= 1) {
+                                                if (i <= 0) {
                                                     holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
 
                                                 } else {
