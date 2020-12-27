@@ -57,21 +57,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Title_card"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
             android:text="Price"
             android:textAlignment="center"
             android:textColor="#777474"
             android:textSize="16dp"
-            android:textStyle="bold|italic" />
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/Quantity_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/Title_card"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/Price_card"
+            android:text="Quantity"
+            android:textAlignment="textStart"
+            android:textColor="#777474"
+            android:textSize="16dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/TotalQuantity_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Price_card"
+            android:layout_marginStart="50dp"
             android:text="Quantity"
             android:textAlignment="textStart"
             android:textColor="#777474"

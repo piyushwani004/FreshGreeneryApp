@@ -127,7 +127,7 @@
             android:background="@drawable/plaintext_bg"
             android:ems="10"
             android:hint="Total Quantity with Weight"
-            android:inputType="numberDecimal"
+            android:inputType="text"
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

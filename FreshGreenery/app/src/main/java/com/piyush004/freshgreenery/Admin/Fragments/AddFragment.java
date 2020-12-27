@@ -70,7 +70,7 @@ public class AddFragment extends Fragment implements
     private String date, key;
     private String Name, Price, Quanty, ImgURL, TotalQuantity;
     private String UpName, UpPrice, UpQuanty, UpImgURL;
-    private String[] Quantity = {"1kg", "250gm", "500gm", "piece", "dozen"};
+    private String[] Quantity = {"kilo", "250gm", "500gm", "piece", "dozen"};
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -158,6 +158,7 @@ public class AddFragment extends Fragment implements
                                                 .rotate(0)
                                                 .into(circleImageView);
                                         uri = Uri.parse(snapshot.child("ImageURl").getValue(String.class));
+                                        editTextTotalQuantity.setText(snapshot.child("TotalQuantity").getValue(String.class));
                                     }
 
                                     @Override
@@ -177,6 +178,7 @@ public class AddFragment extends Fragment implements
                 } else {
                     editTextName.setText("");
                     editTextPrice.setText("");
+                    editTextTotalQuantity.setText("");
                     Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
                     // Log.d("else", Search);
                 }

@@ -49,10 +49,8 @@ public class FragmentHomeUser extends Fragment {
             R.anim.layout_animation_right_to_left,
             R.anim.layout_animation_down_to_up,
             R.anim.layout_animation_left_to_right};
-    private int flag = 0;
-    private String Cardkey, SpinnerQuantity, check;
+    private String Cardkey;
     private String ImgURL, Name, Price, VegQuant;
-    private String[] Quantity = {"/kg", "/Quintal", "0.5kilo"};
     public ArrayAdapter arrayAdapter;
 
     public FragmentHomeUser() {
@@ -114,6 +112,7 @@ public class FragmentHomeUser extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull final HomeModel model) {
+                System.out.println(model.getTotalQuantity());
 
                 holder.setTxtName(model.getName());
                 holder.setTxtDate(model.getDate());

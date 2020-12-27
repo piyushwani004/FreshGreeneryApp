@@ -14,11 +14,12 @@ public class HomeModel {
 
     }
 
-    public HomeModel(String name, String price, String quantity, String imgURL) {
+    public HomeModel(String name, String price, String quantity, String imgURL, String id) {
         Name = name;
         Price = price;
         Quantity = quantity;
         ImgURL = imgURL;
+        ID = id;
     }
 
     public HomeModel(String name, String date, String price, String quantity, String imgURL, String id, String TotQuant) {
