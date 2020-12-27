@@ -55,9 +55,10 @@ public class FragmentCartUser extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private ImageButton arrowItem, arrowAddress;
-    private LinearLayout hiddenViewItem, hiddenViewAddress;
-    private LinearLayout linearLayoutItem, linearLayoutAddress;
+    private ImageButton arrowItem, arrowAddress, arrowBill;
+    private LinearLayout hiddenViewItem, hiddenViewAddress, hiddenViewBill;
+    private LinearLayout linearLayoutItem, linearLayoutAddress, linearLayoutBill;
+
     private View view;
     private Thread threadAddress = null;
     private Thread threadRecycle = null;
@@ -103,10 +104,15 @@ public class FragmentCartUser extends Fragment {
         view = inflater.inflate(R.layout.fragment_cart_user, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
+
         arrowItem = view.findViewById(R.id.arrow_button_Items);
         hiddenViewItem = view.findViewById(R.id.hidden_view_Items);
         linearLayoutItem = view.findViewById(R.id.linearItem);
         materialButton = view.findViewById(R.id.button_order_Cart);
+
+        hiddenViewBill = view.findViewById(R.id.hidden_view_Bill);
+        linearLayoutBill = view.findViewById(R.id.linearBill);
+        arrowBill = view.findViewById(R.id.arrow_button_Bill);
 
         recyclerView = view.findViewById(R.id.recyItemCart);
         recyclerView.setHasFixedSize(true);
@@ -158,6 +164,26 @@ public class FragmentCartUser extends Fragment {
                 }
             }
         });
+
+        arrowBill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hiddenViewBill.getVisibility() == View.VISIBLE) {
+
+                    TransitionManager.beginDelayedTransition(linearLayoutBill,
+                            new AutoTransition());
+                    hiddenViewBill.setVisibility(View.GONE);
+                    arrowBill.setImageResource(R.drawable.ic_baseline_expand_more_24);
+                } else {
+
+                    TransitionManager.beginDelayedTransition(linearLayoutBill,
+                            new AutoTransition());
+                    hiddenViewBill.setVisibility(View.VISIBLE);
+                    arrowBill.setImageResource(R.drawable.ic_baseline_expand_less_24);
+                }
+            }
+        });
+
 
         arrowAddress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,12 +240,11 @@ public class FragmentCartUser extends Fragment {
                                     @Override
                                     public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
                                         return new HomeModel(
+
                                                 snapshot.child("CartName").getValue(String.class),
-                                                snapshot.child("UserQuantity").getValue(String.class),
                                                 snapshot.child("CartPrice").getValue(String.class),
-                                                snapshot.child("UserQuant").getValue(String.class),
-                                                snapshot.child("CartImageURl").getValue(String.class),
-                                                snapshot.child("CardID").getValue(String.class)
+                                                snapshot.child("CartQuantity").getValue(String.class),
+                                                snapshot.child("CartImageURl").getValue(String.class)
                                         );
 
                                     }
@@ -227,16 +252,39 @@ public class FragmentCartUser extends Fragment {
                                 adapter = new FirebaseRecyclerAdapter<HomeModel, Holder>(options) {
 
                                     @Override
-                                    protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull final HomeModel model) {
+                                    protected void onBindViewHolder(@NonNull final Holder holder, int position, @NonNull final HomeModel model) {
 
-                                        holder.setTxtName(model.getName());
-                                        holder.setTxtDate(model.getDate());
-                                        holder.setTxtPrice(model.getPrice());
-                                        holder.setTxtQuantity(model.getQuantity());
-                                        holder.setImgURL(model.getImgURL());
+                                        holder.setTxtTitleCart(model.getName());
+                                        holder.setTxtRateCart(model.getPrice());
+                                        holder.setTxtWeightCart(model.getQuantity());
+                                        holder.setTxtTitleImgCart(model.getImgURL());
 
-                                        // Log.e(TAG, "inside=======" + model.toString());
                                         Log.e(TAG, "count=======" + adapter.getItemCount());
+
+
+                                        holder.imageViewMinusCart.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+
+                                                int i = Integer.parseInt(holder.textViewUserQuantityCard.getText().toString());
+                                                Log.e(TAG, "get=======" + i);
+                                                i = i - 1;
+
+                                                holder.setTxtUserQuantCart(String.valueOf(i));
+
+                                            }
+                                        });
+
+                                        holder.imageViewPlusCart.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                int i = Integer.parseInt((String) holder.textViewUserQuantityCard.getText());
+                                                Log.e(TAG, "get=======" + i);
+                                                i = i + 1;
+                                                holder.setTxtUserQuantCart(String.valueOf(i));
+
+                                            }
+                                        });
 
                                         final DatabaseReference Delete = FirebaseDatabase.getInstance().getReference();
                                         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -289,7 +337,7 @@ public class FragmentCartUser extends Fragment {
                                     @Override
                                     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-                                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.admin_home_card, parent, false);
+                                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_card, parent, false);
 
                                         return new Holder(view);
                                     }

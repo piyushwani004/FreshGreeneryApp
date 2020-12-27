@@ -70,7 +70,7 @@ public class AddFragment extends Fragment implements
     private String date, key;
     private String Name, Price, Quanty, ImgURL;
     private String UpName, UpPrice, UpQuanty, UpImgURL;
-    private String[] Quantity = {"/kg", "/Quintal"};
+    private String[] Quantity = {"/1kg", "/250gm", "/500gm", "/piece", "/1dozen"};
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
