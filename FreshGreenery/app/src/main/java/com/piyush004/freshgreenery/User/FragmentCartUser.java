@@ -1,6 +1,7 @@
 package com.piyush004.freshgreenery.User;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -66,7 +68,7 @@ public class FragmentCartUser extends Fragment {
     private DatabaseReference databaseReference;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
-
+    private AlertDialog.Builder builderDelete;
     private FirebaseRecyclerOptions<HomeModel> options;
     private FirebaseRecyclerAdapter<HomeModel, Holder> adapter;
 
@@ -194,7 +196,7 @@ public class FragmentCartUser extends Fragment {
             @Override
             public void run() {
 
-                Handler handler = new Handler(Looper.getMainLooper());
+                final Handler handler = new Handler(Looper.getMainLooper());
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -206,49 +208,97 @@ public class FragmentCartUser extends Fragment {
 
                                 final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(Uid);
 
-                                    options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
+                                options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
 
-                                        @NonNull
-                                        @Override
-                                        public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                            return new HomeModel(
-                                                    snapshot.child("CartName").getValue(String.class),
-                                                    snapshot.child("UserQuantity").getValue(String.class),
-                                                    snapshot.child("CartPrice").getValue(String.class),
-                                                    snapshot.child("UserQuant").getValue(String.class),
-                                                    snapshot.child("CartImageURl").getValue(String.class),
-                                                    snapshot.child("CardID").getValue(String.class)
-                                            );
+                                    @NonNull
+                                    @Override
+                                    public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                                        return new HomeModel(
+                                                snapshot.child("CartName").getValue(String.class),
+                                                snapshot.child("UserQuantity").getValue(String.class),
+                                                snapshot.child("CartPrice").getValue(String.class),
+                                                snapshot.child("UserQuant").getValue(String.class),
+                                                snapshot.child("CartImageURl").getValue(String.class),
+                                                snapshot.child("CardID").getValue(String.class)
+                                        );
 
-                                        }
-                                    }).build();
-                                    adapter = new FirebaseRecyclerAdapter<HomeModel, Holder>(options) {
+                                    }
+                                }).build();
+                                adapter = new FirebaseRecyclerAdapter<HomeModel, Holder>(options) {
 
-                                        @Override
-                                        protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull final HomeModel model) {
+                                    @Override
+                                    protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull final HomeModel model) {
 
-                                            holder.setTxtName(model.getName());
-                                            holder.setTxtDate(model.getDate());
-                                            holder.setTxtPrice(model.getPrice());
-                                            holder.setTxtQuantity(model.getQuantity());
-                                            holder.setImgURL(model.getImgURL());
+                                        holder.setTxtName(model.getName());
+                                        holder.setTxtDate(model.getDate());
+                                        holder.setTxtPrice(model.getPrice());
+                                        holder.setTxtQuantity(model.getQuantity());
+                                        holder.setImgURL(model.getImgURL());
 
-                                            Log.e(TAG, "inside=======" + model.toString());
-                                            HomeModel homeModel = new HomeModel();
-                                            Log.e(TAG, "=======" + homeModel.toString());
-                                        }
+                                        // Log.e(TAG, "inside=======" + model.toString());
+                                        Log.e(TAG, "count=======" + adapter.getItemCount());
 
-                                        @NonNull
-                                        @Override
-                                        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                                        final DatabaseReference Delete = FirebaseDatabase.getInstance().getReference();
+                                        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                                            @Override
+                                            public boolean onLongClick(View v) {
 
-                                            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.admin_home_card, parent, false);
+                                                builderDelete = new AlertDialog.Builder(getContext());
+                                                builderDelete.setMessage("Do You Want To Delete Item ?")
+                                                        .setCancelable(false)
+                                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int id) {
 
-                                            return new Holder(view);
-                                        }
-                                    };
-                                    adapter.startListening();
-                                    recyclerView.setAdapter(adapter);
+                                                                Query RoomQuery = Delete.child("UserData").child("Cart").child(firebaseAuth.getCurrentUser().getUid()).orderByChild("CartName").equalTo(model.getName());
+
+                                                                RoomQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                                            appleSnapshot.getRef().removeValue();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(DatabaseError databaseError) {
+                                                                        System.out.println("On Canceled");
+                                                                    }
+
+                                                                });
+
+                                                                Toast.makeText(getContext(), "Delete Content Successfully", Toast.LENGTH_LONG).show();
+
+                                                            }
+                                                        })
+                                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int id) {
+                                                                dialog.cancel();
+                                                            }
+                                                        });
+
+                                                AlertDialog alert = builderDelete.create();
+                                                alert.setTitle("Content Delete Alert");
+                                                alert.show();
+
+                                                return false;
+                                            }
+                                        });
+                                    }
+
+                                    @NonNull
+                                    @Override
+                                    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.admin_home_card, parent, false);
+
+                                        return new Holder(view);
+                                    }
+                                };
+
+                                adapter.startListening();
+                                recyclerView.setAdapter(adapter);
+
+
                             }
 
                             @Override

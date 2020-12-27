@@ -8,10 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +40,6 @@ public class FragmentHomeUser extends Fragment {
     private String mParam2;
     private FirebaseAuth firebaseAuth;
     private View view;
-    private Spinner spinner;
     private RecyclerView recyclerView;
     private AlertDialog.Builder builderDelete;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -53,9 +49,8 @@ public class FragmentHomeUser extends Fragment {
             R.anim.layout_animation_right_to_left,
             R.anim.layout_animation_down_to_up,
             R.anim.layout_animation_left_to_right};
-    private EditText editTextQuanty;
-
-    private String Cardkey, SpinnerQuantity, EditTextQuantity;
+    private int flag = 0;
+    private String Cardkey, SpinnerQuantity, check;
     private String ImgURL, Name, Price, VegQuant;
     private String[] Quantity = {"/kg", "/Quintal", "0.5kilo"};
     public ArrayAdapter arrayAdapter;
@@ -96,9 +91,6 @@ public class FragmentHomeUser extends Fragment {
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(manager);
 
-
-        //recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
         options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
 
@@ -134,80 +126,49 @@ public class FragmentHomeUser extends Fragment {
 
                         Cardkey = model.getID();
                         final String Uid = firebaseAuth.getCurrentUser().getUid();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        LayoutInflater inflater = getLayoutInflater();
-                        View dialogLayout = inflater.inflate(R.layout.add_to_cart_dialoge, null);
 
-                        editTextQuanty = dialogLayout.findViewById(R.id.editTextQuantityDia);
-                        spinner = dialogLayout.findViewById(R.id.spinnerDia);
-                        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                SpinnerQuantity = Quantity[position];
-                            }
+                        builderDelete = new AlertDialog.Builder(getContext());
+                        builderDelete.setMessage("Do You Want To Add this content to your Cart ?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
 
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
+                                        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(Uid);
 
-                            }
-                        });
+                                        final DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(Cardkey);
+                                        dff.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                                                ImgURL = snapshot.child("ImageURl").getValue(String.class);
+                                                Name = snapshot.child("Name").getValue(String.class);
+                                                Price = snapshot.child("Price").getValue(String.class);
+                                                VegQuant = snapshot.child("Quantity").getValue(String.class);
 
-                        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, Quantity);
-                        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        spinner.setAdapter(aa);
+                                                df.child(Cardkey).child("CardID").setValue(Cardkey);
+                                                df.child(Cardkey).child("CartImageURl").setValue(ImgURL);
+                                                df.child(Cardkey).child("CartName").setValue(Name);
+                                                df.child(Cardkey).child("CartPrice").setValue(Price);
+                                                df.child(Cardkey).child("CartQuantity").setValue(VegQuant);
 
+                                                Toast.makeText(getContext(), "Add to your cart Successfully", Toast.LENGTH_SHORT).show();
+                                            }
 
-                        builder.setTitle("Add Cart Alert");
-                        builder.setPositiveButton("SAVE", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                EditTextQuantity = editTextQuanty.getText().toString();
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
 
-                                final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(Uid);
-                                final String key = df.push().getKey();
-
-
-                                final DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(Cardkey);
-                                dff.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        ImgURL = snapshot.child("ImageURl").getValue(String.class);
-                                        Name = snapshot.child("Name").getValue(String.class);
-                                        Price = snapshot.child("Price").getValue(String.class);
-                                        VegQuant = snapshot.child("Quantity").getValue(String.class);
-
-
-                                        df.child(key).child("CardID").setValue(Cardkey);
-                                        df.child(key).child("UserQuantity").setValue(EditTextQuantity);
-                                        df.child(key).child("UserQuant").setValue(SpinnerQuantity);
-
-                                        df.child(key).child("CartImageURl").setValue(ImgURL);
-                                        df.child(key).child("CartName").setValue(Name);
-                                        df.child(key).child("CartPrice").setValue(Price);
-                                        df.child(key).child("CartQuantity").setValue(VegQuant);
-                                        Toast.makeText(getContext(), "Add to cart Successfully", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
                                     }
                                 });
-
-
-                            }
-                        });
-
-                        builder.setNegativeButton("Closed", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-
-                        builder.setView(dialogLayout);
-                        builder.show();
+                        AlertDialog alert = builderDelete.create();
+                        alert.setTitle("Add Cart Alert");
+                        alert.show();
 
                     }
                 });
