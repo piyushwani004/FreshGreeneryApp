@@ -323,7 +323,7 @@ public class FragmentCartUser extends Fragment {
                                                         value = snapshot.child("TotalQuantity").getValue(String.class);
                                                         val = Integer.valueOf(value);
                                                         double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-                                                       // Log.e(TAG, "inside val=======" + val);
+                                                        // Log.e(TAG, "inside val=======" + val);
                                                         if (i < val) {
                                                             holder.imageViewPlusCart.setVisibility(View.VISIBLE);
                                                         } else {
@@ -342,7 +342,8 @@ public class FragmentCartUser extends Fragment {
                                                 double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
 
                                                 i = i - 1;
-                                                if (i < 0) {
+                                                if (i <= 1) {
+
                                                     holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
 
                                                 } else {
@@ -385,7 +386,7 @@ public class FragmentCartUser extends Fragment {
                                                 double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
                                                 i = i + 1;
 
-                                                if (i > 0) {
+                                                if (i >= 1) {
                                                     holder.imageViewMinusCart.setVisibility(View.VISIBLE);
                                                 } else {
 
