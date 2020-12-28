@@ -58,16 +58,21 @@ public class Holder extends RecyclerView.ViewHolder {
         textViewPrice.setText("Rs " + string);
     }
 
+    public void setTxtUserRate(String price, String Quant) {
+
+        textViewPrice.setText("Rs" + price + " / " + Quant);
+    }
+
     public void setTxtDate(String string) {
         textViewDate.setText(string);
     }
 
     public void setTxtQuantity(String string) {
-        textViewQuanty.setText(" /" + string);
+        textViewQuanty.setText(" Per " + string);
     }
 
-    public void setTxtTotalQuantity(String string) {
-        textViewTotalQuanty.setText(string);
+    public void setTxtTotalQuantity(String string1, String string2) {
+        textViewTotalQuanty.setText(string1 + " " + string2);
     }
 
 
@@ -97,8 +102,8 @@ public class Holder extends RecyclerView.ViewHolder {
         textViewUserQuantityCard.setText(string);
     }
 
-    public void setTxtFromEndQuantity(String string) {
-        textViewfrom_end.setText(string);
+    public void setTxtFromEndQuantity(String quantity, String weight) {
+        textViewfrom_end.setText(quantity + "" + weight);
     }
 
 }

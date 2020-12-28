@@ -99,11 +99,12 @@ public class FragmentHomeUser extends Fragment {
 
                         snapshot.child("Name").getValue(String.class),
                         snapshot.child("Date").getValue(String.class),
-                        snapshot.child("Price").getValue(String.class),
-                        snapshot.child("Quantity").getValue(String.class),
+                        snapshot.child("Rate").getValue(String.class),
+                        snapshot.child("RateWeight").getValue(String.class),
                         snapshot.child("ImageURl").getValue(String.class),
                         snapshot.child("ID").getValue(String.class),
-                        snapshot.child("TotalQuantity").getValue(String.class)
+                        snapshot.child("TotalQuantity").getValue(String.class),
+                        snapshot.child("TotalWeight").getValue(String.class)
                 );
 
             }
@@ -112,14 +113,12 @@ public class FragmentHomeUser extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull final HomeModel model) {
-                System.out.println(model.getTotalQuantity());
 
                 holder.setTxtName(model.getName());
                 holder.setTxtDate(model.getDate());
-                holder.setTxtPrice(model.getPrice());
-                holder.setTxtQuantity(model.getQuantity());
+                holder.setTxtUserRate(model.getPrice(), model.getQuantity());
                 holder.setImgURL(model.getImgURL());
-                holder.setTxtTotalQuantity(model.getTotalQuantity());
+                holder.setTxtTotalQuantity(model.getTotalQuantity(), model.getTotalWeight());
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -143,8 +142,8 @@ public class FragmentHomeUser extends Fragment {
 
                                                 ImgURL = snapshot.child("ImageURl").getValue(String.class);
                                                 Name = snapshot.child("Name").getValue(String.class);
-                                                Price = snapshot.child("Price").getValue(String.class);
-                                                VegQuant = snapshot.child("Quantity").getValue(String.class);
+                                                Price = snapshot.child("Rate").getValue(String.class);
+                                                VegQuant = snapshot.child("RateWeight").getValue(String.class);
 
                                                 df.child(Cardkey).child("CardID").setValue(Cardkey);
                                                 df.child(Cardkey).child("CartImageURl").setValue(ImgURL);

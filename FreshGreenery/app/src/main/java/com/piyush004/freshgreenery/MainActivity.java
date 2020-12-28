@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         progressBar.setVisibility(View.VISIBLE);
 
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

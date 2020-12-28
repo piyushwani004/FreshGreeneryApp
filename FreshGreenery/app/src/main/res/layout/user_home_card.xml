@@ -8,16 +8,17 @@
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/Date_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_gravity="end"
             android:text="Date"
             android:textAlignment="textEnd"
             android:textColor="@color/colorGray"
@@ -26,9 +27,9 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageViewHome"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_below="@+id/Date_card"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:clickable="true"
             android:src="@drawable/carrots"
@@ -41,10 +42,9 @@
 
         <TextView
             android:id="@+id/Title_card"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageViewHome"
-            android:layout_marginStart="50dp"
+            android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:text="Title"
             android:textAlignment="center"
@@ -54,10 +54,9 @@
 
         <TextView
             android:id="@+id/Price_card"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/Title_card"
-            android:layout_marginStart="40dp"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:text="Price"
             android:textAlignment="center"
@@ -66,31 +65,15 @@
             android:textStyle="italic" />
 
         <TextView
-            android:id="@+id/Quantity_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/Title_card"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/Price_card"
-            android:text="Quantity"
-            android:textAlignment="textStart"
-            android:textColor="#777474"
-            android:textSize="16dp"
-            android:textStyle="italic" />
-
-        <TextView
             android:id="@+id/TotalQuantity_card"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/Price_card"
-            android:layout_marginStart="50dp"
+            android:layout_gravity="center"
             android:text="Quantity"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:textColor="#777474"
             android:textSize="16dp"
             android:textStyle="bold|italic" />
-
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -138,7 +138,8 @@ public class SignUpFragment extends Fragment {
                                     } else {
 
                                         databaseReference = FirebaseDatabase.getInstance().getReference().child("AppUsers");
-                                        String key = databaseReference.push().getKey();
+
+                                        String key = firebaseAuth.getCurrentUser().getUid();
                                         databaseReference.child(key).child("ID").setValue(key);
                                         databaseReference.child(key).child("Name").setValue(name);
                                         databaseReference.child(key).child("Email").setValue(email);

@@ -7,6 +7,7 @@ public class HomeModel {
     private String Price;
     private String Quantity;
     private String TotalQuantity;
+    private String TotalWeight;
     private String ImgURL;
     private String ID;
 
@@ -22,7 +23,8 @@ public class HomeModel {
         ID = id;
     }
 
-    public HomeModel(String name, String date, String price, String quantity, String imgURL, String id, String TotQuant) {
+    public HomeModel(String name, String date, String price, String quantity, String imgURL, String id, String TotQuant, String TotWeight)
+    {
         Name = name;
         Date = date;
         Price = price;
@@ -30,6 +32,15 @@ public class HomeModel {
         ImgURL = imgURL;
         ID = id;
         TotalQuantity = TotQuant;
+        TotalWeight = TotWeight;
+    }
+
+    public String getTotalWeight() {
+        return TotalWeight;
+    }
+
+    public void setTotalWeight(String totalWeight) {
+        TotalWeight = totalWeight;
     }
 
     public String getTotalQuantity() {

@@ -65,12 +65,14 @@ public class AddFragment extends Fragment implements
     private EditText editTextPrice, editTextName, editTextTotalQuantity;
     private MaterialButton materialButtonAdd, materialButtonUpdate;
     private View view, viewKey;
-    private Spinner spinner;
+    private Spinner spinner, spinnerTot;
     private SimpleDateFormat simpleDateFormat;
     private String date, key;
-    private String Name, Price, Quanty, ImgURL, TotalQuantity;
-    private String UpName, UpPrice, UpQuanty, UpImgURL;
-    private String[] Quantity = {"kilo", "250gm", "500gm", "piece", "dozen"};
+    private String Name, Rate, RateQuantity, ImgURL, TotalQuantity, TotalWeight;
+    private String UpName, UpPrice, UpTotalQuantity, UpTotalWeight, UpImgURL;
+    private String[] Quantity = {"kilo", "125gm", "250gm", "500gm", "750gm", "piece", "dozen"};
+    private String[] TotalQuantWeight = {"kilo", "gram", "piece", "dozen"};
+
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -115,6 +117,7 @@ public class AddFragment extends Fragment implements
         editTextName = view.findViewById(R.id.Address_address);
         editTextTotalQuantity = view.findViewById(R.id.editTextTotalQuantity);
         spinner = view.findViewById(R.id.spinner);
+        spinnerTot = view.findViewById(R.id.spinnerTot);
         spinner.setOnItemSelectedListener(this);
 
 
@@ -151,7 +154,7 @@ public class AddFragment extends Fragment implements
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         editTextName.setText(snapshot.child("Name").getValue(String.class));
-                                        editTextPrice.setText(snapshot.child("Price").getValue(String.class));
+                                        editTextPrice.setText(snapshot.child("Rate").getValue(String.class));
                                         Picasso.get().load(snapshot.child("ImageURl").getValue(String.class))
                                                 .resize(500, 500)
                                                 .centerCrop()
@@ -192,6 +195,7 @@ public class AddFragment extends Fragment implements
 
                 UpName = editTextName.getText().toString();
                 UpPrice = editTextPrice.getText().toString();
+                UpTotalQuantity = editTextTotalQuantity.getText().toString();
 
                 if (UpName.isEmpty()) {
                     editTextName.setError("Please Select Name");
@@ -216,6 +220,21 @@ public class AddFragment extends Fragment implements
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(aa);
 
+        ArrayAdapter Taa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, TotalQuantWeight);
+        Taa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTot.setAdapter(Taa);
+        spinnerTot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Toast.makeText(getContext(), "Tot" + TotalQuantWeight[position], Toast.LENGTH_SHORT).show();
+                TotalWeight = TotalQuantWeight[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -233,19 +252,19 @@ public class AddFragment extends Fragment implements
             public void onClick(View v) {
 
                 Name = editTextName.getText().toString();
-                Price = editTextPrice.getText().toString();
+                Rate = editTextPrice.getText().toString();
                 TotalQuantity = editTextTotalQuantity.getText().toString();
 
                 if (Name.isEmpty()) {
                     editTextName.setError("Please Enter Name");
                     editTextName.requestFocus();
-                } else if (Price.isEmpty()) {
+                } else if (Rate.isEmpty()) {
                     editTextPrice.setError("Please Enter Price");
                     editTextPrice.requestFocus();
                 } else if (TotalQuantity.isEmpty()) {
                     editTextTotalQuantity.setError("Please Enter Quantity");
                     editTextTotalQuantity.requestFocus();
-                } else if (!(Name.isEmpty() && Price.isEmpty())) {
+                } else if (!(Name.isEmpty() && Rate.isEmpty())) {
 
                     uploadImage();
 
@@ -316,17 +335,19 @@ public class AddFragment extends Fragment implements
                                     String key = df.push().getKey();
                                     df.child(key).child("ID").setValue(key);
                                     df.child(key).child("Name").setValue(Name);
-                                    df.child(key).child("Price").setValue(Price);
-                                    df.child(key).child("Quantity").setValue(Quanty);
+                                    df.child(key).child("Rate").setValue(Rate);
+                                    df.child(key).child("RateWeight").setValue(RateQuantity);
                                     df.child(key).child("ImageURl").setValue(ImgURL);
                                     df.child(key).child("Date").setValue(date);
                                     df.child(key).child("TotalQuantity").setValue(TotalQuantity);
+                                    df.child(key).child("TotalWeight").setValue(TotalWeight);
                                 }
                             });
 
                             Toast.makeText(getContext(), "Save Data", Toast.LENGTH_SHORT).show();
                             editTextName.setText("");
                             editTextPrice.setText("");
+                            editTextTotalQuantity.setText("");
                             Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
 
                         }
@@ -372,8 +393,10 @@ public class AddFragment extends Fragment implements
 
                                     UpImgURL = uri.toString();
                                     df.child("Name").setValue(UpName);
-                                    df.child("Price").setValue(UpPrice);
-                                    df.child("Quantity").setValue(Quanty);
+                                    df.child("Rate").setValue(UpPrice);
+                                    df.child("RateQuantity").setValue(RateQuantity);
+                                    df.child("TotalQuantity").setValue(TotalQuantity);
+                                    df.child("TotalWeight").setValue(TotalWeight);
                                     df.child("ImageURl").setValue(UpImgURL);
 
                                 }
@@ -410,7 +433,7 @@ public class AddFragment extends Fragment implements
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // Toast.makeText(getContext(), Quantity[position], Toast.LENGTH_LONG).show();
-        Quanty = Quantity[position];
+        RateQuantity = Quantity[position];
     }
 
     @Override

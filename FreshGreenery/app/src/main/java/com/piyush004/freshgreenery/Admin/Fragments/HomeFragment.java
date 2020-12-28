@@ -3,6 +3,7 @@ package com.piyush004.freshgreenery.Admin.Fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.piyush004.freshgreenery.R;
 import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
 import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
+
+import static android.content.ContentValues.TAG;
 
 
 public class HomeFragment extends Fragment {
@@ -95,11 +98,12 @@ public class HomeFragment extends Fragment {
 
                         snapshot.child("Name").getValue(String.class),
                         snapshot.child("Date").getValue(String.class),
-                        snapshot.child("Price").getValue(String.class),
-                        snapshot.child("Quantity").getValue(String.class),
+                        snapshot.child("Rate").getValue(String.class),
+                        snapshot.child("RateWeight").getValue(String.class),
                         snapshot.child("ImageURl").getValue(String.class),
                         snapshot.child("ID").getValue(String.class),
-                        snapshot.child("TotalQuantity").getValue(String.class)
+                        snapshot.child("TotalQuantity").getValue(String.class),
+                        snapshot.child("TotalWeight").getValue(String.class)
                 );
 
             }
@@ -117,20 +121,27 @@ public class HomeFragment extends Fragment {
                 holder.setTxtPrice(model.getPrice());
                 holder.setTxtQuantity(model.getQuantity());
                 holder.setImgURL(model.getImgURL());
-                holder.setTxtTotalQuantity(model.getTotalQuantity());
+                holder.setTxtTotalQuantity(model.getTotalQuantity(), model.getTotalWeight());
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
 
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
 
-
+                        Log.e(TAG, "id=======" + model.getID());
                         builderDelete = new AlertDialog.Builder(getContext());
                         builderDelete.setMessage("Do You Want To Delete Content ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        Query RoomQuery = Delete.child("VegetableEntry").orderByChild("Name").equalTo(model.getName());
+                                        Query RoomQuery = Delete.child("VegetableEntry").orderByChild("ID").equalTo(model.getID());
 
                                         RoomQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -146,7 +157,6 @@ public class HomeFragment extends Fragment {
                                             }
 
                                         });
-
                                         Toast.makeText(getContext(), "Delete Content Successfully", Toast.LENGTH_LONG).show();
 
                                     }

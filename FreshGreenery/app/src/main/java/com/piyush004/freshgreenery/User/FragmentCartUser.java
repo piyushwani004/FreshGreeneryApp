@@ -77,9 +77,12 @@ public class FragmentCartUser extends Fragment {
     private FirebaseRecyclerAdapter<HomeModel, Holder> adapter;
     private SimpleDateFormat simpleDateFormat;
     private TextView cart_date, cartNoItems, cartCharges, cartTotalCharge, cartOrderMethod;
-    private String value, id, ExtractString;
+    private String value, Weight;
     private int val;
     private RecyclerView recyclerView;
+
+    private double[] count = new double[]{125, 250, 500, 750};
+
 
     public FragmentCartUser() {
         // Required empty public constructor
@@ -282,18 +285,25 @@ public class FragmentCartUser extends Fragment {
                                         holder.setTxtWeightCart(model.getQuantity());
                                         holder.setTxtTitleImgCart(model.getImgURL());
 
-                                        Log.e(TAG, "count=======" + adapter.getItemCount());
+
                                         NoOfItems = String.valueOf(adapter.getItemCount());
+                                        if (adapter.getItemCount() == 0) {
+                                            materialButton.setVisibility(View.GONE);
+                                        } else {
+                                            materialButton.setVisibility(View.VISIBLE);
+                                        }
                                         cartNoItems.setText(NoOfItems);
 
-                                        Log.e(TAG, "val=======" + val);
 
                                         databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
                                         databaseReference.addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                 value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                holder.setTxtFromEndQuantity(value);
+                                                Weight = snapshot.child("TotalWeight").getValue(String.class);
+
+                                                holder.setTxtFromEndQuantity(value, Weight);
+
                                             }
 
                                             @Override
@@ -311,10 +321,9 @@ public class FragmentCartUser extends Fragment {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                         value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                        value = extractInt(value);
                                                         val = Integer.valueOf(value);
-                                                        int i = Integer.parseInt(holder.textViewUserQuantityCard.getText().toString());
-                                                        Log.e(TAG, "inside val=======" + val);
+                                                        double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
+                                                       // Log.e(TAG, "inside val=======" + val);
                                                         if (i < val) {
                                                             holder.imageViewPlusCart.setVisibility(View.VISIBLE);
                                                         } else {
@@ -330,10 +339,10 @@ public class FragmentCartUser extends Fragment {
                                                     }
                                                 });
 
-                                                int i = Integer.parseInt(holder.textViewUserQuantityCard.getText().toString());
+                                                double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
 
                                                 i = i - 1;
-                                                if (i <= 0) {
+                                                if (i < 0) {
                                                     holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
 
                                                 } else {
@@ -355,9 +364,8 @@ public class FragmentCartUser extends Fragment {
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                         value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                        value = extractInt(value);
                                                         val = Integer.valueOf(value);
-                                                        int i = Integer.parseInt(holder.textViewUserQuantityCard.getText().toString());
+                                                        double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
                                                         Log.e(TAG, "inside val=======" + val);
                                                         if (i < val) {
 
@@ -374,10 +382,10 @@ public class FragmentCartUser extends Fragment {
                                                     }
                                                 });
 
-                                                int i = Integer.parseInt((String) holder.textViewUserQuantityCard.getText());
+                                                double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
                                                 i = i + 1;
-                                                if (i >= 0) {
 
+                                                if (i > 0) {
                                                     holder.imageViewMinusCart.setVisibility(View.VISIBLE);
                                                 } else {
 
@@ -504,6 +512,7 @@ public class FragmentCartUser extends Fragment {
                                     //Toast.makeText(getContext(), "Filled Address Section First..", Toast.LENGTH_LONG).show();
                                 } else if (!(mobile == null && address == null)) {
 
+                                    materialButton.setVisibility(View.VISIBLE);
                                     textViewMobile.setText(mobile);
                                     textViewAddress.setText(address);
                                     textViewCity.setText(city);
@@ -528,13 +537,6 @@ public class FragmentCartUser extends Fragment {
         threadAddress.start();
 
         return view;
-    }
-
-
-    public String checkQuantity(String id) {
-
-
-        return ExtractString;
     }
 
 
