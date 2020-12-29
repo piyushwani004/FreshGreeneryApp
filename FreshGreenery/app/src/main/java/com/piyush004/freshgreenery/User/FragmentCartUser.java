@@ -6,7 +6,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +47,6 @@ import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static android.content.ContentValues.TAG;
-
 public class FragmentCartUser extends Fragment {
 
 
@@ -80,8 +79,8 @@ public class FragmentCartUser extends Fragment {
     private String value, Weight;
     private int val;
     private RecyclerView recyclerView;
-
-    private double[] count = new double[]{125, 250, 500, 750};
+    public TextView TotalPriceCart;
+    private double count1, count2;
 
 
     public FragmentCartUser() {
@@ -151,6 +150,8 @@ public class FragmentCartUser extends Fragment {
         cartCharges = view.findViewById(R.id.cartCharges);
         cartTotalCharge = view.findViewById(R.id.cartTotalCharge);
         cartOrderMethod = view.findViewById(R.id.cartOrderMethod);
+        TotalPriceCart = view.findViewById(R.id.TotalPriceCart);
+
 
         cart_date.setText(date);
 
@@ -269,7 +270,6 @@ public class FragmentCartUser extends Fragment {
                                                 snapshot.child("CartName").getValue(String.class),
                                                 snapshot.child("CartPrice").getValue(String.class),
                                                 snapshot.child("CartQuantity").getValue(String.class),
-                                                snapshot.child("CartImageURl").getValue(String.class),
                                                 snapshot.child("CardID").getValue(String.class)
                                         );
 
@@ -283,8 +283,6 @@ public class FragmentCartUser extends Fragment {
                                         holder.setTxtTitleCart(model.getName());
                                         holder.setTxtRateCart(model.getPrice());
                                         holder.setTxtWeightCart(model.getQuantity());
-                                        holder.setTxtTitleImgCart(model.getImgURL());
-
 
                                         NoOfItems = String.valueOf(adapter.getItemCount());
                                         if (adapter.getItemCount() == 0) {
@@ -323,7 +321,6 @@ public class FragmentCartUser extends Fragment {
                                                         value = snapshot.child("TotalQuantity").getValue(String.class);
                                                         val = Integer.valueOf(value);
                                                         double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-                                                        // Log.e(TAG, "inside val=======" + val);
                                                         if (i < val) {
                                                             holder.imageViewPlusCart.setVisibility(View.VISIBLE);
                                                         } else {
@@ -341,8 +338,8 @@ public class FragmentCartUser extends Fragment {
 
                                                 double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
 
-                                                i = i - 1;
-                                                if (i <= 1) {
+                                                i = i - 0.25;
+                                                if (i <= 0.25) {
 
                                                     holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
 
@@ -353,6 +350,17 @@ public class FragmentCartUser extends Fragment {
 
                                                 holder.setTxtUserQuantCart(String.valueOf(i));
 
+                                                if (model.getQuantity().equals("kilo")) {
+
+                                                    double init = Double.valueOf(TotalPriceCart.getText().toString());
+                                                    int p = Integer.valueOf(model.getPrice());
+                                                    double tot = i * p;
+                                                    //Log.e(TAG, "inside kilo=======" + tot);
+                                                    double total = tot + init;
+                                                    model.setTotalCartPrice(total);
+                                                    holder.setTxtTotalRate(String.valueOf(total));
+
+                                                }
                                             }
                                         });
 
@@ -367,7 +375,6 @@ public class FragmentCartUser extends Fragment {
                                                         value = snapshot.child("TotalQuantity").getValue(String.class);
                                                         val = Integer.valueOf(value);
                                                         double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-                                                        Log.e(TAG, "inside val=======" + val);
                                                         if (i < val) {
 
                                                         } else {
@@ -384,9 +391,9 @@ public class FragmentCartUser extends Fragment {
                                                 });
 
                                                 double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-                                                i = i + 1;
+                                                i = i + 0.25;
 
-                                                if (i >= 1) {
+                                                if (i >= 0.25) {
                                                     holder.imageViewMinusCart.setVisibility(View.VISIBLE);
                                                 } else {
 
@@ -394,6 +401,34 @@ public class FragmentCartUser extends Fragment {
                                                 }
 
                                                 holder.setTxtUserQuantCart(String.valueOf(i));
+
+                                                if (model.getQuantity().equals("kilo")) {
+
+                                                    double init = Double.valueOf(TotalPriceCart.getText().toString());
+                                                    int p = Integer.valueOf(model.getPrice());
+                                                    double tot = i * p;
+                                                    double total = tot + init;
+                                                    model.setTotalCartPrice(total);
+                                                    holder.setTxtTotalRate(String.valueOf(total));
+
+                                                }
+                                            }
+                                        });
+
+                                        holder.cart_totalRate.addTextChangedListener(new TextWatcher() {
+                                            @Override
+                                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                            }
+
+                                            @Override
+                                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                                            }
+
+                                            @Override
+                                            public void afterTextChanged(Editable s) {
+                                                System.out.println(s);
                                             }
                                         });
 

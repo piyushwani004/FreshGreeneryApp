@@ -10,21 +10,20 @@ public class HomeModel {
     private String TotalWeight;
     private String ImgURL;
     private String ID;
+    private double TotalCartPrice;
 
     public HomeModel() {
 
     }
 
-    public HomeModel(String name, String price, String quantity, String imgURL, String id) {
+    public HomeModel(String name, String price, String quantity, String id) {
         Name = name;
         Price = price;
         Quantity = quantity;
-        ImgURL = imgURL;
         ID = id;
     }
 
-    public HomeModel(String name, String date, String price, String quantity, String imgURL, String id, String TotQuant, String TotWeight)
-    {
+    public HomeModel(String name, String date, String price, String quantity, String imgURL, String id, String TotQuant, String TotWeight) {
         Name = name;
         Date = date;
         Price = price;
@@ -97,6 +96,15 @@ public class HomeModel {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+
+    public double getTotalCartPrice() {
+        return TotalCartPrice;
+    }
+
+    public void setTotalCartPrice(double totalCartPrice) {
+        TotalCartPrice = totalCartPrice;
     }
 
     @Override

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -14,26 +13,7 @@
         android:layout_height="wrap_content"
         android:background="#fff"
         android:orientation="horizontal"
-        android:padding="10dp">
-
-        <LinearLayout
-            android:id="@+id/thumbnail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="7dip"
-            android:padding="2dip">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/list_image"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:clickable="true"
-                android:src="@drawable/carrots"
-                app:civ_border_color="@color/colorApp"
-                app:civ_border_width="2dp" />
-
-        </LinearLayout>
+        android:padding="5dp">
 
 
         <TextView
@@ -41,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/thumbnail"
+            android:layout_marginLeft="10dp"
             android:text="Title"
             android:textColor="#040404"
             android:textSize="15dip"
@@ -52,7 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="50dp"
             android:layout_toRightOf="@+id/from_name"
             android:text="Total Quantity"
             android:textAlignment="center"
@@ -74,7 +55,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_marginLeft="70dp"
+                android:layout_marginLeft="10dp"
                 android:paddingRight="5dip"
                 android:text="Rs. 200"
                 android:textColor="#1d1d1d"
@@ -86,7 +67,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
-                android:paddingRight="25dip"
+                android:paddingRight="25dp"
                 android:text="kilo"
                 android:textColor="#343434"
                 android:textSize="12dp" />
@@ -103,17 +84,49 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="1"
                 android:textSize="12dip"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cart_weight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="kg"
+                android:textSize="12dip"
+                android:textStyle="bold" />
+
 
             <ImageView
                 android:id="@+id/cart_plus_img"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:src="@drawable/ic_plus" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginStart="5dp"
+                android:paddingRight="5dp"
+                android:text="Rs"
+                android:textColor="#1d1d1d"
+                android:textSize="12dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cart_totalRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="0.0"
+                android:textColor="#1d1d1d"
+                android:textSize="12dip"
+                android:textStyle="bold" />
+
+
         </LinearLayout>
 
     </RelativeLayout>

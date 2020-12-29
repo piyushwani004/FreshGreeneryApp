@@ -20,9 +20,8 @@ public class Holder extends RecyclerView.ViewHolder {
     public CircleImageView circleImageViewHome;
 
     //Cart page Holder Components...
-    public CircleImageView imageViewTitleCart;
     public ImageView imageViewMinusCart, imageViewPlusCart;
-    public TextView textViewTitleCart, textViewPriceCart, textViewWeightCart, textViewUserQuantityCard, textViewfrom_end;
+    public TextView textViewTitleCart, textViewPriceCart, textViewWeightCart, textViewUserQuantityCard, textViewfrom_end, cart_totalRate;
 
 
     public Holder(@NonNull View itemView) {
@@ -36,10 +35,11 @@ public class Holder extends RecyclerView.ViewHolder {
 
         this.circleImageViewHome = itemView.findViewById(R.id.imageViewHome);
 
-        this.imageViewTitleCart = itemView.findViewById(R.id.list_image);
         this.imageViewMinusCart = itemView.findViewById(R.id.cart_minus_img);
         this.imageViewPlusCart = itemView.findViewById(R.id.cart_plus_img);
 
+        //cart
+        this.cart_totalRate = itemView.findViewById(R.id.cart_totalRate);
         this.textViewTitleCart = itemView.findViewById(R.id.from_name);
         this.textViewfrom_end = itemView.findViewById(R.id.from_end);
         this.textViewPriceCart = itemView.findViewById(R.id.plist_price_text);
@@ -82,12 +82,13 @@ public class Holder extends RecyclerView.ViewHolder {
 
 
     //cart Section
-    public void setTxtTitleCart(String string) {
-        textViewTitleCart.setText(string);
+
+    public void setTxtTotalRate(String string) {
+        cart_totalRate.setText(string);
     }
 
-    public void setTxtTitleImgCart(String string) {
-        Picasso.get().load(string).resize(500, 500).centerCrop().rotate(0).into(imageViewTitleCart);
+    public void setTxtTitleCart(String string) {
+        textViewTitleCart.setText(string);
     }
 
     public void setTxtRateCart(String string) {
@@ -95,7 +96,7 @@ public class Holder extends RecyclerView.ViewHolder {
     }
 
     public void setTxtWeightCart(String string) {
-        textViewWeightCart.setText(string);
+        textViewWeightCart.setText("/"+string);
     }
 
     public void setTxtUserQuantCart(String string) {
