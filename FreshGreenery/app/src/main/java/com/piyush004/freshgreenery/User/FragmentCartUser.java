@@ -1,6 +1,7 @@
 package com.piyush004.freshgreenery.User;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -46,16 +47,16 @@ import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 public class FragmentCartUser extends Fragment {
-
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-
     private String mParam1;
     private String mParam2;
+
 
     private ImageButton arrowItem, arrowAddress, arrowBill;
     private LinearLayout hiddenViewItem, hiddenViewAddress, hiddenViewBill;
@@ -64,7 +65,7 @@ public class FragmentCartUser extends Fragment {
     private View view;
     private Thread threadAddress = null;
     private Thread threadRecycle = null;
-    private String mobile, address, city, society, flat, key, orderBy, date, NoOfItems;
+    private String mobile, address, city, society, flat, key, orderBy, date, NoOfItems, cartTotChrg;
     private MaterialButton materialButton;
     private TextView textViewMobile, textViewCity, textViewAddress, textViewSociety, textViewFlatNo;
     private FirebaseAuth firebaseAuth;
@@ -113,7 +114,7 @@ public class FragmentCartUser extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        Date data = new Date();
+        final Date data = new Date();
         simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
         date = simpleDateFormat.format(data);
 
@@ -239,7 +240,58 @@ public class FragmentCartUser extends Fragment {
                     orderBy = radioButton.getText().toString();
                 }
 
-                System.out.println(list.toString());
+                date = cart_date.getText().toString();
+                NoOfItems = cartNoItems.getText().toString();
+                orderBy = cartOrderMethod.getText().toString();
+                cartTotChrg = cartTotalCharge.getText().toString();
+
+                if (date.isEmpty()) {
+                } else if (NoOfItems.isEmpty()) {
+                    Toast.makeText(getContext(), "Select Items Quantity...", Toast.LENGTH_SHORT).show();
+                } else if (orderBy.isEmpty()) {
+                    Toast.makeText(getContext(), "Select Delivery Option...", Toast.LENGTH_SHORT).show();
+                } else if (cartTotChrg.isEmpty()) {
+                    Toast.makeText(getContext(), "Select Items Quantity...", Toast.LENGTH_SHORT).show();
+                } else if (list.isEmpty()) {
+                    Toast.makeText(getContext(), "Select Items Quantity...", Toast.LENGTH_SHORT).show();
+                } else if (!(date.isEmpty() && NoOfItems.isEmpty() && orderBy.isEmpty() && cartTotChrg.isEmpty() && list.isEmpty())) {
+                    materialButton.setVisibility(View.VISIBLE);
+                    System.out.println(list.toString());
+
+                    final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                    progressDialog.setTitle("Processing...");
+                    progressDialog.show();
+                    String uid = firebaseAuth.getCurrentUser().getUid();
+                    final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid);
+                    String key = df.push().getKey();
+                    df.child(key).child("Date").setValue(date);
+                    df.child(key).child("NoOfItems").setValue(NoOfItems);
+                    df.child(key).child("OrderMethod").setValue(orderBy);
+                    df.child(key).child("TotalRate").setValue(cartTotChrg);
+
+                    Iterator itr = list.iterator();
+                    while (itr.hasNext()) {
+
+                        CartItems item = (CartItems) itr.next();
+                        String itemKey = df.push().getKey();
+                        df.child(key).child("ItemList").child(itemKey).child("Name").setValue(item.name);
+                        df.child(key).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
+                        df.child(key).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
+
+                    }
+
+                    progressDialog.dismiss();
+                    Toast.makeText(getContext(), "Order Confirmed...", Toast.LENGTH_SHORT).show();
+
+                    final DatabaseReference deleteCart = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart");
+                    deleteCart.removeValue();
+                    FragmentHomeUser homeUser = new FragmentHomeUser();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.containerHomeUser, homeUser);
+                    fragmentTransaction.commit();
+                }
+
             }
         });
 

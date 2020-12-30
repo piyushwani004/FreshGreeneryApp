@@ -24,6 +24,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.freshgreenery.Auth.AuthActivity;
 import com.piyush004.freshgreenery.R;
 import com.piyush004.freshgreenery.User.FragmentCartUser;
@@ -47,7 +52,20 @@ public class HomeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbarAdmin);
         bottomNavigationView = findViewById(R.id.BotnavViewUserHome);
         firebaseAuth = FirebaseAuth.getInstance();
-        toolbar.setTitle("User");
+        String uid = firebaseAuth.getCurrentUser().getUid();
+        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
+        df.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                toolbar.setTitle(snapshot.child("Name").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         setSupportActionBar(toolbar);
         setUpNavView();
 
@@ -90,6 +108,7 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
             }
         });
+
 
     }
 

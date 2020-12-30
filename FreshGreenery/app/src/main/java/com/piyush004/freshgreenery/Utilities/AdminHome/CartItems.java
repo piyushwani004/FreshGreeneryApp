@@ -2,9 +2,9 @@ package com.piyush004.freshgreenery.Utilities.AdminHome;
 
 public class CartItems {
 
-    private String name;
-    private String weight;
-    private String rate;
+    public String name;
+    public String weight;
+    public String rate;
 
 
     public CartItems(String name, String weight, String rate) {
