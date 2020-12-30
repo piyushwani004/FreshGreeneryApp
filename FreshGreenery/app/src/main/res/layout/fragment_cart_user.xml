@@ -311,14 +311,24 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="Home Delivery"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
             <RadioGroup
                 android:id="@+id/radioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="20dp"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -330,7 +340,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:checked="false"
-                    android:text="Cash On Delivery"
+                    android:padding="10dp"
+                    android:text="No"
                     android:textColor="#00BCD4"
                     android:textColorHighlight="@color/colorApp"
                     android:textColorLink="#00BCD4"
@@ -343,7 +354,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:checked="false"
-                    android:text="Home Delivery"
+                    android:padding="10dp"
+                    android:text="Yes"
                     android:textColor="#00BCD4"
                     android:textColorHighlight="@color/colorApp"
                     android:textColorLink="#00BCD4"
@@ -444,7 +456,7 @@
                     <TextView
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
-                        android:text="Order Methode : "
+                        android:text="Home Delivery :"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
@@ -453,29 +465,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Not Set"
-                        android:textAlignment="textStart"
-                        android:textSize="16dp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="150dp"
-                        android:layout_height="wrap_content"
-                        android:text="Charges : "
-                        android:textSize="18dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/cartCharges"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0.0"
                         android:textAlignment="textStart"
                         android:textSize="16dp" />
 
@@ -526,7 +515,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:backgroundTint="@color/colorApp"
                 app:cornerRadius="20dp"
                 app:elevation="1dp" />

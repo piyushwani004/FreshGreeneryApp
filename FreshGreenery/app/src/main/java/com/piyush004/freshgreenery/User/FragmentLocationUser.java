@@ -1,6 +1,8 @@
 package com.piyush004.freshgreenery.User;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
@@ -16,8 +19,11 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.freshgreenery.R;
 
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
@@ -39,8 +45,9 @@ public class FragmentLocationUser extends Fragment {
     private EditText editTextMobile, editTextAddress, editTextCity, editTextSocity, editTextFlat;
     private MaterialButton materialButtonSave;
     private String Mob, Addr, City, Soci, FlatNo;
+    private String mobile, address, city, society, flat;
     private String key;
-
+    private Thread threadAddress = null;
     ImageButton arrow;
     LinearLayout hiddenView;
     MaterialCardView cardView;
@@ -88,6 +95,52 @@ public class FragmentLocationUser extends Fragment {
         cardView = view.findViewById(R.id.base_cardview);
         arrow = view.findViewById(R.id.arrow_button);
         hiddenView = view.findViewById(R.id.hidden_view);
+
+        key = firebaseAuth.getCurrentUser().getUid();
+
+        threadAddress = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    public void run() {
+
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child("Address");
+                        databaseReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                mobile = snapshot.child(key).child("Mobile").getValue(String.class);
+                                address = snapshot.child(key).child("Address").getValue(String.class);
+                                city = snapshot.child(key).child("City").getValue(String.class);
+                                society = snapshot.child(key).child("SocietyName").getValue(String.class);
+                                flat = snapshot.child(key).child("FlatNo").getValue(String.class);
+
+                                if (!(mobile == null && address == null)) {
+
+                                    editTextMobile.setText(mobile);
+                                    editTextAddress.setText(address);
+                                    editTextCity.setText(city);
+                                    editTextSocity.setText(society);
+                                    editTextFlat.setText(flat);
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+                    }
+                });
+            }
+        });
+        threadAddress.start();
+
 
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override

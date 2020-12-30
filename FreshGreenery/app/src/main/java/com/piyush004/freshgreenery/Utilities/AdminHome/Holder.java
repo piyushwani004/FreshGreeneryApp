@@ -20,7 +20,7 @@ public class Holder extends RecyclerView.ViewHolder {
     public CircleImageView circleImageViewHome;
 
     //Cart page Holder Components...
-    public ImageView imageViewMinusCart, imageViewPlusCart;
+    public ImageView imageViewMinusCart, imageViewPlusCart, imageViewCheck;
     public TextView textViewTitleCart, textViewPriceCart, textViewWeightCart, textViewUserQuantityCard, textViewfrom_end, cart_totalRate;
 
 
@@ -39,6 +39,7 @@ public class Holder extends RecyclerView.ViewHolder {
         this.imageViewPlusCart = itemView.findViewById(R.id.cart_plus_img);
 
         //cart
+        this.imageViewCheck = itemView.findViewById(R.id.action_check);
         this.cart_totalRate = itemView.findViewById(R.id.cart_totalRate);
         this.textViewTitleCart = itemView.findViewById(R.id.from_name);
         this.textViewfrom_end = itemView.findViewById(R.id.from_end);
@@ -96,7 +97,7 @@ public class Holder extends RecyclerView.ViewHolder {
     }
 
     public void setTxtWeightCart(String string) {
-        textViewWeightCart.setText("/"+string);
+        textViewWeightCart.setText("/" + string);
     }
 
     public void setTxtUserQuantCart(String string) {

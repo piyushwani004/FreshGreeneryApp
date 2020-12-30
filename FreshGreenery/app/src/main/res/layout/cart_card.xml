@@ -15,7 +15,6 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-
         <TextView
             android:id="@+id/from_name"
             android:layout_width="wrap_content"
@@ -29,10 +28,10 @@
 
         <TextView
             android:id="@+id/from_end"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="90dp"
             android:layout_marginEnd="50dp"
             android:layout_toRightOf="@+id/from_name"
             android:text="Total Quantity"
@@ -41,6 +40,16 @@
             android:textSize="15dip"
             android:typeface="serif" />
 
+        <ImageView
+            android:id="@+id/action_check"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="30dp"
+            android:layout_toRightOf="@+id/from_end"
+            android:clickable="true"
+            android:src="@drawable/ic_baseline_check_24"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/cart_plus_minus_layout"
@@ -85,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:paddingRight="5dp"
-                android:text="1"
+                android:text="0"
                 android:textSize="12dip"
                 android:textStyle="bold" />
 

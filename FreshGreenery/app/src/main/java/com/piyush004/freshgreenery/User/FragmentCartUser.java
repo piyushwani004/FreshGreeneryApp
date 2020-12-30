@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,10 +39,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.freshgreenery.R;
+import com.piyush004.freshgreenery.Utilities.AdminHome.CartItems;
 import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
 import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class FragmentCartUser extends Fragment {
@@ -75,13 +75,13 @@ public class FragmentCartUser extends Fragment {
     private FirebaseRecyclerOptions<HomeModel> options;
     private FirebaseRecyclerAdapter<HomeModel, Holder> adapter;
     private SimpleDateFormat simpleDateFormat;
-    private TextView cart_date, cartNoItems, cartCharges, cartTotalCharge, cartOrderMethod;
+    private TextView cart_date, cartNoItems, cartTotalCharge, cartOrderMethod;
     private String value, Weight;
     private int val;
     private RecyclerView recyclerView;
     public TextView TotalPriceCart;
-    private double count1, count2;
 
+    ArrayList<CartItems> list = new ArrayList<CartItems>();
 
     public FragmentCartUser() {
         // Required empty public constructor
@@ -117,7 +117,6 @@ public class FragmentCartUser extends Fragment {
         simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
         date = simpleDateFormat.format(data);
 
-
         arrowItem = view.findViewById(R.id.arrow_button_Items);
         hiddenViewItem = view.findViewById(R.id.hidden_view_Items);
         linearLayoutItem = view.findViewById(R.id.linearItem);
@@ -147,7 +146,6 @@ public class FragmentCartUser extends Fragment {
         // billing Section id
         cart_date = view.findViewById(R.id.cart_date);
         cartNoItems = view.findViewById(R.id.cartNoItems);
-        cartCharges = view.findViewById(R.id.cartCharges);
         cartTotalCharge = view.findViewById(R.id.cartTotalCharge);
         cartOrderMethod = view.findViewById(R.id.cartOrderMethod);
         TotalPriceCart = view.findViewById(R.id.TotalPriceCart);
@@ -165,7 +163,6 @@ public class FragmentCartUser extends Fragment {
                         if (null != radioButton && checkedId > -1) {
                             orderBy = radioButton.getText().toString();
                             cartOrderMethod.setText(orderBy);
-                            Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -233,14 +230,16 @@ public class FragmentCartUser extends Fragment {
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int selectedId = radioGroup.getCheckedRadioButtonId();
                 if (selectedId == -1) {
                     Toast.makeText(getContext(), "No Order Method has been selected", Toast.LENGTH_SHORT).show();
                 } else {
                     RadioButton radioButton = (RadioButton) radioGroup.findViewById(selectedId);
                     orderBy = radioButton.getText().toString();
-                    //Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
                 }
+
+                System.out.println(list.toString());
             }
         });
 
@@ -314,6 +313,8 @@ public class FragmentCartUser extends Fragment {
                                             @Override
                                             public void onClick(View v) {
 
+                                                TotalPriceCart.setText(String.valueOf(0.0));
+                                                holder.imageViewCheck.setVisibility(View.VISIBLE);
                                                 databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
                                                 databaseReference.addValueEventListener(new ValueEventListener() {
                                                     @Override
@@ -352,13 +353,10 @@ public class FragmentCartUser extends Fragment {
 
                                                 if (model.getQuantity().equals("kilo")) {
 
-                                                    double init = Double.valueOf(TotalPriceCart.getText().toString());
-                                                    int p = Integer.valueOf(model.getPrice());
+                                                    int p = Integer.parseInt(model.getPrice());
                                                     double tot = i * p;
                                                     //Log.e(TAG, "inside kilo=======" + tot);
-                                                    double total = tot + init;
-                                                    model.setTotalCartPrice(total);
-                                                    holder.setTxtTotalRate(String.valueOf(total));
+                                                    holder.setTxtTotalRate(String.valueOf(tot));
 
                                                 }
                                             }
@@ -367,6 +365,9 @@ public class FragmentCartUser extends Fragment {
                                         holder.imageViewPlusCart.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
+                                                TotalPriceCart.setText(String.valueOf(0.0));
+
+                                                holder.imageViewCheck.setVisibility(View.VISIBLE);
                                                 databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
                                                 databaseReference.addValueEventListener(new ValueEventListener() {
                                                     @Override
@@ -404,31 +405,31 @@ public class FragmentCartUser extends Fragment {
 
                                                 if (model.getQuantity().equals("kilo")) {
 
-                                                    double init = Double.valueOf(TotalPriceCart.getText().toString());
-                                                    int p = Integer.valueOf(model.getPrice());
+                                                    int p = Integer.parseInt(model.getPrice());
                                                     double tot = i * p;
-                                                    double total = tot + init;
-                                                    model.setTotalCartPrice(total);
-                                                    holder.setTxtTotalRate(String.valueOf(total));
+                                                    holder.setTxtTotalRate(String.valueOf(tot));
 
                                                 }
                                             }
                                         });
 
-                                        holder.cart_totalRate.addTextChangedListener(new TextWatcher() {
+                                        holder.imageViewCheck.setOnClickListener(new View.OnClickListener() {
                                             @Override
-                                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                            public void onClick(View v) {
 
-                                            }
+                                                double initTotal = Double.parseDouble(TotalPriceCart.getText().toString());
+                                                double initCart = Double.parseDouble(holder.cart_totalRate.getText().toString());
 
-                                            @Override
-                                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                                initTotal = initTotal + initCart;
+                                                TotalPriceCart.setText(String.valueOf(initTotal));
+                                                holder.imageViewCheck.setVisibility(View.GONE);
+                                                cartTotalCharge.setText(TotalPriceCart.getText().toString());
 
-                                            }
+                                                String Quantity = holder.textViewUserQuantityCard.getText().toString();
+                                                String rate = holder.cart_totalRate.getText().toString();
 
-                                            @Override
-                                            public void afterTextChanged(Editable s) {
-                                                System.out.println(s);
+                                                list.add(new CartItems(model.getName(), Quantity, rate));
+
                                             }
                                         });
 
@@ -443,8 +444,9 @@ public class FragmentCartUser extends Fragment {
                                                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int id) {
 
-                                                                Query RoomQuery = Delete.child("UserData").child("Cart").child(firebaseAuth.getCurrentUser().getUid()).orderByChild("CartName").equalTo(model.getName());
+                                                                TotalPriceCart.setText(String.valueOf(0.0));
 
+                                                                Query RoomQuery = Delete.child("UserData").child("Cart").child(firebaseAuth.getCurrentUser().getUid()).orderByChild("CartName").equalTo(model.getName());
                                                                 RoomQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                     @Override
                                                                     public void onDataChange(DataSnapshot dataSnapshot) {
