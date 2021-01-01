@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -78,6 +79,8 @@ public class FragmentHistoryUser extends Fragment {
 
         MBSpinner = view.findViewById(R.id.material_spinner_history);
         recyclerView = view.findViewById(R.id.recycleHisUser);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         TVOrderId = view.findViewById(R.id.textHisOrderIdUser);
         TVName = view.findViewById(R.id.textHisNameUser);
