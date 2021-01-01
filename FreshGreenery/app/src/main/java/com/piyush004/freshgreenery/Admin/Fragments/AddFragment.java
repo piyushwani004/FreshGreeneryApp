@@ -70,7 +70,7 @@ public class AddFragment extends Fragment implements
     private String date, key;
     private String Name, Rate, RateQuantity, ImgURL, TotalQuantity, TotalWeight;
     private String UpName, UpPrice, UpTotalQuantity, UpTotalWeight, UpImgURL;
-    private String[] Quantity = {"kilo", "125gm", "250gm", "500gm", "750gm", "piece", "dozen"};
+    private String[] Quantity = {"kilo", "gram", "piece", "dozen"};
     private String[] TotalQuantWeight = {"kilo", "gram", "piece", "dozen"};
 
     private StorageReference storageReference;

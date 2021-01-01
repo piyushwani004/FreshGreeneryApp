@@ -46,6 +46,7 @@ import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -65,7 +66,7 @@ public class FragmentCartUser extends Fragment {
     private View view;
     private Thread threadAddress = null;
     private Thread threadRecycle = null;
-    private String mobile, address, city, society, flat, key, orderBy, date, NoOfItems, cartTotChrg;
+    private String mobile, address, city, society, flat, key, orderBy, date, NoOfItems, cartTotChrg, time;
     private MaterialButton materialButton;
     private TextView textViewMobile, textViewCity, textViewAddress, textViewSociety, textViewFlatNo;
     private FirebaseAuth firebaseAuth;
@@ -81,6 +82,7 @@ public class FragmentCartUser extends Fragment {
     private int val;
     private RecyclerView recyclerView;
     public TextView TotalPriceCart;
+    private ProgressDialog progress;
 
     ArrayList<CartItems> list = new ArrayList<CartItems>();
 
@@ -99,11 +101,13 @@ public class FragmentCartUser extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -245,6 +249,13 @@ public class FragmentCartUser extends Fragment {
                 orderBy = cartOrderMethod.getText().toString();
                 cartTotChrg = cartTotalCharge.getText().toString();
 
+                mobile = textViewMobile.getText().toString();
+                address = textViewAddress.getText().toString();
+                city = textViewCity.getText().toString();
+                society = textViewSociety.getText().toString();
+                flat = textViewFlatNo.getText().toString();
+
+
                 if (date.isEmpty()) {
                 } else if (NoOfItems.isEmpty()) {
                     Toast.makeText(getContext(), "Select Items Quantity...", Toast.LENGTH_SHORT).show();
@@ -255,32 +266,98 @@ public class FragmentCartUser extends Fragment {
                 } else if (list.isEmpty()) {
                     Toast.makeText(getContext(), "Select Items Quantity...", Toast.LENGTH_SHORT).show();
                 } else if (!(date.isEmpty() && NoOfItems.isEmpty() && orderBy.isEmpty() && cartTotChrg.isEmpty() && list.isEmpty())) {
-                    materialButton.setVisibility(View.VISIBLE);
-                    System.out.println(list.toString());
 
-                    final ProgressDialog progressDialog = new ProgressDialog(getContext());
-                    progressDialog.setTitle("Processing...");
-                    progressDialog.show();
+                    materialButton.setVisibility(View.VISIBLE);
+
+                    progress = new ProgressDialog(getContext());
+                    progress.setMessage("Processing...");
+                    progress.show();
+
                     String uid = firebaseAuth.getCurrentUser().getUid();
-                    final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid);
-                    String key = df.push().getKey();
-                    df.child(key).child("Date").setValue(date);
-                    df.child(key).child("NoOfItems").setValue(NoOfItems);
-                    df.child(key).child("OrderMethod").setValue(orderBy);
-                    df.child(key).child("TotalRate").setValue(cartTotChrg);
+
+                    final Calendar calendar = Calendar.getInstance();
+                    simpleDateFormat = new SimpleDateFormat("hh:mm a");
+                    time = simpleDateFormat.format(calendar.getTime());
+
+                    final DatabaseReference dfUser = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid);
+                    final String key = dfUser.push().getKey();
+                    dfUser.child(key).child("Bill").child("OrderID").setValue(key);
+                    final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
+                    df.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            dfUser.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+                    dfUser.child(key).child("Bill").child("Date").setValue(date);
+                    dfUser.child(key).child("Bill").child("Time").setValue(time);
+                    dfUser.child(key).child("Bill").child("NoOfItems").setValue(NoOfItems);
+                    dfUser.child(key).child("Bill").child("OrderMethod").setValue(orderBy);
+                    dfUser.child(key).child("Bill").child("TotalRate").setValue(cartTotChrg);
+
+                    dfUser.child(key).child("Bill").child("Mobile").setValue(mobile);
+                    dfUser.child(key).child("Bill").child("Address").setValue(address);
+                    dfUser.child(key).child("Bill").child("City").setValue(city);
+                    dfUser.child(key).child("Bill").child("SocietyName").setValue(society);
+                    dfUser.child(key).child("Bill").child("FlatNo").setValue(flat);
 
                     Iterator itr = list.iterator();
                     while (itr.hasNext()) {
 
                         CartItems item = (CartItems) itr.next();
-                        String itemKey = df.push().getKey();
-                        df.child(key).child("ItemList").child(itemKey).child("Name").setValue(item.name);
-                        df.child(key).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
-                        df.child(key).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
+                        String itemKey = dfUser.push().getKey();
+                        dfUser.child(key).child("ItemList").child(itemKey).child("Name").setValue(item.name);
+                        dfUser.child(key).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
+                        dfUser.child(key).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
 
                     }
 
-                    progressDialog.dismiss();
+                    //admin section
+                    final DatabaseReference Admin = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing").child(uid);
+                    final String Adkey = Admin.push().getKey();
+                    Admin.child(Adkey).child("Bill").child("OrderID").setValue(Adkey);
+                    Admin.child(Adkey).child("Bill").child("Date").setValue(date);
+                    Admin.child(Adkey).child("Bill").child("Time").setValue(time);
+                    Admin.child(Adkey).child("Bill").child("NoOfItems").setValue(NoOfItems);
+                    Admin.child(Adkey).child("Bill").child("OrderMethod").setValue(orderBy);
+                    Admin.child(Adkey).child("Bill").child("TotalRate").setValue(cartTotChrg);
+
+                    Admin.child(Adkey).child("Bill").child("Mobile").setValue(mobile);
+                    Admin.child(Adkey).child("Bill").child("Address").setValue(address);
+                    Admin.child(Adkey).child("Bill").child("City").setValue(city);
+                    Admin.child(Adkey).child("Bill").child("SocietyName").setValue(society);
+                    Admin.child(Adkey).child("Bill").child("FlatNo").setValue(flat);
+
+                    final DatabaseReference admin = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
+                    admin.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Admin.child(Adkey).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+
+                    });
+                    Iterator itrad = list.iterator();
+                    while (itrad.hasNext()) {
+
+                        CartItems item = (CartItems) itrad.next();
+                        String itemKey = dfUser.push().getKey();
+                        Admin.child(Adkey).child("ItemList").child(itemKey).child("Name").setValue(item.name);
+                        Admin.child(Adkey).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
+                        Admin.child(Adkey).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
+                    }
+
+                    progress.dismiss();
                     Toast.makeText(getContext(), "Order Confirmed...", Toast.LENGTH_SHORT).show();
 
                     final DatabaseReference deleteCart = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart");
@@ -410,6 +487,12 @@ public class FragmentCartUser extends Fragment {
                                                     //Log.e(TAG, "inside kilo=======" + tot);
                                                     holder.setTxtTotalRate(String.valueOf(tot));
 
+                                                } else if (model.getQuantity().equals("gram")) {
+
+                                                    int p = Integer.parseInt(model.getPrice());
+                                                    double tot = i * p;
+                                                    //Log.e(TAG, "inside kilo=======" + tot);
+                                                    holder.setTxtTotalRate(String.valueOf(tot));
                                                 }
                                             }
                                         });
@@ -461,7 +544,13 @@ public class FragmentCartUser extends Fragment {
                                                     double tot = i * p;
                                                     holder.setTxtTotalRate(String.valueOf(tot));
 
+                                                } else if (model.getQuantity().equals("gram")) {
+
+                                                    int p = Integer.parseInt(model.getPrice());
+                                                    double tot = i * p;
+                                                    holder.setTxtTotalRate(String.valueOf(tot));
                                                 }
+
                                             }
                                         });
 
@@ -603,6 +692,7 @@ public class FragmentCartUser extends Fragment {
                                 } else if (!(mobile == null && address == null)) {
 
                                     materialButton.setVisibility(View.VISIBLE);
+
                                     textViewMobile.setText(mobile);
                                     textViewAddress.setText(address);
                                     textViewCity.setText(city);
