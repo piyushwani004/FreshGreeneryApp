@@ -126,7 +126,7 @@ public class FragmentHistoryUser extends Fragment {
                 arrayList.add("Nothing");
                 arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList);
                 MBSpinner.setAdapter(arrayAdapter);
-                MBSpinner.setText("Select Content");
+                MBSpinner.setText("Select Order ID");
             }
 
             @Override
