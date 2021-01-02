@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -15,47 +17,65 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
-        <TextView
-            android:id="@+id/from_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
-            android:text="Title"
-            android:textColor="#040404"
-            android:textSize="14dp"
-            android:typeface="serif" />
 
-        <TextView
-            android:id="@+id/from_end"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/topLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="90dp"
-            android:layout_marginEnd="50dp"
-            android:layout_toRightOf="@+id/from_name"
-            android:text="Total Quantity"
-            android:textAlignment="center"
-            android:textColor="#040404"
-            android:textSize="15dip"
-            android:typeface="serif" />
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/action_check"
-            android:layout_width="50dp"
-            android:layout_height="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="30dp"
-            android:layout_toRightOf="@+id/from_end"
-            android:clickable="true"
-            android:src="@drawable/ic_baseline_check_24"
-            android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/from_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginStart="10dp"
+                android:gravity="center_horizontal"
+                android:text="Title"
+                android:textColor="#040404"
+                android:textSize="14dp"
+                android:typeface="serif"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/from_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Total Quantity"
+                android:textAlignment="center"
+                android:textColor="#040404"
+                android:textSize="15dip"
+                android:typeface="serif"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/action_check"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:clickable="true"
+                android:gravity="center_horizontal"
+                android:src="@drawable/ic_baseline_check_24"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/cart_plus_minus_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/from_name"
+            android:layout_below="@+id/topLayout"
             android:layout_alignParentRight="true"
             android:orientation="horizontal">
 
