@@ -3,13 +3,13 @@ package com.piyush004.freshgreenery.User;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -132,7 +132,7 @@ public class FragmentHomeUser extends Fragment {
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
 
-                                        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(Uid);
+                                        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Cart").child(Uid);
 
                                         final DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(Cardkey);
                                         dff.addValueEventListener(new ValueEventListener() {
@@ -149,8 +149,8 @@ public class FragmentHomeUser extends Fragment {
                                                 df.child(Cardkey).child("CartName").setValue(Name);
                                                 df.child(Cardkey).child("CartPrice").setValue(Price);
                                                 df.child(Cardkey).child("CartQuantity").setValue(VegQuant);
-
-                                                Toast.makeText(getContext(), "Add to your cart Successfully", Toast.LENGTH_SHORT).show();
+                                                Log.e("Project", "cart Add");
+                                                // Toast.makeText(getContext(), "Add to your cart Successfully", Toast.LENGTH_SHORT).show();
                                             }
 
                                             @Override

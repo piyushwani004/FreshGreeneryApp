@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -31,6 +32,8 @@ import androidx.transition.TransitionManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -280,7 +283,7 @@ public class FragmentCartUser extends Fragment {
                     simpleDateFormat = new SimpleDateFormat("hh:mm a");
                     time = simpleDateFormat.format(calendar.getTime());
 
-                    final DatabaseReference dfUser = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid);
+                    final DatabaseReference dfUser = FirebaseDatabase.getInstance().getReference().child("Billing").child(uid);
 
                     final String Tempkey = generateRandomString(6);
                     key = Tempkey + "-" + date + "-" + time;
@@ -363,7 +366,7 @@ public class FragmentCartUser extends Fragment {
                         Admin.child(Adkey).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
                     }
 
-                   /* Iterator itrSearch = list.iterator();
+                    Iterator itrSearch = list.iterator();
                     while (itrSearch.hasNext()) {
 
                         final CartItems item = (CartItems) itrSearch.next();
@@ -374,13 +377,31 @@ public class FragmentCartUser extends Fragment {
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
+
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
                                     String key = snapshot.getKey();
                                     double ItemQuantity = Double.parseDouble(snapshot.child("TotalQuantity").getValue(String.class));
                                     ItemQuantity = ItemQuantity - itemWeight;
-                                    Log.d("Quantity", "Quan:" + ItemQuantity);
-                                    dfSearch.child(key).child("TotalQuantity").setValue(String.valueOf(ItemQuantity));
+                                    String s = Double.toString(ItemQuantity);
+                                    Log.e("Project", "Quan:" + ItemQuantity);
+                                    Log.e("Project", "key:" + key);
+
+                                    final DatabaseReference updateVege = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
+                                    updateVege.child(key).child("TotalQuantity").setValue(s).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.e("Project", "Update Complete");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e("Project", "error :" + e);
+                                        }
+                                    });
+
                                 }
+
                             }
 
                             @Override
@@ -389,288 +410,86 @@ public class FragmentCartUser extends Fragment {
                             }
 
                         });
+                    }
 
-                    }*/
+                    FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                            Log.e("Project", "cart Complete");
+                        }
+                    });
+
                     progress.dismiss();
-
-                    final DatabaseReference deleteCart = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart");
-                    deleteCart.removeValue();
-
                     Toast.makeText(getContext(), "Order Confirmed...", Toast.LENGTH_SHORT).show();
 
                     FragmentHomeUser homeUser = new FragmentHomeUser();
-                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentManager fragmentManager = getParentFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.containerHomeUser, homeUser);
                     fragmentTransaction.commit();
+
+                    FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                            Log.e("Project", "cart Complete");
+                        }
+                    });
+
                 }
 
             }
         });
 
-        threadRecycle = new Thread(new Runnable() {
-            @Override
-            public void run() {
 
-                final Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
+        final String Uid = firebaseAuth.getCurrentUser().getUid();
+        final DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("Cart").child(firebaseAuth.getCurrentUser().getUid());
+        dff.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Cart").child(Uid);
+
+                options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
+
+                    @NonNull
                     @Override
-                    public void run() {
-                        final String Uid = firebaseAuth.getCurrentUser().getUid();
-                        final DatabaseReference dff = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(firebaseAuth.getCurrentUser().getUid());
-                        dff.addValueEventListener(new ValueEventListener() {
+                    public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        return new HomeModel(
+
+                                snapshot.child("CartName").getValue(String.class),
+                                snapshot.child("CartPrice").getValue(String.class),
+                                snapshot.child("CartQuantity").getValue(String.class),
+                                snapshot.child("CardID").getValue(String.class)
+                        );
+
+                    }
+                }).build();
+                adapter = new FirebaseRecyclerAdapter<HomeModel, Holder>(options) {
+
+                    @Override
+                    protected void onBindViewHolder(@NonNull final Holder holder, int position, @NonNull final HomeModel model) {
+
+                        holder.setTxtTitleCart(model.getName());
+                        holder.setTxtRateCart(model.getPrice());
+                        holder.setTxtWeightCart(model.getQuantity());
+
+                        NoOfItems = String.valueOf(adapter.getItemCount());
+                        if (adapter.getItemCount() == 0) {
+                            materialButton.setVisibility(View.GONE);
+                        } else {
+                            materialButton.setVisibility(View.VISIBLE);
+                        }
+                        cartNoItems.setText(NoOfItems);
+
+
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
+                        databaseReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                value = snapshot.child("TotalQuantity").getValue(String.class);
+                                Weight = snapshot.child("TotalWeight").getValue(String.class);
 
-                                final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart").child(Uid);
-
-                                options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
-
-                                    @NonNull
-                                    @Override
-                                    public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
-                                        return new HomeModel(
-
-                                                snapshot.child("CartName").getValue(String.class),
-                                                snapshot.child("CartPrice").getValue(String.class),
-                                                snapshot.child("CartQuantity").getValue(String.class),
-                                                snapshot.child("CardID").getValue(String.class)
-                                        );
-
-                                    }
-                                }).build();
-                                adapter = new FirebaseRecyclerAdapter<HomeModel, Holder>(options) {
-
-                                    @Override
-                                    protected void onBindViewHolder(@NonNull final Holder holder, int position, @NonNull final HomeModel model) {
-
-                                        holder.setTxtTitleCart(model.getName());
-                                        holder.setTxtRateCart(model.getPrice());
-                                        holder.setTxtWeightCart(model.getQuantity());
-
-                                        NoOfItems = String.valueOf(adapter.getItemCount());
-                                        if (adapter.getItemCount() == 0) {
-                                            materialButton.setVisibility(View.GONE);
-                                        } else {
-                                            materialButton.setVisibility(View.VISIBLE);
-                                        }
-                                        cartNoItems.setText(NoOfItems);
-
-
-                                        databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
-                                        databaseReference.addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                Weight = snapshot.child("TotalWeight").getValue(String.class);
-
-                                                holder.setTxtFromEndQuantity(value, Weight);
-
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
-
-                                            }
-                                        });
-
-                                        holder.imageViewMinusCart.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-
-                                                TotalPriceCart.setText(String.valueOf(0.0));
-                                                holder.imageViewCheck.setVisibility(View.VISIBLE);
-                                                databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
-                                                databaseReference.addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                        val = Double.parseDouble(value);
-                                                        double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-                                                        if (i < val) {
-                                                            holder.imageViewPlusCart.setVisibility(View.VISIBLE);
-                                                        } else {
-                                                            Toast.makeText(getContext(), "out of stock", Toast.LENGTH_SHORT).show();
-                                                            holder.imageViewPlusCart.setVisibility(View.INVISIBLE);
-                                                        }
-
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
-                                                });
-
-                                                double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-
-                                                i = i - 0.25;
-                                                if (i <= 0.25) {
-
-                                                    holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
-
-                                                } else {
-
-                                                    holder.imageViewMinusCart.setVisibility(View.VISIBLE);
-                                                }
-
-                                                holder.setTxtUserQuantCart(String.valueOf(i));
-
-                                                if (model.getQuantity().equals("kilo")) {
-
-                                                    int p = Integer.parseInt(model.getPrice());
-                                                    double tot = i * p;
-                                                    //Log.e(TAG, "inside kilo=======" + tot);
-                                                    holder.setTxtTotalRate(String.valueOf(tot));
-
-                                                } else if (model.getQuantity().equals("gram")) {
-
-                                                    int p = Integer.parseInt(model.getPrice());
-                                                    double tot = i * p;
-                                                    //Log.e(TAG, "inside kilo=======" + tot);
-                                                    holder.setTxtTotalRate(String.valueOf(tot));
-                                                }
-                                            }
-                                        });
-
-                                        holder.imageViewPlusCart.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                TotalPriceCart.setText(String.valueOf(0.0));
-
-                                                holder.imageViewCheck.setVisibility(View.VISIBLE);
-                                                databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
-                                                databaseReference.addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                        value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                        val = Double.parseDouble(value);
-                                                        double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-                                                        if (i < val) {
-
-                                                        } else {
-                                                            Toast.makeText(getContext(), "out of stock", Toast.LENGTH_SHORT).show();
-                                                            holder.imageViewPlusCart.setVisibility(View.INVISIBLE);
-                                                        }
-
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                                    }
-                                                });
-
-                                                double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
-                                                i = i + 0.25;
-
-                                                if (i >= 0.25) {
-                                                    holder.imageViewMinusCart.setVisibility(View.VISIBLE);
-                                                } else {
-
-                                                    holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
-                                                }
-
-                                                holder.setTxtUserQuantCart(String.valueOf(i));
-
-                                                if (model.getQuantity().equals("kilo")) {
-
-                                                    int p = Integer.parseInt(model.getPrice());
-                                                    double tot = i * p;
-                                                    holder.setTxtTotalRate(String.valueOf(tot));
-
-                                                } else if (model.getQuantity().equals("gram")) {
-
-                                                    int p = Integer.parseInt(model.getPrice());
-                                                    double tot = i * p;
-                                                    holder.setTxtTotalRate(String.valueOf(tot));
-                                                }
-
-                                            }
-                                        });
-
-                                        holder.imageViewCheck.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-
-                                                double initTotal = Double.parseDouble(TotalPriceCart.getText().toString());
-                                                double initCart = Double.parseDouble(holder.cart_totalRate.getText().toString());
-
-                                                initTotal = initTotal + initCart;
-                                                TotalPriceCart.setText(String.valueOf(initTotal));
-                                                holder.imageViewCheck.setVisibility(View.GONE);
-                                                cartTotalCharge.setText(TotalPriceCart.getText().toString());
-
-                                                String Quantity = holder.textViewUserQuantityCard.getText().toString();
-                                                String rate = holder.cart_totalRate.getText().toString();
-
-                                                list.add(new CartItems(model.getName(), Quantity, rate));
-
-                                            }
-                                        });
-
-                                        final DatabaseReference Delete = FirebaseDatabase.getInstance().getReference();
-                                        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                                            @Override
-                                            public boolean onLongClick(View v) {
-
-                                                builderDelete = new AlertDialog.Builder(getContext());
-                                                builderDelete.setMessage("Do You Want To Delete Item ?")
-                                                        .setCancelable(false)
-                                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-
-                                                                TotalPriceCart.setText(String.valueOf(0.0));
-
-                                                                Query RoomQuery = Delete.child("UserData").child("Cart").child(firebaseAuth.getCurrentUser().getUid()).orderByChild("CartName").equalTo(model.getName());
-                                                                RoomQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                    @Override
-                                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                                                            appleSnapshot.getRef().removeValue();
-                                                                        }
-                                                                    }
-
-                                                                    @Override
-                                                                    public void onCancelled(DatabaseError databaseError) {
-                                                                        System.out.println("On Canceled");
-                                                                    }
-
-                                                                });
-
-                                                                Toast.makeText(getContext(), "Delete Content Successfully", Toast.LENGTH_LONG).show();
-
-                                                            }
-                                                        })
-                                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                                dialog.cancel();
-                                                            }
-                                                        });
-
-                                                AlertDialog alert = builderDelete.create();
-                                                alert.setTitle("Content Delete Alert");
-                                                alert.show();
-
-                                                return false;
-                                            }
-                                        });
-                                    }
-
-                                    @NonNull
-                                    @Override
-                                    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-                                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_card, parent, false);
-
-                                        return new Holder(view);
-                                    }
-                                };
-
-                                adapter.startListening();
-                                recyclerView.setAdapter(adapter);
-
+                                holder.setTxtFromEndQuantity(value, Weight);
 
                             }
 
@@ -679,11 +498,213 @@ public class FragmentCartUser extends Fragment {
 
                             }
                         });
+
+                        holder.imageViewMinusCart.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                TotalPriceCart.setText(String.valueOf(0.0));
+                                holder.imageViewCheck.setVisibility(View.VISIBLE);
+                                databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
+                                databaseReference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        value = snapshot.child("TotalQuantity").getValue(String.class);
+                                        val = Double.parseDouble(value);
+                                        double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
+                                        if (i < val) {
+                                            holder.imageViewPlusCart.setVisibility(View.VISIBLE);
+                                        } else {
+                                            Toast.makeText(getContext(), "out of stock", Toast.LENGTH_SHORT).show();
+                                            holder.imageViewPlusCart.setVisibility(View.INVISIBLE);
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                                double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
+
+                                i = i - 0.25;
+                                if (i <= 0.25) {
+
+                                    holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
+
+                                } else {
+
+                                    holder.imageViewMinusCart.setVisibility(View.VISIBLE);
+                                }
+
+                                holder.setTxtUserQuantCart(String.valueOf(i));
+
+                                if (model.getQuantity().equals("kilo")) {
+
+                                    int p = Integer.parseInt(model.getPrice());
+                                    double tot = i * p;
+                                    //Log.e(TAG, "inside kilo=======" + tot);
+                                    holder.setTxtTotalRate(String.valueOf(tot));
+
+                                } else if (model.getQuantity().equals("gram")) {
+
+                                    int p = Integer.parseInt(model.getPrice());
+                                    double tot = i * p;
+                                    //Log.e(TAG, "inside kilo=======" + tot);
+                                    holder.setTxtTotalRate(String.valueOf(tot));
+                                }
+                            }
+                        });
+
+                        holder.imageViewPlusCart.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                TotalPriceCart.setText(String.valueOf(0.0));
+
+                                holder.imageViewCheck.setVisibility(View.VISIBLE);
+                                databaseReference = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(model.getID());
+                                databaseReference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                        value = snapshot.child("TotalQuantity").getValue(String.class);
+                                        val = Double.parseDouble(value);
+                                        double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
+                                        if (i < val) {
+
+                                        } else {
+                                            Toast.makeText(getContext(), "out of stock", Toast.LENGTH_SHORT).show();
+                                            holder.imageViewPlusCart.setVisibility(View.INVISIBLE);
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                                double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
+                                i = i + 0.25;
+
+                                if (i >= 0.25) {
+                                    holder.imageViewMinusCart.setVisibility(View.VISIBLE);
+                                } else {
+
+                                    holder.imageViewMinusCart.setVisibility(View.INVISIBLE);
+                                }
+
+                                holder.setTxtUserQuantCart(String.valueOf(i));
+
+                                if (model.getQuantity().equals("kilo")) {
+
+                                    int p = Integer.parseInt(model.getPrice());
+                                    double tot = i * p;
+                                    holder.setTxtTotalRate(String.valueOf(tot));
+
+                                } else if (model.getQuantity().equals("gram")) {
+
+                                    int p = Integer.parseInt(model.getPrice());
+                                    double tot = i * p;
+                                    holder.setTxtTotalRate(String.valueOf(tot));
+                                }
+
+                            }
+                        });
+
+                        holder.imageViewCheck.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                double initTotal = Double.parseDouble(TotalPriceCart.getText().toString());
+                                double initCart = Double.parseDouble(holder.cart_totalRate.getText().toString());
+
+                                initTotal = initTotal + initCart;
+                                TotalPriceCart.setText(String.valueOf(initTotal));
+                                holder.imageViewCheck.setVisibility(View.GONE);
+                                cartTotalCharge.setText(TotalPriceCart.getText().toString());
+
+                                String Quantity = holder.textViewUserQuantityCard.getText().toString();
+                                String rate = holder.cart_totalRate.getText().toString();
+
+                                list.add(new CartItems(model.getName(), Quantity, rate));
+
+                            }
+                        });
+
+                        final DatabaseReference Delete = FirebaseDatabase.getInstance().getReference();
+                        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+
+                                builderDelete = new AlertDialog.Builder(getContext());
+                                builderDelete.setMessage("Do You Want To Delete Item ?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+
+                                                TotalPriceCart.setText(String.valueOf(0.0));
+
+                                                Query RoomQuery = Delete.child("Cart").child(firebaseAuth.getCurrentUser().getUid()).orderByChild("CartName").equalTo(model.getName());
+                                                RoomQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                                            appleSnapshot.getRef().removeValue();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+                                                        System.out.println("On Canceled");
+                                                    }
+
+                                                });
+
+                                                Toast.makeText(getContext(), "Delete Content Successfully", Toast.LENGTH_LONG).show();
+
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.cancel();
+                                            }
+                                        });
+
+                                AlertDialog alert = builderDelete.create();
+                                alert.setTitle("Content Delete Alert");
+                                alert.show();
+
+                                return false;
+                            }
+                        });
                     }
-                });
+
+                    @NonNull
+                    @Override
+                    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_card, parent, false);
+
+                        return new Holder(view);
+                    }
+                };
+
+                adapter.startListening();
+                recyclerView.setAdapter(adapter);
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
-        threadRecycle.start();
+
 
         threadAddress = new Thread(new Runnable() {
             @Override
@@ -693,7 +714,7 @@ public class FragmentCartUser extends Fragment {
                     public void run() {
                         key = firebaseAuth.getCurrentUser().getUid();
 
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child("Address");
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Address");
                         databaseReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {

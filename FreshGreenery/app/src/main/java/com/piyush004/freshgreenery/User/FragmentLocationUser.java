@@ -105,7 +105,7 @@ public class FragmentLocationUser extends Fragment {
                 handler.post(new Runnable() {
                     public void run() {
 
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child("Address");
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("Address");
                         databaseReference.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -186,7 +186,7 @@ public class FragmentLocationUser extends Fragment {
                 } else if (!(Mob.isEmpty() && Addr.isEmpty())) {
                     key = firebaseAuth.getCurrentUser().getUid();
 
-                    databaseReference = FirebaseDatabase.getInstance().getReference().child("UserData").child("Address");
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("Address");
                     databaseReference.child(key).child("ID").setValue(key);
                     databaseReference.child(key).child("Mobile").setValue(Mob);
                     databaseReference.child(key).child("Address").setValue(Addr);
