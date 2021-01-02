@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ import com.piyush004.freshgreenery.Utilities.AdminHome.CartItems;
 import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
 import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,7 +59,6 @@ public class FragmentCartUser extends Fragment {
 
     private String mParam1;
     private String mParam2;
-
 
     private ImageButton arrowItem, arrowAddress, arrowBill;
     private LinearLayout hiddenViewItem, hiddenViewAddress, hiddenViewBill;
@@ -79,7 +80,7 @@ public class FragmentCartUser extends Fragment {
     private SimpleDateFormat simpleDateFormat;
     private TextView cart_date, cartNoItems, cartTotalCharge, cartOrderMethod;
     private String value, Weight;
-    private int val;
+    private double val;
     private RecyclerView recyclerView;
     public TextView TotalPriceCart;
     private ProgressDialog progress;
@@ -280,7 +281,11 @@ public class FragmentCartUser extends Fragment {
                     time = simpleDateFormat.format(calendar.getTime());
 
                     final DatabaseReference dfUser = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid);
-                    final String key = dfUser.push().getKey();
+
+                    final String Tempkey = generateRandomString(6);
+                    key = Tempkey + "-" + date + "-" + time;
+
+
                     dfUser.child(key).child("Bill").child("OrderID").setValue(key);
                     final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
                     df.addValueEventListener(new ValueEventListener() {
@@ -318,10 +323,11 @@ public class FragmentCartUser extends Fragment {
 
                     }
 
+
                     //admin section
-                    final DatabaseReference Admin = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing").child(uid);
+                    final DatabaseReference Admin = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing");
                     final String Adkey = Admin.push().getKey();
-                    Admin.child(Adkey).child("Bill").child("OrderID").setValue(Adkey);
+                    Admin.child(Adkey).child("Bill").child("OrderID").setValue(key);
                     Admin.child(Adkey).child("Bill").child("Date").setValue(date);
                     Admin.child(Adkey).child("Bill").child("Time").setValue(time);
                     Admin.child(Adkey).child("Bill").child("NoOfItems").setValue(NoOfItems);
@@ -357,11 +363,41 @@ public class FragmentCartUser extends Fragment {
                         Admin.child(Adkey).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
                     }
 
+                   /* Iterator itrSearch = list.iterator();
+                    while (itrSearch.hasNext()) {
+
+                        final CartItems item = (CartItems) itrSearch.next();
+                        String itemName = item.name;
+                        final double itemWeight = Double.parseDouble(item.weight);
+                        final DatabaseReference dfSearch = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
+                        Query query = dfSearch.orderByChild("Name").equalTo(itemName);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    String key = snapshot.getKey();
+                                    double ItemQuantity = Double.parseDouble(snapshot.child("TotalQuantity").getValue(String.class));
+                                    ItemQuantity = ItemQuantity - itemWeight;
+                                    Log.d("Quantity", "Quan:" + ItemQuantity);
+                                    dfSearch.child(key).child("TotalQuantity").setValue(String.valueOf(ItemQuantity));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("On Canceled");
+                            }
+
+                        });
+
+                    }*/
                     progress.dismiss();
-                    Toast.makeText(getContext(), "Order Confirmed...", Toast.LENGTH_SHORT).show();
 
                     final DatabaseReference deleteCart = FirebaseDatabase.getInstance().getReference().child("UserData").child("Cart");
                     deleteCart.removeValue();
+
+                    Toast.makeText(getContext(), "Order Confirmed...", Toast.LENGTH_SHORT).show();
+
                     FragmentHomeUser homeUser = new FragmentHomeUser();
                     FragmentManager fragmentManager = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -449,7 +485,7 @@ public class FragmentCartUser extends Fragment {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                         value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                        val = Integer.valueOf(value);
+                                                        val = Double.parseDouble(value);
                                                         double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
                                                         if (i < val) {
                                                             holder.imageViewPlusCart.setVisibility(View.VISIBLE);
@@ -509,7 +545,7 @@ public class FragmentCartUser extends Fragment {
                                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                         value = snapshot.child("TotalQuantity").getValue(String.class);
-                                                        val = Integer.valueOf(value);
+                                                        val = Double.parseDouble(value);
                                                         double i = Double.parseDouble(holder.textViewUserQuantityCard.getText().toString());
                                                         if (i < val) {
 
@@ -688,7 +724,6 @@ public class FragmentCartUser extends Fragment {
                                     textView.setTextColor(Color.RED);
                                     snackBar.show();
 
-                                    //Toast.makeText(getContext(), "Filled Address Section First..", Toast.LENGTH_LONG).show();
                                 } else if (!(mobile == null && address == null)) {
 
                                     materialButton.setVisibility(View.VISIBLE);
@@ -720,7 +755,7 @@ public class FragmentCartUser extends Fragment {
     }
 
 
-    static String extractInt(String str) {
+    public static String extractInt(String str) {
 
         str = str.replaceAll("[^\\d]", " ");
         str = str.trim();
@@ -731,5 +766,30 @@ public class FragmentCartUser extends Fragment {
 
         return str;
     }
+
+    public String generateRandomString(int length) {
+
+        String CHAR_LOWER = "abcdefghijklmnopqrstuvwxyz";
+        String CHAR_UPPER = CHAR_LOWER.toUpperCase();
+        String NUMBER = "0123456789";
+
+        String DATA_FOR_RANDOM_STRING = CHAR_LOWER + CHAR_UPPER + NUMBER;
+        SecureRandom random = new SecureRandom();
+
+        if (length < 1) throw new IllegalArgumentException();
+
+        StringBuilder sb = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            // 0-62 (exclusive), random returns 0-61
+            int rndCharAt = random.nextInt(DATA_FOR_RANDOM_STRING.length());
+            char rndChar = DATA_FOR_RANDOM_STRING.charAt(rndCharAt);
+
+            sb.append(rndChar);
+        }
+
+        return sb.toString();
+    }
+
 
 }

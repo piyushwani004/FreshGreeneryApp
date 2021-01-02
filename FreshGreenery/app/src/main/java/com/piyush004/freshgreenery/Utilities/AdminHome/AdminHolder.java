@@ -2,19 +2,26 @@ package com.piyush004.freshgreenery.Utilities.AdminHome;
 
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.piyush004.freshgreenery.R;
 
 public class AdminHolder extends RecyclerView.ViewHolder {
 
-    public ImageButton imageButtonArrow ,imageViewCheckOrderConfirm;
+    public ImageButton imageButtonArrow;
+    public ImageView imageViewCheckOrderConfirm;
     public TextView textViewOrderId, textViewUserName, textViewRateAdmin, textViewDateAdmin;
     public TextView textViewMobile, textViewAddress, textViewTime, textViewNoItems, textViewCity, textViewSociety, textViewFlatNo;
     public RecyclerView recyclerViewItems;
+
+    public LinearLayout hiddenView;
+    public MaterialCardView cardView;
 
     public AdminHolder(@NonNull View itemView) {
         super(itemView);
@@ -36,6 +43,10 @@ public class AdminHolder extends RecyclerView.ViewHolder {
         this.textViewFlatNo = itemView.findViewById(R.id.textNotiFlatAdmin);
 
         this.recyclerViewItems = itemView.findViewById(R.id.recycleNotiAdmin);
+
+        this.hiddenView = itemView.findViewById(R.id.AdminNotiHidden_view);
+        this.cardView = itemView.findViewById(R.id.base_cardView_admin);
+
     }
 
 

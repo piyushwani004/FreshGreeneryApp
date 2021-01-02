@@ -63,7 +63,7 @@
                     android:padding="5dp">
 
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="80dp"
                         android:layout_height="wrap_content"
                         android:text="Order ID :"
                         android:textAlignment="textStart"
@@ -74,11 +74,11 @@
                         android:id="@+id/textHisOrderIdUser"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginStart="5dp"
                         android:fontFamily="serif"
                         android:text="null"
                         android:textColor="@color/colorGray"
-                        android:textSize="16dp"
+                        android:textSize="14dp"
                         android:textStyle="italic" />
 
                 </LinearLayout>
