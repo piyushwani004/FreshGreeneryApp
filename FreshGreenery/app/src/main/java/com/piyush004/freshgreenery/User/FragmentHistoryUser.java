@@ -135,7 +135,8 @@ public class FragmentHistoryUser extends Fragment {
                             TVDate.setText(snapshot.child("Date").getValue(String.class));
                             TVTime.setText(snapshot.child("Time").getValue(String.class));
                             TVNOItems.setText(snapshot.child("NoOfItems").getValue(String.class));
-                            TVAmount.setText(snapshot.child("TotalRate").getValue(String.class));
+                            String rate = snapshot.child("TotalRate").getValue(String.class);
+                            TVAmount.setText(rate + "Rs");
                             TVAddress.setText(snapshot.child("Address").getValue(String.class));
                             TVCity.setText(snapshot.child("City").getValue(String.class));
                             TVSociety.setText(snapshot.child("SocietyName").getValue(String.class));
@@ -167,9 +168,6 @@ public class FragmentHistoryUser extends Fragment {
                                     holder.setTxtUserItemRateCart(model.getCartItemRate());
                                     holder.setTxtUserItemWeightCart(model.getCartItemweight());
 
-                                    Log.i("MyActivity", "CArtNAme" + model.getCartItemName());
-                                    Log.i("MyActivity", "CArtRate" + model.getCartItemRate());
-                                    Log.i("MyActivity", "CArtWeight" + model.getCartItemweight());
                                 }
 
                                 @NonNull
