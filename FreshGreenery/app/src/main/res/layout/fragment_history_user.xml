@@ -18,7 +18,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:hint="Select Here"
+            android:hint="Select Order Id"
             android:textColor="@color/colorApp"
             android:textColorHint="#d10e3b"
             android:textSize="20dp" />
@@ -41,9 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="1dp"
@@ -54,13 +54,13 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:padding="25dp">
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:padding="5dp">
 
                     <TextView
                         android:layout_width="100dp"
@@ -78,7 +78,7 @@
                         android:fontFamily="serif"
                         android:text="null"
                         android:textColor="@color/colorGray"
-                        android:textSize="18dp"
+                        android:textSize="16dp"
                         android:textStyle="italic" />
 
                 </LinearLayout>
@@ -267,7 +267,7 @@
                         android:fontFamily="serif"
                         android:text="null"
                         android:textColor="@color/colorGray"
-                        android:textSize="18dp"
+                        android:textSize="16dp"
                         android:textStyle="italic" />
 
                 </LinearLayout>
@@ -354,14 +354,17 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/historyRecycleViewLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="200dp"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
                         android:text="Items :"
                         android:textAlignment="textStart"
                         android:textSize="18dp"
@@ -370,7 +373,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleHisUser"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         tools:listitem="@layout/user_history_card" />
 
                 </LinearLayout>

@@ -85,7 +85,6 @@ public class FragmentHomeUser extends Fragment {
         recyclerView = view.findViewById(R.id.recyFragHomeUser);
         swipeRefreshLayout = view.findViewById(R.id.swipeFragHomeUser);
         recyclerView.setHasFixedSize(true);
-
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(manager);
 

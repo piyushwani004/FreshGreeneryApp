@@ -12,6 +12,12 @@ public class HomeModel {
     private String ID;
     private double TotalCartPrice;
 
+    //History Cart Item Recy..
+
+    private String CartItemName;
+    private String CartItemweight;
+    private String CartItemRate;
+
     public HomeModel() {
 
     }
@@ -32,6 +38,12 @@ public class HomeModel {
         ID = id;
         TotalQuantity = TotQuant;
         TotalWeight = TotWeight;
+    }
+
+    public HomeModel(String cartItemName, String cartItemweight, String cartItemRate) {
+        CartItemName = cartItemName;
+        CartItemweight = cartItemweight;
+        CartItemRate = cartItemRate;
     }
 
     public String getTotalWeight() {
@@ -105,6 +117,30 @@ public class HomeModel {
 
     public void setTotalCartPrice(double totalCartPrice) {
         TotalCartPrice = totalCartPrice;
+    }
+
+    public String getCartItemName() {
+        return CartItemName;
+    }
+
+    public void setCartItemName(String cartItemName) {
+        CartItemName = cartItemName;
+    }
+
+    public String getCartItemweight() {
+        return CartItemweight;
+    }
+
+    public void setCartItemweight(String cartItemweight) {
+        CartItemweight = cartItemweight;
+    }
+
+    public String getCartItemRate() {
+        return CartItemRate;
+    }
+
+    public void setCartItemRate(String cartItemRate) {
+        CartItemRate = cartItemRate;
     }
 
     @Override

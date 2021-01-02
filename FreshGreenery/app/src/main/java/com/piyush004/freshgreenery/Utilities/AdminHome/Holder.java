@@ -23,6 +23,8 @@ public class Holder extends RecyclerView.ViewHolder {
     public ImageView imageViewMinusCart, imageViewPlusCart, imageViewCheck;
     public TextView textViewTitleCart, textViewPriceCart, textViewWeightCart, textViewUserQuantityCard, textViewfrom_end, cart_totalRate;
 
+    //cart History Item Recy..
+    public TextView CartItemName, CartItemWeight, CartItemRate;
 
     public Holder(@NonNull View itemView) {
         super(itemView);
@@ -46,6 +48,11 @@ public class Holder extends RecyclerView.ViewHolder {
         this.textViewPriceCart = itemView.findViewById(R.id.plist_price_text);
         this.textViewWeightCart = itemView.findViewById(R.id.plist_weight_text);
         this.textViewUserQuantityCard = itemView.findViewById(R.id.cart_product_quantity);
+
+        //cart History Item Recy..
+        this.CartItemName = itemView.findViewById(R.id.cartHisItemNameUser);
+        this.CartItemWeight = itemView.findViewById(R.id.cartHisItemWeightUser);
+        this.CartItemRate = itemView.findViewById(R.id.cartHisRateUser);
 
     }
 
@@ -107,5 +114,18 @@ public class Holder extends RecyclerView.ViewHolder {
     public void setTxtFromEndQuantity(String quantity, String weight) {
         textViewfrom_end.setText(quantity + "" + weight);
     }
+
+    public void setTxtUserItemNameCart(String string) {
+        CartItemName.setText(string);
+    }
+
+    public void setTxtUserItemWeightCart(String string) {
+        CartItemWeight.setText(string + "Kg");
+    }
+
+    public void setTxtUserItemRateCart(String string) {
+        CartItemRate.setText(string + "Rs");
+    }
+
 
 }

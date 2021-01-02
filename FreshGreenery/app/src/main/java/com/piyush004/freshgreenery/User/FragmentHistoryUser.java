@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.freshgreenery.R;
+import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
+import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
@@ -44,6 +51,9 @@ public class FragmentHistoryUser extends Fragment {
     public ArrayAdapter arrayAdapter;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private String uid;
+    private FirebaseRecyclerOptions<HomeModel> options;
+    private FirebaseRecyclerAdapter<HomeModel, Holder> adapter;
+    private LinearLayout linearLayout;
 
     public FragmentHistoryUser() {
         // Required empty public constructor
@@ -93,6 +103,7 @@ public class FragmentHistoryUser extends Fragment {
         TVCity = view.findViewById(R.id.textHisCityUser);
         TVSociety = view.findViewById(R.id.textHisSocietyUser);
         TVFlat = view.findViewById(R.id.textHisFlatUser);
+        linearLayout = view.findViewById(R.id.historyRecycleViewLayout);
 
         showDataSpinner(getContext(), uid);
 
@@ -109,9 +120,93 @@ public class FragmentHistoryUser extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
                 final String Search = MBSpinner.getText().toString();
 
-                System.out.println(Search);
+                if (!(Search.equals("Nothing"))) {
+                    DatabaseReference dfFetch = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid).child(Search).child("Bill");
+                    dfFetch.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            TVOrderId.setText(snapshot.child("OrderID").getValue(String.class));
+                            TVName.setText(snapshot.child("UserName").getValue(String.class));
+                            TVMobile.setText(snapshot.child("Mobile").getValue(String.class));
+                            TVDate.setText(snapshot.child("Date").getValue(String.class));
+                            TVTime.setText(snapshot.child("Time").getValue(String.class));
+                            TVNOItems.setText(snapshot.child("NoOfItems").getValue(String.class));
+                            TVAmount.setText(snapshot.child("TotalRate").getValue(String.class));
+                            TVAddress.setText(snapshot.child("Address").getValue(String.class));
+                            TVCity.setText(snapshot.child("City").getValue(String.class));
+                            TVSociety.setText(snapshot.child("SocietyName").getValue(String.class));
+                            TVFlat.setText(snapshot.child("FlatNo").getValue(String.class));
+
+                            linearLayout.setVisibility(View.VISIBLE);
+
+                            final DatabaseReference cartItem = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid).child(Search).child("ItemList");
+                            options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(cartItem, new SnapshotParser<HomeModel>() {
+
+                                @NonNull
+                                @Override
+                                public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                                    return new HomeModel(
+
+                                            snapshot.child("Name").getValue(String.class),
+                                            snapshot.child("weight").getValue(String.class),
+                                            snapshot.child("rate").getValue(String.class)
+                                    );
+
+                                }
+                            }).build();
+                            adapter = new FirebaseRecyclerAdapter<HomeModel, Holder>(options) {
+
+                                @Override
+                                protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull final HomeModel model) {
+
+                                    holder.setTxtUserItemNameCart(model.getCartItemName());
+                                    holder.setTxtUserItemRateCart(model.getCartItemRate());
+                                    holder.setTxtUserItemWeightCart(model.getCartItemweight());
+
+                                    Log.i("MyActivity", "CArtNAme" + model.getCartItemName());
+                                    Log.i("MyActivity", "CArtRate" + model.getCartItemRate());
+                                    Log.i("MyActivity", "CArtWeight" + model.getCartItemweight());
+                                }
+
+                                @NonNull
+                                @Override
+                                public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_history_card, parent, false);
+
+                                    return new Holder(view);
+                                }
+                            };
+
+                            adapter.startListening();
+                            recyclerView.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                } else {
+
+                    linearLayout.setVisibility(View.GONE);
+                    TVOrderId.setText("");
+                    TVName.setText("");
+                    TVMobile.setText("");
+                    TVDate.setText("");
+                    TVTime.setText("");
+                    TVNOItems.setText("");
+                    TVAmount.setText("");
+                    TVAddress.setText("");
+                    TVCity.setText("");
+                    TVSociety.setText("");
+                    TVFlat.setText("");
+
+                }
             }
         });
 
@@ -119,6 +214,7 @@ public class FragmentHistoryUser extends Fragment {
     }
 
     private void showDataSpinner(final Context context, String uid) {
+
         databaseReference.child("UserData").child("Billing").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -129,7 +225,6 @@ public class FragmentHistoryUser extends Fragment {
                 arrayList.add("Nothing");
                 arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList);
                 MBSpinner.setAdapter(arrayAdapter);
-                MBSpinner.setText("Select Order ID");
             }
 
             @Override
