@@ -38,7 +38,6 @@
         android:elevation="8dp"
         app:itemIconTint="@drawable/color_selector"
         app:itemTextColor="#FFFFFF"
-        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_nav_user" />
 
 </RelativeLayout>

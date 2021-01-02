@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.piyush004.freshgreenery.Admin.Fragments.AddFragment;
+import com.piyush004.freshgreenery.Admin.Fragments.HistoryFragment;
 import com.piyush004.freshgreenery.Admin.Fragments.HomeFragment;
 import com.piyush004.freshgreenery.Admin.Fragments.NotificationFragment;
 import com.piyush004.freshgreenery.Auth.AuthActivity;
@@ -167,6 +168,10 @@ public class AdminActivity extends AppCompatActivity {
 
             case R.id.add:
                 pushFragment(new AddFragment());
+                break;
+
+            case R.id.history:
+                pushFragment(new HistoryFragment());
                 break;
         }
 
