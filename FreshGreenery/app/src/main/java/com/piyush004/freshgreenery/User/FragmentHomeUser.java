@@ -12,6 +12,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -87,6 +88,13 @@ public class FragmentHomeUser extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(manager);
+
+        FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                Log.e("Project", "cart  delete Complete");
+            }
+        });
 
         final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
         options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {

@@ -415,7 +415,7 @@ public class FragmentCartUser extends Fragment {
                     FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                            Log.e("Project", "cart Complete");
+                            Log.e("Project", "cart delete Complete");
                         }
                     });
 
@@ -427,13 +427,6 @@ public class FragmentCartUser extends Fragment {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.containerHomeUser, homeUser);
                     fragmentTransaction.commit();
-
-                    FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                            Log.e("Project", "cart Complete");
-                        }
-                    });
 
                 }
 
