@@ -23,7 +23,7 @@
             android:layout_marginLeft="10dp"
             android:text="Title"
             android:textColor="#040404"
-            android:textSize="15dip"
+            android:textSize="14dp"
             android:typeface="serif" />
 
         <TextView

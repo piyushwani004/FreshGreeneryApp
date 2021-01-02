@@ -89,13 +89,6 @@ public class FragmentHomeUser extends Fragment {
         RecyclerView.LayoutManager manager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(manager);
 
-        FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Log.e("Project", "cart  delete Complete");
-            }
-        });
-
         final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
         options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(df, new SnapshotParser<HomeModel>() {
 

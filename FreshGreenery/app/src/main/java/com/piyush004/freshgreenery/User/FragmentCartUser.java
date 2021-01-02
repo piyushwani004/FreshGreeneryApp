@@ -1,7 +1,6 @@
 package com.piyush004.freshgreenery.User;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -69,7 +68,6 @@ public class FragmentCartUser extends Fragment {
 
     private View view;
     private Thread threadAddress = null;
-    private Thread threadRecycle = null;
     private String mobile, address, city, society, flat, key, orderBy, date, NoOfItems, cartTotChrg, time;
     private MaterialButton materialButton;
     private TextView textViewMobile, textViewCity, textViewAddress, textViewSociety, textViewFlatNo;
@@ -86,8 +84,8 @@ public class FragmentCartUser extends Fragment {
     private double val;
     private RecyclerView recyclerView;
     public TextView TotalPriceCart;
-    private ProgressDialog progress;
-
+    private AlertDialog.Builder builder;
+    private TextView OrderIdDialoge, orderPriceDialoge;
     ArrayList<CartItems> list = new ArrayList<CartItems>();
 
     public FragmentCartUser() {
@@ -159,6 +157,7 @@ public class FragmentCartUser extends Fragment {
         cartOrderMethod = view.findViewById(R.id.cartOrderMethod);
         TotalPriceCart = view.findViewById(R.id.TotalPriceCart);
 
+        builder = new AlertDialog.Builder(getContext());
 
         cart_date.setText(date);
 
@@ -272,161 +271,181 @@ public class FragmentCartUser extends Fragment {
                 } else if (!(date.isEmpty() && NoOfItems.isEmpty() && orderBy.isEmpty() && cartTotChrg.isEmpty() && list.isEmpty())) {
 
                     materialButton.setVisibility(View.VISIBLE);
-
-                    progress = new ProgressDialog(getContext());
-                    progress.setMessage("Processing...");
-                    progress.show();
-
-                    String uid = firebaseAuth.getCurrentUser().getUid();
-
                     final Calendar calendar = Calendar.getInstance();
                     simpleDateFormat = new SimpleDateFormat("hh:mm a");
                     time = simpleDateFormat.format(calendar.getTime());
-
-                    final DatabaseReference dfUser = FirebaseDatabase.getInstance().getReference().child("Billing").child(uid);
-
                     final String Tempkey = generateRandomString(6);
                     key = Tempkey + "-" + date + "-" + time;
 
 
-                    dfUser.child(key).child("Bill").child("OrderID").setValue(key);
-                    final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
-                    df.addValueEventListener(new ValueEventListener() {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogLayout = inflater.inflate(R.layout.order_confirm_dialoge, null);
+                    OrderIdDialoge = dialogLayout.findViewById(R.id.textVieworderidDialoge);
+                    orderPriceDialoge = dialogLayout.findViewById(R.id.textViewMRPDialoge);
+                    builder.setTitle("Order Confirmation");
+                    OrderIdDialoge.setText(key);
+                    orderPriceDialoge.setText(cartTotChrg + "Rs");
+
+                    builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            dfUser.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-
-                    });
-                    dfUser.child(key).child("Bill").child("Date").setValue(date);
-                    dfUser.child(key).child("Bill").child("Time").setValue(time);
-                    dfUser.child(key).child("Bill").child("NoOfItems").setValue(NoOfItems);
-                    dfUser.child(key).child("Bill").child("OrderMethod").setValue(orderBy);
-                    dfUser.child(key).child("Bill").child("TotalRate").setValue(cartTotChrg);
-
-                    dfUser.child(key).child("Bill").child("Mobile").setValue(mobile);
-                    dfUser.child(key).child("Bill").child("Address").setValue(address);
-                    dfUser.child(key).child("Bill").child("City").setValue(city);
-                    dfUser.child(key).child("Bill").child("SocietyName").setValue(society);
-                    dfUser.child(key).child("Bill").child("FlatNo").setValue(flat);
-
-                    Iterator itr = list.iterator();
-                    while (itr.hasNext()) {
-
-                        CartItems item = (CartItems) itr.next();
-                        String itemKey = dfUser.push().getKey();
-                        dfUser.child(key).child("ItemList").child(itemKey).child("Name").setValue(item.name);
-                        dfUser.child(key).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
-                        dfUser.child(key).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
-
-                    }
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                    //admin section
-                    final DatabaseReference Admin = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing");
-                    final String Adkey = Admin.push().getKey();
-                    Admin.child(Adkey).child("Bill").child("OrderID").setValue(key);
-                    Admin.child(Adkey).child("Bill").child("Date").setValue(date);
-                    Admin.child(Adkey).child("Bill").child("Time").setValue(time);
-                    Admin.child(Adkey).child("Bill").child("NoOfItems").setValue(NoOfItems);
-                    Admin.child(Adkey).child("Bill").child("OrderMethod").setValue(orderBy);
-                    Admin.child(Adkey).child("Bill").child("TotalRate").setValue(cartTotChrg);
+                            String uid = firebaseAuth.getCurrentUser().getUid();
 
-                    Admin.child(Adkey).child("Bill").child("Mobile").setValue(mobile);
-                    Admin.child(Adkey).child("Bill").child("Address").setValue(address);
-                    Admin.child(Adkey).child("Bill").child("City").setValue(city);
-                    Admin.child(Adkey).child("Bill").child("SocietyName").setValue(society);
-                    Admin.child(Adkey).child("Bill").child("FlatNo").setValue(flat);
 
-                    final DatabaseReference admin = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
-                    admin.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Admin.child(Adkey).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
-                        }
+                            final DatabaseReference dfUser = FirebaseDatabase.getInstance().getReference().child("Billing").child(uid);
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
+                            dfUser.child(key).child("Bill").child("OrderID").setValue(key);
+                            final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
+                            df.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    dfUser.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                                }
 
-                    });
-                    Iterator itrad = list.iterator();
-                    while (itrad.hasNext()) {
-
-                        CartItems item = (CartItems) itrad.next();
-                        String itemKey = dfUser.push().getKey();
-                        Admin.child(Adkey).child("ItemList").child(itemKey).child("Name").setValue(item.name);
-                        Admin.child(Adkey).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
-                        Admin.child(Adkey).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
-                    }
-
-                    Iterator itrSearch = list.iterator();
-                    while (itrSearch.hasNext()) {
-
-                        final CartItems item = (CartItems) itrSearch.next();
-                        String itemName = item.name;
-                        final double itemWeight = Double.parseDouble(item.weight);
-                        final DatabaseReference dfSearch = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
-                        Query query = dfSearch.orderByChild("Name").equalTo(itemName);
-                        query.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                                    String key = snapshot.getKey();
-                                    double ItemQuantity = Double.parseDouble(snapshot.child("TotalQuantity").getValue(String.class));
-                                    ItemQuantity = ItemQuantity - itemWeight;
-                                    String s = Double.toString(ItemQuantity);
-                                    Log.e("Project", "Quan:" + ItemQuantity);
-                                    Log.e("Project", "key:" + key);
-
-                                    final DatabaseReference updateVege = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
-                                    updateVege.child(key).child("TotalQuantity").setValue(s).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.e("Project", "Update Complete");
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.e("Project", "error :" + e);
-                                        }
-                                    });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
                                 }
 
+                            });
+                            dfUser.child(key).child("Bill").child("Date").setValue(date);
+                            dfUser.child(key).child("Bill").child("Time").setValue(time);
+                            dfUser.child(key).child("Bill").child("NoOfItems").setValue(NoOfItems);
+                            dfUser.child(key).child("Bill").child("OrderMethod").setValue(orderBy);
+                            dfUser.child(key).child("Bill").child("TotalRate").setValue(cartTotChrg);
+
+                            dfUser.child(key).child("Bill").child("Mobile").setValue(mobile);
+                            dfUser.child(key).child("Bill").child("Address").setValue(address);
+                            dfUser.child(key).child("Bill").child("City").setValue(city);
+                            dfUser.child(key).child("Bill").child("SocietyName").setValue(society);
+                            dfUser.child(key).child("Bill").child("FlatNo").setValue(flat);
+
+                            Iterator itr = list.iterator();
+                            while (itr.hasNext()) {
+
+                                CartItems item = (CartItems) itr.next();
+                                String itemKey = dfUser.push().getKey();
+                                dfUser.child(key).child("ItemList").child(itemKey).child("Name").setValue(item.name);
+                                dfUser.child(key).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
+                                dfUser.child(key).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
+
                             }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                System.out.println("On Canceled");
+
+                            //admin section
+                            final DatabaseReference Admin = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing");
+                            final String Adkey = Admin.push().getKey();
+                            Admin.child(Adkey).child("Bill").child("OrderID").setValue(key);
+                            Admin.child(Adkey).child("Bill").child("Date").setValue(date);
+                            Admin.child(Adkey).child("Bill").child("Time").setValue(time);
+                            Admin.child(Adkey).child("Bill").child("NoOfItems").setValue(NoOfItems);
+                            Admin.child(Adkey).child("Bill").child("OrderMethod").setValue(orderBy);
+                            Admin.child(Adkey).child("Bill").child("TotalRate").setValue(cartTotChrg);
+
+                            Admin.child(Adkey).child("Bill").child("Mobile").setValue(mobile);
+                            Admin.child(Adkey).child("Bill").child("Address").setValue(address);
+                            Admin.child(Adkey).child("Bill").child("City").setValue(city);
+                            Admin.child(Adkey).child("Bill").child("SocietyName").setValue(society);
+                            Admin.child(Adkey).child("Bill").child("FlatNo").setValue(flat);
+
+                            final DatabaseReference admin = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
+                            admin.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    Admin.child(Adkey).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+
+                            });
+                            Iterator itrad = list.iterator();
+                            while (itrad.hasNext()) {
+
+                                CartItems item = (CartItems) itrad.next();
+                                String itemKey = dfUser.push().getKey();
+                                Admin.child(Adkey).child("ItemList").child(itemKey).child("Name").setValue(item.name);
+                                Admin.child(Adkey).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
+                                Admin.child(Adkey).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
                             }
 
-                        });
-                    }
+                            Iterator itrSearch = list.iterator();
+                            while (itrSearch.hasNext()) {
 
-                    FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                            Log.e("Project", "cart delete Complete");
+                                final CartItems item = (CartItems) itrSearch.next();
+                                String itemName = item.name;
+                                final double itemWeight = Double.parseDouble(item.weight);
+                                final DatabaseReference dfSearch = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
+                                Query query = dfSearch.orderByChild("Name").equalTo(itemName);
+                                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                                            String key = snapshot.getKey();
+                                            double ItemQuantity = Double.parseDouble(snapshot.child("TotalQuantity").getValue(String.class));
+                                            ItemQuantity = ItemQuantity - itemWeight;
+                                            String s = Double.toString(ItemQuantity);
+
+                                            final DatabaseReference updateVege = FirebaseDatabase.getInstance().getReference().child("VegetableEntry");
+                                            updateVege.child(key).child("TotalQuantity").setValue(s).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.e("Project", "Update Complete");
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.e("Project", "error :" + e);
+                                                }
+                                            });
+
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        System.out.println("On Canceled");
+                                    }
+
+                                });
+                            }
+
+                            FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                    Log.e("Project", "cart delete Complete");
+                                }
+                            });
+
+                            Toast.makeText(getContext(), "Order Confirmed...", Toast.LENGTH_SHORT).show();
+
+                            FragmentHomeUser homeUser = new FragmentHomeUser();
+                            FragmentManager fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.containerHomeUser, homeUser);
+                            fragmentTransaction.commit();
+
+
                         }
                     });
 
-                    progress.dismiss();
-                    Toast.makeText(getContext(), "Order Confirmed...", Toast.LENGTH_SHORT).show();
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
 
-                    FragmentHomeUser homeUser = new FragmentHomeUser();
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.containerHomeUser, homeUser);
-                    fragmentTransaction.commit();
+                    builder.setView(dialogLayout);
+                    builder.show();
 
                 }
 

@@ -124,7 +124,7 @@ public class FragmentHistoryUser extends Fragment {
                 final String Search = MBSpinner.getText().toString();
 
                 if (!(Search.equals("Nothing"))) {
-                    DatabaseReference dfFetch = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid).child(Search).child("Bill");
+                    DatabaseReference dfFetch = FirebaseDatabase.getInstance().getReference().child("Billing").child(uid).child(Search).child("Bill");
                     dfFetch.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -143,7 +143,7 @@ public class FragmentHistoryUser extends Fragment {
 
                             linearLayout.setVisibility(View.VISIBLE);
 
-                            final DatabaseReference cartItem = FirebaseDatabase.getInstance().getReference().child("UserData").child("Billing").child(uid).child(Search).child("ItemList");
+                            final DatabaseReference cartItem = FirebaseDatabase.getInstance().getReference().child("Billing").child(uid).child(Search).child("ItemList");
                             options = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(cartItem, new SnapshotParser<HomeModel>() {
 
                                 @NonNull
@@ -215,7 +215,7 @@ public class FragmentHistoryUser extends Fragment {
 
     private void showDataSpinner(final Context context, String uid) {
 
-        databaseReference.child("UserData").child("Billing").child(uid).addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Billing").child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear();
