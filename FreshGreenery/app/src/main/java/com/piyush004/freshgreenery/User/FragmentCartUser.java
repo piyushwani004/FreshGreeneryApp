@@ -337,25 +337,24 @@ public class FragmentCartUser extends Fragment {
 
                             //admin section
                             final DatabaseReference Admin = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing");
-                            final String Adkey = Admin.push().getKey();
-                            Admin.child(Adkey).child("Bill").child("OrderID").setValue(key);
-                            Admin.child(Adkey).child("Bill").child("Date").setValue(date);
-                            Admin.child(Adkey).child("Bill").child("Time").setValue(time);
-                            Admin.child(Adkey).child("Bill").child("NoOfItems").setValue(NoOfItems);
-                            Admin.child(Adkey).child("Bill").child("OrderMethod").setValue(orderBy);
-                            Admin.child(Adkey).child("Bill").child("TotalRate").setValue(cartTotChrg);
+                            Admin.child(key).child("Bill").child("OrderID").setValue(key);
+                            Admin.child(key).child("Bill").child("Date").setValue(date);
+                            Admin.child(key).child("Bill").child("Time").setValue(time);
+                            Admin.child(key).child("Bill").child("NoOfItems").setValue(NoOfItems);
+                            Admin.child(key).child("Bill").child("OrderMethod").setValue(orderBy);
+                            Admin.child(key).child("Bill").child("TotalRate").setValue(cartTotChrg);
 
-                            Admin.child(Adkey).child("Bill").child("Mobile").setValue(mobile);
-                            Admin.child(Adkey).child("Bill").child("Address").setValue(address);
-                            Admin.child(Adkey).child("Bill").child("City").setValue(city);
-                            Admin.child(Adkey).child("Bill").child("SocietyName").setValue(society);
-                            Admin.child(Adkey).child("Bill").child("FlatNo").setValue(flat);
+                            Admin.child(key).child("Bill").child("Mobile").setValue(mobile);
+                            Admin.child(key).child("Bill").child("Address").setValue(address);
+                            Admin.child(key).child("Bill").child("City").setValue(city);
+                            Admin.child(key).child("Bill").child("SocietyName").setValue(society);
+                            Admin.child(key).child("Bill").child("FlatNo").setValue(flat);
 
                             final DatabaseReference admin = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
                             admin.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Admin.child(Adkey).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                                    Admin.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
                                 }
 
                                 @Override
@@ -369,11 +368,50 @@ public class FragmentCartUser extends Fragment {
 
                                 CartItems item = (CartItems) itrad.next();
                                 String itemKey = dfUser.push().getKey();
-                                Admin.child(Adkey).child("ItemList").child(itemKey).child("Name").setValue(item.name);
-                                Admin.child(Adkey).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
-                                Admin.child(Adkey).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
+                                Admin.child(key).child("ItemList").child(itemKey).child("Name").setValue(item.name);
+                                Admin.child(key).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
+                                Admin.child(key).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
                             }
 
+
+                            //admin History
+                            final DatabaseReference moveToHis = FirebaseDatabase.getInstance().getReference().child("AdminData").child("History").child(key);
+
+                            moveToHis.child(key).child("Bill").child("OrderID").setValue(key);
+                            moveToHis.child(key).child("Bill").child("Date").setValue(date);
+                            moveToHis.child(key).child("Bill").child("Time").setValue(time);
+                            moveToHis.child(key).child("Bill").child("NoOfItems").setValue(NoOfItems);
+                            moveToHis.child(key).child("Bill").child("OrderMethod").setValue(orderBy);
+                            moveToHis.child(key).child("Bill").child("TotalRate").setValue(cartTotChrg);
+
+                            moveToHis.child(key).child("Bill").child("Mobile").setValue(mobile);
+                            moveToHis.child(key).child("Bill").child("Address").setValue(address);
+                            moveToHis.child(key).child("Bill").child("City").setValue(city);
+                            moveToHis.child(key).child("Bill").child("SocietyName").setValue(society);
+                            moveToHis.child(key).child("Bill").child("FlatNo").setValue(flat);
+                            final DatabaseReference userName = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
+                            userName.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    userName.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                            Iterator itrHis = list.iterator();
+                            while (itrHis.hasNext()) {
+
+                                CartItems item = (CartItems) itrHis.next();
+                                String itemKey = dfUser.push().getKey();
+                                moveToHis.child(key).child("ItemList").child(itemKey).child("Name").setValue(item.name);
+                                moveToHis.child(key).child("ItemList").child(itemKey).child("weight").setValue(item.weight);
+                                moveToHis.child(key).child("ItemList").child(itemKey).child("rate").setValue(item.rate);
+                            }
+
+                            //Stock Maintain Section
                             Iterator itrSearch = list.iterator();
                             while (itrSearch.hasNext()) {
 
@@ -417,6 +455,7 @@ public class FragmentCartUser extends Fragment {
 
                                 });
                             }
+
 
                             FirebaseDatabase.getInstance().getReference().child("Cart").removeValue(new DatabaseReference.CompletionListener() {
                                 @Override

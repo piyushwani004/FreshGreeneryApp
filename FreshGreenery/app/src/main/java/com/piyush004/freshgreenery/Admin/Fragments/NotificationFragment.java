@@ -1,5 +1,6 @@
 package com.piyush004.freshgreenery.Admin.Fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.freshgreenery.R;
 import com.piyush004.freshgreenery.Utilities.AdminHome.AdminHolder;
 import com.piyush004.freshgreenery.Utilities.AdminHome.AdminModel;
+import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
+import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 
 public class NotificationFragment extends Fragment {
 
@@ -35,6 +39,9 @@ public class NotificationFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseRecyclerOptions<AdminModel> options;
     private FirebaseRecyclerAdapter<AdminModel, AdminHolder> adapter;
+
+    private FirebaseRecyclerOptions<HomeModel> optionsinside;
+    private FirebaseRecyclerAdapter<HomeModel, Holder> adapterinside;
 
     public NotificationFragment() {
         // Required empty public constructor
@@ -86,7 +93,8 @@ public class NotificationFragment extends Fragment {
                         snapshot.child("Bill").child("Address").getValue(String.class),
                         snapshot.child("Bill").child("City").getValue(String.class),
                         snapshot.child("Bill").child("SocietyName").getValue(String.class),
-                        snapshot.child("Bill").child("FlatNo").getValue(String.class)
+                        snapshot.child("Bill").child("FlatNo").getValue(String.class),
+                        snapshot.child("Bill").child("OrderMethod").getValue(String.class)
                 );
 
             }
@@ -96,7 +104,7 @@ public class NotificationFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final AdminHolder holder, int position, @NonNull final AdminModel model) {
 
-                holder.imageButtonArrow.setOnClickListener(new View.OnClickListener() {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -105,13 +113,11 @@ public class NotificationFragment extends Fragment {
                             TransitionManager.beginDelayedTransition(holder.cardView,
                                     new AutoTransition());
                             holder.hiddenView.setVisibility(View.GONE);
-                            holder.imageButtonArrow.setImageResource(R.drawable.ic_baseline_expand_more_24);
                         } else {
 
                             TransitionManager.beginDelayedTransition(holder.cardView,
                                     new AutoTransition());
                             holder.hiddenView.setVisibility(View.VISIBLE);
-                            holder.imageButtonArrow.setImageResource(R.drawable.ic_baseline_expand_less_24);
                         }
 
                     }
@@ -129,15 +135,92 @@ public class NotificationFragment extends Fragment {
                 holder.textViewCity.setText(model.getCity());
                 holder.textViewSociety.setText(model.getSocietyName());
                 holder.textViewFlatNo.setText(model.getFlatNo());
+                holder.textViewOrderMethod.setText(model.getOrderMethod());
 
-                holder.imageViewCheckOrderConfirm.setOnClickListener(new View.OnClickListener() {
+                /*holder.imageViewCheckOrderConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle("Order Confirmation Alert")
+                                .setMessage("Is this order ready ?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        final String key = model.getOrderId();
+                                        final DatabaseReference moveToHis = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing").child(key);
+
+                                        moveToHis.child(key).child("Bill").child("OrderID").setValue(key);
+                                        moveToHis.child(key).child("Bill").child("Date").setValue(model.getDate());
+                                        moveToHis.child(key).child("Bill").child("Time").setValue(model.getTime());
+                                        moveToHis.child(key).child("Bill").child("NoOfItems").setValue(model.getNoItems());
+                                        moveToHis.child(key).child("Bill").child("OrderMethod").setValue(model.getOrderMethod());
+                                        moveToHis.child(key).child("Bill").child("TotalRate").setValue(model.getRate());
+                                        moveToHis.child(key).child("Bill").child("UserName").setValue(model.getUserName());
+                                        moveToHis.child(key).child("Bill").child("Mobile").setValue(model.getMobile());
+                                        moveToHis.child(key).child("Bill").child("Address").setValue(model.getAddress());
+                                        moveToHis.child(key).child("Bill").child("City").setValue(model.getCity());
+                                        moveToHis.child(key).child("Bill").child("SocietyName").setValue(model.getSocietyName());
+                                        moveToHis.child(key).child("Bill").child("FlatNo").setValue(model.getFlatNo());
+
+                                    }
+                                })
+                                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+
                         Toast.makeText(getContext(), "Order Ready", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
 
+                holder.recyclerViewItems.setHasFixedSize(true);
+                holder.recyclerViewItems.setLayoutManager(new LinearLayoutManager(getContext()));
 
+                final DatabaseReference cartItem = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing").child(model.getOrderId()).child("ItemList");
+                optionsinside = new FirebaseRecyclerOptions.Builder<HomeModel>().setQuery(cartItem, new SnapshotParser<HomeModel>() {
+
+                    @NonNull
+                    @Override
+                    public HomeModel parseSnapshot(@NonNull DataSnapshot snapshot) {
+                        return new HomeModel(
+
+                                snapshot.child("Name").getValue(String.class),
+                                snapshot.child("weight").getValue(String.class),
+                                snapshot.child("rate").getValue(String.class)
+                        );
+
+                    }
+                }).build();
+                adapterinside = new FirebaseRecyclerAdapter<HomeModel, Holder>(optionsinside) {
+
+                    @Override
+                    protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull final HomeModel model) {
+
+                        holder.setTxtUserItemNameCart(model.getCartItemName());
+                        holder.setTxtUserItemRateCart(model.getCartItemRate());
+                        holder.setTxtUserItemWeightCart(model.getCartItemweight());
+
+                    }
+
+                    @NonNull
+                    @Override
+                    public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_history_card, parent, false);
+
+                        return new Holder(view);
+                    }
+                };
+
+                adapterinside.startListening();
+                holder.recyclerViewItems.setAdapter(adapterinside);
 
             }
 

@@ -14,9 +14,8 @@ import com.piyush004.freshgreenery.R;
 
 public class AdminHolder extends RecyclerView.ViewHolder {
 
-    public ImageButton imageButtonArrow;
     public ImageView imageViewCheckOrderConfirm;
-    public TextView textViewOrderId, textViewUserName, textViewRateAdmin, textViewDateAdmin;
+    public TextView textViewOrderId, textViewUserName, textViewRateAdmin, textViewDateAdmin ,textViewOrderMethod;
     public TextView textViewMobile, textViewAddress, textViewTime, textViewNoItems, textViewCity, textViewSociety, textViewFlatNo;
     public RecyclerView recyclerViewItems;
 
@@ -26,13 +25,13 @@ public class AdminHolder extends RecyclerView.ViewHolder {
     public AdminHolder(@NonNull View itemView) {
         super(itemView);
 
-        this.imageButtonArrow = itemView.findViewById(R.id.AdminNotiArrow_button);
         this.imageViewCheckOrderConfirm = itemView.findViewById(R.id.imageViewCheckOrderConfirm);
 
         this.textViewOrderId = itemView.findViewById(R.id.textViewOrderidAdmin);
         this.textViewUserName = itemView.findViewById(R.id.textViewUserName);
         this.textViewRateAdmin = itemView.findViewById(R.id.textViewRateAdmin);
         this.textViewDateAdmin = itemView.findViewById(R.id.textViewDateAdmin);
+        this.textViewOrderMethod = itemView.findViewById(R.id.textViewOrderMethod);
 
         this.textViewMobile = itemView.findViewById(R.id.textNotiMobileAdmin);
         this.textViewAddress = itemView.findViewById(R.id.textNotiAddressAdmin);

@@ -13,12 +13,13 @@ public class AdminModel {
     private String City;
     private String SocietyName;
     private String FlatNo;
+    private String OrderMethod;
 
     private String ItemName;
     private String ItemWeight;
     private String ItemRate;
 
-    public AdminModel(String orderId, String userName, String rate, String date, String mobile, String time, String noItems, String addres, String city, String societyName, String flatNo) {
+    public AdminModel(String orderId, String userName, String rate, String date, String mobile, String time, String noItems, String addres, String city, String societyName, String flatNo, String ordermethod) {
         order = orderId;
         UserName = userName;
         Rate = rate;
@@ -30,6 +31,7 @@ public class AdminModel {
         City = city;
         SocietyName = societyName;
         FlatNo = flatNo;
+        OrderMethod = ordermethod;
     }
 
     public AdminModel(String itemName, String itemWeight, String itemRate) {
@@ -39,6 +41,14 @@ public class AdminModel {
     }
 
     public AdminModel() {
+    }
+
+    public String getOrderMethod() {
+        return OrderMethod;
+    }
+
+    public void setOrderMethod(String orderMethod) {
+        OrderMethod = orderMethod;
     }
 
     public String getOrderId() {
