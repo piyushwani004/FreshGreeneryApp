@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class FragmentCartUser extends Fragment {
 
@@ -779,7 +780,7 @@ public class FragmentCartUser extends Fragment {
                                 if (mobile == null && address == null) {
 
                                     materialButton.setVisibility(View.GONE);
-                                    Snackbar snackBar = Snackbar.make(getView(), "Filled Address Section First..", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
+                                    Snackbar snackBar = Snackbar.make(requireView(), "Filled Address Section First..", Snackbar.LENGTH_LONG).setAction("Yes", new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
 
