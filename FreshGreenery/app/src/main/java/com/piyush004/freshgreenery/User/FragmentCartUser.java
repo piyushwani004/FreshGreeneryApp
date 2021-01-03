@@ -53,7 +53,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Objects;
 
 public class FragmentCartUser extends Fragment {
 
@@ -303,7 +302,9 @@ public class FragmentCartUser extends Fragment {
                             df.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    dfUser.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                                    String userName = snapshot.child("Name").getValue().toString();
+
+                                    dfUser.child(key).child("Bill").child("UserName").setValue(userName);
                                 }
 
                                 @Override
@@ -355,7 +356,9 @@ public class FragmentCartUser extends Fragment {
                             admin.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Admin.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+                                    String userName = snapshot.child("Name").getValue().toString();
+
+                                    Admin.child(key).child("Bill").child("UserName").setValue(userName);
                                 }
 
                                 @Override
@@ -376,7 +379,7 @@ public class FragmentCartUser extends Fragment {
 
 
                             //admin History
-                            final DatabaseReference moveToHis = FirebaseDatabase.getInstance().getReference().child("AdminData").child("History").child(key);
+                            final DatabaseReference moveToHis = FirebaseDatabase.getInstance().getReference().child("AdminData").child("History");
 
                             moveToHis.child(key).child("Bill").child("OrderID").setValue(key);
                             moveToHis.child(key).child("Bill").child("Date").setValue(date);
@@ -390,11 +393,15 @@ public class FragmentCartUser extends Fragment {
                             moveToHis.child(key).child("Bill").child("City").setValue(city);
                             moveToHis.child(key).child("Bill").child("SocietyName").setValue(society);
                             moveToHis.child(key).child("Bill").child("FlatNo").setValue(flat);
+
                             final DatabaseReference userName = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(uid);
                             userName.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    userName.child(key).child("Bill").child("UserName").setValue(snapshot.child("Name").getValue().toString());
+
+                                    String userName = snapshot.child("Name").getValue().toString();
+
+                                    moveToHis.child(key).child("Bill").child("UserName").setValue(userName);
                                 }
 
                                 @Override

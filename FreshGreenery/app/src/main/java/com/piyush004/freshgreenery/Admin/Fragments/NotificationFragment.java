@@ -2,6 +2,7 @@ package com.piyush004.freshgreenery.Admin.Fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.transition.TransitionManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -137,7 +140,7 @@ public class NotificationFragment extends Fragment {
                 holder.textViewFlatNo.setText(model.getFlatNo());
                 holder.textViewOrderMethod.setText(model.getOrderMethod());
 
-                /*holder.imageViewCheckOrderConfirm.setOnClickListener(new View.OnClickListener() {
+                holder.imageViewCheckOrderConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -148,21 +151,22 @@ public class NotificationFragment extends Fragment {
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+
                                         final String key = model.getOrderId();
                                         final DatabaseReference moveToHis = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing").child(key);
+                                        moveToHis.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.e("Delete", "Delete complete");
+                                                Toast.makeText(getContext(), "Order Ready to dispatch", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e("Delete", "Delete Incomplete" + e);
+                                            }
+                                        });
 
-                                        moveToHis.child(key).child("Bill").child("OrderID").setValue(key);
-                                        moveToHis.child(key).child("Bill").child("Date").setValue(model.getDate());
-                                        moveToHis.child(key).child("Bill").child("Time").setValue(model.getTime());
-                                        moveToHis.child(key).child("Bill").child("NoOfItems").setValue(model.getNoItems());
-                                        moveToHis.child(key).child("Bill").child("OrderMethod").setValue(model.getOrderMethod());
-                                        moveToHis.child(key).child("Bill").child("TotalRate").setValue(model.getRate());
-                                        moveToHis.child(key).child("Bill").child("UserName").setValue(model.getUserName());
-                                        moveToHis.child(key).child("Bill").child("Mobile").setValue(model.getMobile());
-                                        moveToHis.child(key).child("Bill").child("Address").setValue(model.getAddress());
-                                        moveToHis.child(key).child("Bill").child("City").setValue(model.getCity());
-                                        moveToHis.child(key).child("Bill").child("SocietyName").setValue(model.getSocietyName());
-                                        moveToHis.child(key).child("Bill").child("FlatNo").setValue(model.getFlatNo());
 
                                     }
                                 })
@@ -174,11 +178,8 @@ public class NotificationFragment extends Fragment {
                                 });
                         AlertDialog dialog = builder.create();
                         dialog.show();
-
-
-                        Toast.makeText(getContext(), "Order Ready", Toast.LENGTH_SHORT).show();
                     }
-                });*/
+                });
 
                 holder.recyclerViewItems.setHasFixedSize(true);
                 holder.recyclerViewItems.setLayoutManager(new LinearLayoutManager(getContext()));
