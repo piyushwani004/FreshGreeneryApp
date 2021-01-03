@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,7 +62,7 @@ public class AddFragment extends Fragment implements
     private String mParam2;
 
     private static int SELECT_PHOTO = 1;
-    private Uri uri;
+    private Uri uri, UpUri;
     private CircleImageView circleImageView;
     private EditText editTextPrice, editTextName, editTextTotalQuantity;
     private MaterialButton materialButtonAdd, materialButtonUpdate;
@@ -72,7 +74,7 @@ public class AddFragment extends Fragment implements
     private String UpName, UpPrice, UpTotalQuantity, UpTotalWeight, UpImgURL;
     private String[] Quantity = {"kilo", "gram", "piece", "dozen"};
     private String[] TotalQuantWeight = {"kilo", "gram", "piece", "dozen"};
-
+    private SwipeRefreshLayout swipeRefreshLayout;
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -116,6 +118,7 @@ public class AddFragment extends Fragment implements
         editTextPrice = view.findViewById(R.id.editTextPrice);
         editTextName = view.findViewById(R.id.Address_address);
         editTextTotalQuantity = view.findViewById(R.id.editTextTotalQuantity);
+        swipeRefreshLayout = view.findViewById(R.id.refreshFragAdd);
         spinner = view.findViewById(R.id.spinner);
         spinnerTot = view.findViewById(R.id.spinnerTot);
         spinner.setOnItemSelectedListener(this);
@@ -160,7 +163,7 @@ public class AddFragment extends Fragment implements
                                                 .centerCrop()
                                                 .rotate(0)
                                                 .into(circleImageView);
-                                        uri = Uri.parse(snapshot.child("ImageURl").getValue(String.class));
+                                        UpUri = Uri.parse(snapshot.child("ImageURl").getValue(String.class));
                                         editTextTotalQuantity.setText(snapshot.child("TotalQuantity").getValue(String.class));
                                     }
 
@@ -183,7 +186,6 @@ public class AddFragment extends Fragment implements
                     editTextPrice.setText("");
                     editTextTotalQuantity.setText("");
                     Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
-                    // Log.d("else", Search);
                 }
             }
         });
@@ -198,14 +200,27 @@ public class AddFragment extends Fragment implements
                 UpTotalQuantity = editTextTotalQuantity.getText().toString();
 
                 if (UpName.isEmpty()) {
-                    editTextName.setError("Please Select Name");
+                    editTextName.setError("Please Enter Name");
                     editTextName.requestFocus();
                 } else if (UpPrice.isEmpty()) {
-                    editTextPrice.setError("Please Select Name");
+                    editTextPrice.setError("Please Enter Price");
                     editTextPrice.requestFocus();
-                } else if (!(UpName.isEmpty() && UpPrice.isEmpty())) {
+                } else if (!(UpName.isEmpty() && UpPrice.isEmpty() && UpTotalQuantity.isEmpty())) {
+
+                    final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("VegetableEntry").child(key);
+                    df.child("Name").setValue(UpName);
+                    df.child("Rate").setValue(UpPrice);
+                    df.child("RateWeight").setValue(RateQuantity);
+                    df.child("TotalQuantity").setValue(UpTotalQuantity);
+                    df.child("TotalWeight").setValue(TotalWeight);
 
                     uploadUpdatedImage(key, getContext());
+
+                    editTextName.setText("");
+                    editTextPrice.setText("");
+                    editTextTotalQuantity.setText("");
+                    Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
+                    Toast.makeText(getContext(), "Data Updated...", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -276,6 +291,29 @@ public class AddFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 UIUtil.hideKeyboard(getActivity());
+            }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                editTextName.setText("");
+                editTextPrice.setText("");
+                editTextTotalQuantity.setText("");
+                Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
+                arrayAdapter.notifyDataSetChanged();
+                arrayAdapter.clear();
+                materialBetterSpinner.setSelection(0);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (swipeRefreshLayout.isRefreshing()) {
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                }, 1000);
+
             }
         });
 
@@ -379,7 +417,6 @@ public class AddFragment extends Fragment implements
             final ProgressDialog progressDialog = new ProgressDialog(getContext());
             progressDialog.setTitle("Updating...");
             progressDialog.show();
-
             final StorageReference ref = storageReference.child(UpName + System.currentTimeMillis() + ".img");
             ref.putFile(uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -391,13 +428,8 @@ public class AddFragment extends Fragment implements
                                 @Override
                                 public void onSuccess(Uri uri) {
 
-                                    UpImgURL = uri.toString();
-                                    df.child("Name").setValue(UpName);
-                                    df.child("Rate").setValue(UpPrice);
-                                    df.child("RateQuantity").setValue(RateQuantity);
-                                    df.child("TotalQuantity").setValue(TotalQuantity);
-                                    df.child("TotalWeight").setValue(TotalWeight);
-                                    df.child("ImageURl").setValue(UpImgURL);
+                                    ImgURL = uri.toString();
+                                    df.child("ImageURl").setValue(ImgURL);
 
                                 }
                             });
@@ -425,6 +457,16 @@ public class AddFragment extends Fragment implements
                             progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
+        } else {
+
+            UpImgURL = UpUri.toString();
+            df.child("ImageURl").setValue(UpImgURL);
+
+            Toast.makeText(getContext(), "Image Updated...", Toast.LENGTH_SHORT).show();
+            editTextName.setText("");
+            editTextPrice.setText("");
+            editTextTotalQuantity.setText("");
+            Glide.with(context).load(R.drawable.carrots).into(circleImageView);
         }
 
     }
@@ -452,7 +494,6 @@ public class AddFragment extends Fragment implements
                 arrayList.add("Nothing");
                 arrayAdapter = new ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item, arrayList);
                 materialBetterSpinner.setAdapter(arrayAdapter);
-                materialBetterSpinner.setText("Select Content");
             }
 
             @Override

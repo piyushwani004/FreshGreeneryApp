@@ -168,7 +168,7 @@ public class FragmentLocationUser extends Fragment {
                 City = "-";
                 Soci = "-";
                 FlatNo = "-";
-                Mob = "91" + editTextMobile.getText().toString();
+                Mob = editTextMobile.getText().toString();
                 Addr = editTextAddress.getText().toString();
                 City = editTextCity.getText().toString();
                 Soci = editTextSocity.getText().toString();
@@ -177,12 +177,12 @@ public class FragmentLocationUser extends Fragment {
                 if (Mob.isEmpty()) {
                     editTextMobile.setError("Enter Mobile Number");
                     editTextMobile.requestFocus();
-                } else if (Addr.isEmpty()) {
-                    editTextAddress.setError("Enter Mobile Number");
-                    editTextAddress.requestFocus();
-                } else if (isValidMobile(Mob)) {
+                } else if (!(isValidMobile(Mob))) {
                     editTextMobile.setError("Enter Valid Mobile Number");
                     editTextMobile.requestFocus();
+                } else if (Addr.isEmpty()) {
+                    editTextAddress.setError("Enter Address");
+                    editTextAddress.requestFocus();
                 } else if (!(Mob.isEmpty() && Addr.isEmpty())) {
                     key = firebaseAuth.getCurrentUser().getUid();
 
