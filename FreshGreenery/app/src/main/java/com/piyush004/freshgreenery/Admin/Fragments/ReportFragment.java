@@ -94,7 +94,8 @@ public class ReportFragment extends Fragment {
         materialButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                TotalRate = 0.0;
+                textViewTotalRate.setText("0.0 Rs");
                 dialogFragment.show(getChildFragmentManager(), null);
 
             }
