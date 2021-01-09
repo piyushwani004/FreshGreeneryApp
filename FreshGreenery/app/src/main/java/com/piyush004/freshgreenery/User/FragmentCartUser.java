@@ -272,11 +272,10 @@ public class FragmentCartUser extends Fragment {
 
                     materialButton.setVisibility(View.VISIBLE);
                     final Calendar calendar = Calendar.getInstance();
-                    simpleDateFormat = new SimpleDateFormat("hh:mm a");
+                    simpleDateFormat = new SimpleDateFormat("hh:mm");
                     time = simpleDateFormat.format(calendar.getTime());
                     final String Tempkey = generateRandomString(6);
                     key = Tempkey + "-" + date + "-" + time;
-
 
                     LayoutInflater inflater = getLayoutInflater();
                     View dialogLayout = inflater.inflate(R.layout.order_confirm_dialoge, null);

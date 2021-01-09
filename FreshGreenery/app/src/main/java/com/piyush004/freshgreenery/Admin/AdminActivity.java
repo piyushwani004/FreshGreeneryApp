@@ -28,6 +28,7 @@ import com.piyush004.freshgreenery.Admin.Fragments.AddFragment;
 import com.piyush004.freshgreenery.Admin.Fragments.HistoryFragment;
 import com.piyush004.freshgreenery.Admin.Fragments.HomeFragment;
 import com.piyush004.freshgreenery.Admin.Fragments.NotificationFragment;
+import com.piyush004.freshgreenery.Admin.Fragments.ReportFragment;
 import com.piyush004.freshgreenery.Auth.AuthActivity;
 import com.piyush004.freshgreenery.R;
 
@@ -141,7 +142,7 @@ public class AdminActivity extends AppCompatActivity {
     private void setUpNavView() {
         if (bottomNavigationView != null) {
             Menu menu = bottomNavigationView.getMenu();
-            selectFragment(menu.getItem(1));
+            selectFragment(menu.getItem(2));
 
             bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -172,6 +173,10 @@ public class AdminActivity extends AppCompatActivity {
 
             case R.id.history:
                 pushFragment(new HistoryFragment());
+                break;
+
+            case R.id.report:
+                pushFragment(new ReportFragment());
                 break;
         }
 

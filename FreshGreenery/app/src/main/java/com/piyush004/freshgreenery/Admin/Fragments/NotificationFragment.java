@@ -1,6 +1,7 @@
 package com.piyush004.freshgreenery.Admin.Fragments;
 
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +32,9 @@ import com.piyush004.freshgreenery.Utilities.AdminHome.AdminModel;
 import com.piyush004.freshgreenery.Utilities.AdminHome.Holder;
 import com.piyush004.freshgreenery.Utilities.AdminHome.HomeModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class NotificationFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
@@ -40,6 +45,8 @@ public class NotificationFragment extends Fragment {
 
     private View view;
     private RecyclerView recyclerView;
+    private SimpleDateFormat simpleDateFormat;
+
     private FirebaseRecyclerOptions<AdminModel> options;
     private FirebaseRecyclerAdapter<AdminModel, AdminHolder> adapter;
 
@@ -74,7 +81,7 @@ public class NotificationFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_notification, container, false);
-
+        final Date data = new Date();
         recyclerView = view.findViewById(R.id.adminNotificationRecycle);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -149,8 +156,30 @@ public class NotificationFragment extends Fragment {
                                 .setMessage("Is this order ready ?")
                                 .setCancelable(false)
                                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @RequiresApi(api = Build.VERSION_CODES.O)
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+
+                                        /*String date = model.getDate();
+                                        String[] firebasedate = date.split("-");
+                                        Log.e("Split", "day :" + firebasedate[0]);
+                                        Log.e("Split", "month :" + firebasedate[1]);
+                                        Log.e("Split", "year :" + firebasedate[2]);*/
+
+                                        simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                                        String CurrentDate = simpleDateFormat.format(data);
+                                        String[] CurrentSplitDate = CurrentDate.split("-");
+
+                                        Log.e("Debugger", "SplictDate :" + CurrentSplitDate[1] + ":" + CurrentSplitDate[2]);
+                                        Log.e("Debugger", "OrderRate :" + model.getRate());
+
+                                        final DatabaseReference moveToReport = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Report").child(CurrentSplitDate[2]).child(CurrentSplitDate[1]);
+                                        String reportkey = moveToReport.push().getKey();
+                                        moveToReport.child(reportkey).child("OrderId").setValue(model.getOrderId());
+                                        moveToReport.child(reportkey).child("OrderName").setValue(model.getUserName());
+                                        moveToReport.child(reportkey).child("OrderDate").setValue(model.getDate());
+                                        moveToReport.child(reportkey).child("OrderNoItems").setValue(model.getNoItems());
+                                        moveToReport.child(reportkey).child("OrderRate").setValue(model.getRate());
 
                                         final String key = model.getOrderId();
                                         final DatabaseReference moveToHis = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Billing").child(key);
