@@ -38,7 +38,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="@+id/textView"
         app:layout_constraintStart_toStartOf="@+id/textView"
-        app:srcCompat="@drawable/vege" />
+        app:srcCompat="@drawable/rounded_icon" />
 
     <ProgressBar
         android:id="@+id/progressBarSplash"

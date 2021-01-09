@@ -19,6 +19,18 @@ public class AdminModel {
     private String ItemWeight;
     private String ItemRate;
 
+    //Admin Report Fragment Recycle Model
+    private String ReportOrderId, ReportOrderName, ReportOrderDate, ReportOrderItems, ReportOrderRate;
+
+    //Admin Report Fragment Recycle Model
+    public AdminModel(String reportOrderId, String reportOrderName, String reportOrderDate, String reportOrderItems, String reportOrderRate) {
+        ReportOrderId = reportOrderId;
+        ReportOrderName = reportOrderName;
+        ReportOrderDate = reportOrderDate;
+        ReportOrderItems = reportOrderItems;
+        ReportOrderRate = reportOrderRate;
+    }
+
     public AdminModel(String orderId, String userName, String rate, String date, String mobile, String time, String noItems, String addres, String city, String societyName, String flatNo, String ordermethod) {
         order = orderId;
         UserName = userName;
@@ -161,6 +173,47 @@ public class AdminModel {
 
     public void setItemRate(String itemRate) {
         ItemRate = itemRate;
+    }
+
+
+    public String getReportOrderId() {
+        return ReportOrderId;
+    }
+
+    public void setReportOrderId(String reportOrderId) {
+        ReportOrderId = reportOrderId;
+    }
+
+    public String getReportOrderName() {
+        return ReportOrderName;
+    }
+
+    public void setReportOrderName(String reportOrderName) {
+        ReportOrderName = reportOrderName;
+    }
+
+    public String getReportOrderDate() {
+        return ReportOrderDate;
+    }
+
+    public void setReportOrderDate(String reportOrderDate) {
+        ReportOrderDate = reportOrderDate;
+    }
+
+    public String getReportOrderItems() {
+        return ReportOrderItems;
+    }
+
+    public void setReportOrderItems(String reportOrderItems) {
+        ReportOrderItems = reportOrderItems;
+    }
+
+    public String getReportOrderRate() {
+        return ReportOrderRate;
+    }
+
+    public void setReportOrderRate(String reportOrderRate) {
+        ReportOrderRate = reportOrderRate;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.piyush004.freshgreenery.Utilities.AdminHome;
 
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,12 +14,16 @@ import com.piyush004.freshgreenery.R;
 public class AdminHolder extends RecyclerView.ViewHolder {
 
     public ImageView imageViewCheckOrderConfirm;
-    public TextView textViewOrderId, textViewUserName, textViewRateAdmin, textViewDateAdmin ,textViewOrderMethod;
+    public TextView textViewOrderId, textViewUserName, textViewRateAdmin, textViewDateAdmin, textViewOrderMethod;
     public TextView textViewMobile, textViewAddress, textViewTime, textViewNoItems, textViewCity, textViewSociety, textViewFlatNo;
     public RecyclerView recyclerViewItems;
 
     public LinearLayout hiddenView;
     public MaterialCardView cardView;
+
+    //Admin Report Fragment Recycle Holder
+    public TextView reportOrderId, reportOrderName, ReportOrderDate, reportOrderItems, ReportOrderRate;
+
 
     public AdminHolder(@NonNull View itemView) {
         super(itemView);
@@ -45,6 +48,14 @@ public class AdminHolder extends RecyclerView.ViewHolder {
 
         this.hiddenView = itemView.findViewById(R.id.AdminNotiHidden_view);
         this.cardView = itemView.findViewById(R.id.base_cardView_admin);
+
+
+        //Admin Report Fragment Recycle Holder
+        this.reportOrderId = itemView.findViewById(R.id.reportOrderId);
+        this.reportOrderName = itemView.findViewById(R.id.reportOrderName);
+        this.ReportOrderDate = itemView.findViewById(R.id.ReportOrderDate);
+        this.reportOrderItems = itemView.findViewById(R.id.reportOrderItems);
+        this.ReportOrderRate = itemView.findViewById(R.id.ReportOrderRate);
 
     }
 
