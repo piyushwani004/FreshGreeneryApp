@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,7 @@ public class ReportFragment extends Fragment {
     private FirebaseRecyclerOptions<AdminModel> options;
     private FirebaseRecyclerAdapter<AdminModel, AdminHolder> adapter;
     private TextView textViewTotalRate;
-
+    private LinearLayout linearLayout, linearLayoutTotal;
 
     private String month;
     int yearSelected;
@@ -81,10 +82,12 @@ public class ReportFragment extends Fragment {
 
         materialButton = view.findViewById(R.id.ButtonYearMonthPicker);
         textViewTotalRate = view.findViewById(R.id.textViewTotalRate);
+        linearLayout = view.findViewById(R.id.ReportLinearLayout);
+        linearLayoutTotal = view.findViewById(R.id.reportTotalLinearLayout);
 
         recyclerView = view.findViewById(R.id.AdminReportRecycleView);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         Calendar calendar = Calendar.getInstance();
         yearSelected = calendar.get(Calendar.YEAR);
@@ -105,6 +108,7 @@ public class ReportFragment extends Fragment {
             @Override
             public void onDateSet(int year, int monthOfYear) {
 
+                linearLayout.setVisibility(View.VISIBLE);
                 switch (monthOfYear) {
                     case 0:
                         month = "Jan";
@@ -168,13 +172,12 @@ public class ReportFragment extends Fragment {
                     protected void onBindViewHolder(@NonNull AdminHolder holder, int position, @NonNull final AdminModel model) {
 
                         TotalRate = TotalRate + Double.parseDouble(model.getReportOrderRate());
-                        Log.e("Total", "Total : " + TotalRate);
 
                         holder.reportOrderId.setText(model.getReportOrderId());
                         holder.reportOrderName.setText(model.getReportOrderName());
                         holder.ReportOrderDate.setText(model.getReportOrderDate());
                         holder.reportOrderItems.setText(model.getReportOrderItems());
-                        holder.ReportOrderRate.setText(model.getReportOrderRate() + "Rs");
+                        holder.ReportOrderRate.setText(model.getReportOrderRate() + " Rs");
 
                         textViewTotalRate.setText("" + TotalRate + "");
 
@@ -190,10 +193,9 @@ public class ReportFragment extends Fragment {
                     }
                 };
 
-
                 adapter.startListening();
                 recyclerView.setAdapter(adapter);
-
+                adapter.notifyDataSetChanged();
             }
         });
 

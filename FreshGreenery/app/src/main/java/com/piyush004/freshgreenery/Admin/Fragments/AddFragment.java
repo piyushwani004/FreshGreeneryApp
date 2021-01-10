@@ -123,6 +123,7 @@ public class AddFragment extends Fragment implements
         spinnerTot = view.findViewById(R.id.spinnerTot);
         spinner.setOnItemSelectedListener(this);
 
+        materialButtonUpdate.setClickable(false);
 
         materialBetterSpinner = (MaterialBetterSpinner) view.findViewById(R.id.material_spinner);
         //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_dropdown_item_1line, SPINNER_DATA);
@@ -145,7 +146,7 @@ public class AddFragment extends Fragment implements
 
                 final String Search = materialBetterSpinner.getText().toString();
                 if (!(Search.equals("Nothing"))) {
-
+                    materialButtonUpdate.setClickable(true);
                     databaseReference.child("VegetableEntry").orderByChild("Name").equalTo(Search).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -182,10 +183,11 @@ public class AddFragment extends Fragment implements
                     });
 
                 } else {
+                    materialButtonUpdate.setClickable(false);
                     editTextName.setText("");
                     editTextPrice.setText("");
                     editTextTotalQuantity.setText("");
-                    Glide.with(getContext()).load(R.drawable.carrots).into(circleImageView);
+                    Glide.with(getContext()).load(R.drawable.uploadvege).into(circleImageView);
                 }
             }
         });

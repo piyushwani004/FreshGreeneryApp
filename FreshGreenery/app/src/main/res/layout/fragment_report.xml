@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/reportTotalLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#E3E6E6"
@@ -59,9 +60,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/ReportLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
+        android:background="#E3E6E6"
         android:gravity="start|center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"

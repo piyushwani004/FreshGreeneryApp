@@ -76,7 +76,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="14dp"
                         android:textStyle="italic" />
@@ -103,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -130,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -157,7 +157,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -184,7 +184,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -211,7 +211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -238,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -265,7 +265,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="16dp"
                         android:textStyle="italic" />
@@ -292,7 +292,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -319,7 +319,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />
@@ -346,7 +346,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:fontFamily="serif"
-                        android:text="null"
+                        android:text=" "
                         android:textColor="@color/colorGray"
                         android:textSize="18dp"
                         android:textStyle="italic" />

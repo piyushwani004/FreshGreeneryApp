@@ -35,7 +35,7 @@
             android:background="@drawable/plaintext_bg"
             android:ems="10"
             android:gravity="center"
-            android:hint="Username"
+            android:hint="Email"
             android:inputType="textEmailAddress" />
 
         <com.google.android.material.textfield.TextInputLayout

@@ -160,20 +160,18 @@ public class NotificationFragment extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        /*String date = model.getDate();
+                                        String date = model.getDate();
                                         String[] firebasedate = date.split("-");
                                         Log.e("Split", "day :" + firebasedate[0]);
                                         Log.e("Split", "month :" + firebasedate[1]);
-                                        Log.e("Split", "year :" + firebasedate[2]);*/
+                                        Log.e("Split", "year :" + firebasedate[2]);
 
-                                        simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                                        /*simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
                                         String CurrentDate = simpleDateFormat.format(data);
-                                        String[] CurrentSplitDate = CurrentDate.split("-");
+                                        String[] CurrentSplitDate = CurrentDate.split("-");*/
 
-                                        Log.e("Debugger", "SplictDate :" + CurrentSplitDate[1] + ":" + CurrentSplitDate[2]);
-                                        Log.e("Debugger", "OrderRate :" + model.getRate());
 
-                                        final DatabaseReference moveToReport = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Report").child(CurrentSplitDate[2]).child(CurrentSplitDate[1]);
+                                        final DatabaseReference moveToReport = FirebaseDatabase.getInstance().getReference().child("AdminData").child("Report").child(firebasedate[2]).child(firebasedate[1]);
                                         String reportkey = moveToReport.push().getKey();
                                         moveToReport.child(reportkey).child("OrderId").setValue(model.getOrderId());
                                         moveToReport.child(reportkey).child("OrderName").setValue(model.getUserName());
